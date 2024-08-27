@@ -1,5 +1,5 @@
-import React from "react";
-
-export const Review = () => {
+function Review() {
   return <div>Review</div>;
-};
+}
+
+export default Review;

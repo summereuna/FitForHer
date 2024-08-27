@@ -1,6 +1,6 @@
 import { NavLink, Outlet } from "react-router-dom";
 
-export const Product = () => {
+function Product() {
   return (
     <div>
       <section>
@@ -16,4 +16,6 @@ export const Product = () => {
       <Outlet />
     </div>
   );
-};
+}
+
+export default Product;

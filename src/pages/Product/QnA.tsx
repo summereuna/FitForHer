@@ -1,7 +1,5 @@
-import React from 'react'
-
-export const QnA = () => {
-  return (
-    <div>QnA</div>
-  )
+function QnA() {
+  return <div>QnA</div>;
 }
+
+export default QnA;

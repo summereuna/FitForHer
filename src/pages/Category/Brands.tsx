@@ -1,5 +1,5 @@
-import React from "react";
-
-export const Brands = () => {
+function Brands() {
   return <div>Brands</div>;
-};
+}
+
+export default Brands;

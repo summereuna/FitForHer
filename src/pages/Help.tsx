@@ -1,5 +1,5 @@
-import React from "react";
-
-export const Help = () => {
+function Help() {
   return <div>Help</div>;
-};
+}
+
+export default Help;

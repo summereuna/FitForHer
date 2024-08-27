@@ -1,5 +1,5 @@
-import React from "react";
-
-export const Best = () => {
+function Best() {
   return <div>Best</div>;
-};
+}
+
+export default Best;
