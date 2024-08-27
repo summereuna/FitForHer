@@ -1,10 +1,14 @@
 import supabase from "@/shared/supabaseClient";
 import { LoginUserRequest } from "@/types/auth.types";
+import { Enums } from "@/types/database.types";
 import { Provider, Session, User, WeakPassword } from "@supabase/supabase-js";
 import { createContext, useState, useEffect } from "react";
 
 interface AuthContextProps {
   session: Session | null;
+  isLoggedIn: boolean;
+  isSessionLoading: boolean;
+  userRole: Enums<"user_role"> | null;
   loginWithSocial: (
     provider: Provider
   ) => Promise<{ provider: Provider; url: string }>;
@@ -22,15 +26,34 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const [session, setSession] = useState<Session | null>(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isSessionLoading, setIsSessionLoading] = useState(true);
+  const [userRole, setUserRole] = useState<Enums<"user_role"> | null>(null);
 
   useEffect(() => {
+    // 페이지 새로고침 시 현재 세션 초기화시켜서 정보 안날아가게 하기
+    setIsSessionLoading(true);
+    const initSession = async () => {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession(); //로컬스토리지에 있는 세션객체
+      setSession(session ?? null);
+      setUserRole(session?.user.user_metadata.role);
+      setIsSessionLoading(false);
+    };
+
+    initSession();
+
+    //세션 변경 감지 및 세션 상태 업데이트
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((event, session) => {
       if (event === "SIGNED_OUT") {
         setSession(null);
-      } else if (session) {
+        setIsLoggedIn(false);
+      } else if (event === "SIGNED_IN") {
         setSession(session);
+        setIsLoggedIn(true);
       }
     });
 
@@ -93,7 +116,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   // };
   return (
     <AuthContext.Provider
-      value={{ session, loginWithSocial, loginWithEmail, logout }}
+      value={{
+        session,
+        isLoggedIn,
+        isSessionLoading,
+        userRole,
+        loginWithSocial,
+        loginWithEmail,
+        logout,
+      }}
     >
       {children}
     </AuthContext.Provider>
