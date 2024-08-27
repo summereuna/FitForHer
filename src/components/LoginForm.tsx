@@ -1,25 +1,3 @@
-// interface LoginFormProps {
-//   onLogin: (loginData: LoginUserRequest) => void;
-//   isPending: boolean;
-//   isError: boolean;
-//   errorMessage: string;
-//   onSocialLogin: (provider: Provider) => void;
-//   isPendingSocialLogin: boolean;
-//   isErrorSocialLogin: boolean;
-//   errorMessageSocialLogin: string;
-// }
-
-// {
-//   onLogin,
-//   isPending,
-//   isError,
-//   errorMessage,
-//   onSocialLogin,
-//   isPendingSocialLogin,
-//   isErrorSocialLogin,
-//   errorMessageSocialLogin,
-// }: LoginFormProps
-
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
@@ -64,8 +42,12 @@ export default function LoginForm() {
     setIsPending(true); //로딩 시작
 
     try {
-      await loginWithEmail(loginData);
-      navigate("/");
+      const { session } = await loginWithEmail(loginData);
+      if (session.user.user_metadata.role === "seller") {
+        navigate("/dashboard/overview");
+      } else {
+        navigate("/");
+      }
     } catch (error) {
       if (error instanceof AuthError) {
         // console.log("code", error.code);

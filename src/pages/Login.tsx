@@ -1,3 +1,4 @@
+import { Icon } from "@/components/Icon";
 import LoginForm from "@/components/LoginForm";
 import { cartIcon, locationIcon, timeIcon, wishIcon } from "@/shared/icons";
 
@@ -9,19 +10,19 @@ export default function Login() {
         <p className="text-base">다양한 가입 혜택을 확인하세요!</p>
         <div className="space-y-4">
           <div className="flex flex-row space-x-2 text-sm">
-            <div>{timeIcon}</div>
+            <Icon className="size-5">{timeIcon}</Icon>
             <p>더 빠른 결제</p>
           </div>
           <div className="flex flex-row space-x-2 text-sm">
-            <div>{locationIcon}</div>
+            <Icon className="size-5">{locationIcon}</Icon>
             <p>빠른 주문 현황 조회</p>
           </div>
           <div className="flex flex-row space-x-2 text-sm">
-            <div>{cartIcon}</div>
+            <Icon className="size-5">{cartIcon}</Icon>
             <p>주문 히스토리 확인</p>
           </div>
           <div className="flex flex-row space-x-2 text-sm">
-            <div>{wishIcon}</div>
+            <Icon className="size-5">{wishIcon}</Icon>
             <p>위시리스트 저장</p>
           </div>
         </div>

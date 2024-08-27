@@ -2,17 +2,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
+import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { searchIcon } from "@/shared/icons";
+import { Icon } from "@/components/Icon";
 
 const SearchFormSchema = z.object({
   keyword: z.string().min(1, {
@@ -65,7 +58,7 @@ export function SearchBar() {
           type="submit"
           className="absolute right-2 top-2 text-gray-400 transition duration-200 ease-in-out hover:text-black focus-visible:text-black "
         >
-          {searchIcon}
+          <Icon className="size-6">{searchIcon}</Icon>
         </button>
       </form>
     </Form>
