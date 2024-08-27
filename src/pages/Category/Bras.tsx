@@ -1,5 +1,5 @@
-import React from "react";
-
-export const Bras = () => {
+function Bras() {
   return <div>Bras</div>;
-};
+}
+
+export default Bras;

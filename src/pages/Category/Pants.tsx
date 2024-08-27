@@ -1,5 +1,5 @@
-import React from "react";
-
-export const Pants = () => {
+function Pants() {
   return <div>Pants</div>;
-};
+}
+
+export default Pants;
