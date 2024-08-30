@@ -1,6 +1,7 @@
 import { CategoryTop } from "@/components/CategoryTop";
 import { Icon } from "@/components/Icon";
 import { SearchBar } from "@/components/SearchBar";
+import { Separator } from "@/components/ui/separator";
 import { useAuth } from "@/hooks/useAuth";
 import { cartIcon, wishIcon } from "@/shared/icons";
 import { Link, NavLink } from "react-router-dom";
@@ -23,19 +24,18 @@ function Header() {
         <nav aria-label="사용자 탐색">
           <ul className=" flex flex-row justify-end items-center space-x-4 text-xs">
             <NavLink to={`/help`}>고객센터</NavLink>
-            <span>|</span>
+            <Separator orientation="vertical" className="h-3 bg-primary" />
             {isLoggedIn && (
               <>
                 <button onClick={() => logout()}>로그아웃</button>
-                <span>|</span>
-
+                <Separator orientation="vertical" className="h-3 bg-primary" />
                 <span>{session?.user?.user_metadata.name}님</span>
               </>
             )}
             {!isLoggedIn && (
               <>
                 <NavLink to={`/signup`}>회원가입</NavLink>
-                <span>|</span>
+                <Separator orientation="vertical" className="h-3 bg-primary" />
                 <NavLink to={`/login`}>로그인</NavLink>
               </>
             )}

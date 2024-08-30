@@ -1,16 +1,17 @@
 import { useCreateUser } from "@/api/userApi";
-import SignForm from "@/components/SignForm";
+import BizSignForm from "@/components/BizSignForm";
 import { SignupUsersRequest } from "@/types/user.types";
 
-export default function Signup() {
+export default function BizSignup() {
   const { mutateCreateUser, isError, errorMessage } = useCreateUser();
 
   const handleSignup = (newUser: SignupUsersRequest) => {
     mutateCreateUser(newUser);
   };
+
   return (
     <div>
-      <SignForm
+      <BizSignForm
         onSignup={handleSignup}
         isError={isError}
         errorMessage={errorMessage}
