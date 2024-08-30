@@ -41,7 +41,6 @@ export const useCreateUser = () => {
   } = useMutation({
     mutationFn: signupFunction,
     onSuccess: (data) => {
-      console.log(data);
       queryClient.invalidateQueries({ queryKey: ["users"] });
       navigate("/login");
     },
