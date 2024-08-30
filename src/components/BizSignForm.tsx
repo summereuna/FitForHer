@@ -17,27 +17,28 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Separator } from "@/components/ui/separator";
 import { signupFormSchema } from "@/schemas/signupFormSchema";
 import { SignupUsersRequest } from "@/types/user.types";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 
-// import { RadioGroup, RadioGroupItem } from "@radix-ui/react-radio-group";
+import { RadioGroup, RadioGroupItem } from "@radix-ui/react-radio-group";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import { z } from "zod";
 
-interface SignFormProps {
+interface BizSignFormProps {
   onSignup: (newUser: SignupUsersRequest) => void;
   isError: boolean;
   errorMessage: string;
 }
 
-export default function SignForm({
+export default function BizSignForm({
   onSignup,
   isError,
   errorMessage,
-}: SignFormProps) {
+}: BizSignFormProps) {
   const form = useForm<z.infer<typeof signupFormSchema>>({
     resolver: zodResolver(signupFormSchema),
     defaultValues: {
@@ -45,7 +46,7 @@ export default function SignForm({
       password: "",
       passwordCheck: "",
       name: "",
-      role: "customer",
+      role: "seller",
       social_type: "email",
     },
   });
@@ -68,11 +69,30 @@ export default function SignForm({
     <div className="flex w-full justify-center content-center">
       <Card>
         <CardHeader>
-          {/* <CardTitle>회원 가입</CardTitle> */}
-          <div className="flex justify-center py-5 text-xl font-semibold">
-            FIT FOR HER
+          <div className="flex flex-col items-center py-5 text-xl font-semibold space-y-3">
+            <span>FIT FOR HER</span>
+            <span className="text-lg font-medium">비즈니스 회원 가입하기</span>
           </div>
-          {/* <CardDescription>설명설명설명</CardDescription> */}
+
+          {/* <div className="flex flex-row justify-center items-center space-x-5 text-xs">
+            <div className="relative flex flex-col items-center space-y-2">
+              <div className="w-5 h-5 bg-black rounded-full flex justify-center items-center">
+                <span className="text-white">1</span>
+              </div>
+              <span>판매자 정보 입력</span>
+              <Separator
+                orientation="horizontal"
+                className="absolute top-[0.1rem] -right-[1.8rem] bg-gray-300 w-10"
+              />
+            </div>
+
+            <div className="flex flex-col items-center space-y-2">
+              <div className="w-5 h-5 bg-gray-300 rounded-full flex justify-center items-center">
+                <span className="text-white">2</span>
+              </div>
+              <span className="text-gray-300">브랜드 정보 입력</span>
+            </div>
+          </div> */}
         </CardHeader>
         <CardContent>
           <Form {...form}>
@@ -80,60 +100,6 @@ export default function SignForm({
               onSubmit={form.handleSubmit(onSubmit)}
               className="space-y-5 w-80"
             >
-              {/* <FormField
-                control={form.control}
-                name="role"
-                render={({ field }) => (
-                  <FormItem className="space-y-1">
-                    <FormLabel>회원 유형 선택</FormLabel>
-                    <FormControl>
-                      <RadioGroup
-                        onValueChange={field.onChange}
-                        defaultValue={field.value}
-                        className="grid grid-cols-2 gap-5"
-                      >
-                        <div>
-                          <FormItem className="flex items-center">
-                            <FormControl>
-                              <RadioGroupItem
-                                value="customer"
-                                id="customer"
-                                className="peer sr-only"
-                              />
-                            </FormControl>
-                            <FormLabel
-                              htmlFor="customer"
-                              className="w-full flex flex-col items-center border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
-                            >
-                              일반 회원
-                            </FormLabel>
-                          </FormItem>
-                        </div>
-                        <div>
-                          <FormItem className="flex items-center">
-                            <FormControl>
-                              <RadioGroupItem
-                                value="seller"
-                                id="seller"
-                                className="peer sr-only"
-                              />
-                            </FormControl>
-                            <FormLabel
-                              htmlFor="seller"
-                              className="w-full flex flex-col items-center border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
-                            >
-                              비즈니스 회원
-                            </FormLabel>
-                          </FormItem>
-                        </div>
-                      </RadioGroup>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              /> */}
-              {/*  */}
-              {/*  */}
               <FormField
                 control={form.control}
                 name="name"
@@ -148,8 +114,8 @@ export default function SignForm({
                         {...field}
                       />
                     </FormControl>
-                    <FormDescription>
-                      *닉네임은 두 글자 이상 입력해 주세요.
+                    <FormDescription className="text-xs">
+                      {`*닉네임은 두 글자 이상이어야 합니다.\n"브랜드명" 혹은 "브랜드명 관리자"를 추천합니다.`}
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
@@ -205,7 +171,7 @@ export default function SignForm({
                         {...field}
                       />
                     </FormControl>
-                    <FormDescription>
+                    <FormDescription className="text-xs">
                       *비밀번호는 영어 대문자, 소문자, 숫자, 특수문자 중 3종류
                       이상을 포함한 최소 8자리 이상이어야 합니다.
                     </FormDescription>
@@ -220,24 +186,10 @@ export default function SignForm({
                 <Button type="submit" className="w-full">
                   가입하기
                 </Button>
-                {/* 
-                <Alert
-                  type={"submit"}
-                  variant={"default"}
-                  buttonChildren={"가입하기"}
-                  title={"회원가입"}
-                  description={`으로 가입하시나요?`}
-                /> */}
               </div>
             </form>
           </Form>
         </CardContent>
-        <CardFooter className="flex justify-center space-x-2 text-xs">
-          <span>법인 고객이신가요?</span>
-          <Link to="biz" className="underline">
-            비즈니스 회원 가입하기
-          </Link>
-        </CardFooter>
       </Card>
     </div>
   );

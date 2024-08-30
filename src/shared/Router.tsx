@@ -1,5 +1,6 @@
 import { useAuth } from "@/hooks/useAuth";
 import About from "@/pages/About";
+import BizSignup from "@/pages/BizSignup";
 import Best from "@/pages/Category/Best";
 import Brands from "@/pages/Category/Brands";
 import Bras from "@/pages/Category/Bras";
@@ -11,6 +12,7 @@ import Tops from "@/pages/Category/Tops";
 import Dashboard from "@/pages/Dashboard/Dashboard";
 import DashOverview from "@/pages/Dashboard/DashOverview";
 import DashProduct from "@/pages/Dashboard/DashProduct";
+import DashReviewAndQnA from "@/pages/Dashboard/DashReviewAndQnA";
 import DashSetting from "@/pages/Dashboard/DashSetting";
 import DashTransaction from "@/pages/Dashboard/DashTransaction";
 import Help from "@/pages/Help";
@@ -69,6 +71,11 @@ export default function Router() {
           <Route path="/help" element={<Help />} />
 
           <Route path="/signup" element={<PublicRoute element={Signup} />} />
+          <Route
+            path="/signup/biz"
+            element={<PublicRoute element={BizSignup} />}
+          />
+
           <Route path="/login" element={<PublicRoute element={Login} />} />
 
           <Route path="/wish" element={<PrivateRoute element={Wish} />} />
@@ -115,8 +122,13 @@ export default function Router() {
               path="/dashboard/transaction"
               element={<DashTransaction />}
             />
-            <Route path="/dashboard/setting" element={<DashSetting />} />
+            <Route
+              path="/dashboard/review-and-qna"
+              element={<DashReviewAndQnA />}
+            />
           </Route>
+          {/* 세팅하기 위해 아울렛에서 뺌 */}
+          <Route path="/dashboard/setting" element={<DashSetting />} />
         </Route>
         {/* -------------- 2. 셀러 전용 라우트 -------------- */}
       </Routes>
