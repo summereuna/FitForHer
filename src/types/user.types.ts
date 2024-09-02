@@ -1,7 +1,5 @@
 import { Database, Enums } from "@/types/database.types";
 
-export type UserRole = Enums<"user_role">;
-
 export type Users = Database["public"]["Tables"]["users"]["Row"];
 
 export type SignupUserRequired = Omit<

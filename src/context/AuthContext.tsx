@@ -6,6 +6,7 @@ import { createContext, useState, useEffect } from "react";
 
 interface AuthContextProps {
   session: Session | null;
+  authId: string | undefined;
   isLoggedIn: boolean;
   isSessionLoading: boolean;
   userRole: Enums<"user_role"> | null;
@@ -99,6 +100,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     if (error) throw error;
   };
 
+  const authId = session?.user.id;
+
   // // 에러 메시지 커스터마이징 함수
   // const getCustomErrorMessage = (error: AuthApiError): string => {
   //   // Supabase 에러 코드에 따라 커스텀 메시지 설정
@@ -118,6 +121,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     <AuthContext.Provider
       value={{
         session,
+        authId,
         isLoggedIn,
         isSessionLoading,
         userRole,
