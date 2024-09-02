@@ -37,14 +37,14 @@ function HeaderForSeller() {
         aria-label="검색 탐색"
         className="bg-white y-2 px-16 flex flex-row justify-between items-center text-sm"
       >
-        <Link to={`/dashboard/overview`} className="text-xl font-semibold w-20">
+        <Link to={`/dashboard`} className="text-xl font-semibold w-20">
           F4H
         </Link>
         <search aria-label="검색" className="w-80">
           <SearchBar />
         </search>
         <div className="flex flex-row justify-end space-x-4 w-20">
-          <NavLink to={`/dashboard/overview`}>
+          <NavLink to={`/dashboard`}>
             <Icon className="size-6">{storeIcon}</Icon>
           </NavLink>
         </div>

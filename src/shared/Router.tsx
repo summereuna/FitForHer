@@ -84,7 +84,8 @@ export default function Router() {
 
           {/* 카테고리 아울렛 */}
           <Route path="/category" element={<Category />}>
-            <Route index path="/category/new" element={<New />} />
+            <Route index element={<New />} />
+            <Route path="/category/new" element={<New />} />
             <Route path="/category/tops" element={<Tops />} />
             <Route path="/category/pants" element={<Pants />} />
             <Route path="/category/sports-bras" element={<Bras />} />
@@ -112,6 +113,7 @@ export default function Router() {
             path="/dashboard"
             element={<SellerRoute element={Dashboard} />}
           >
+            <Route index element={<DashOverview />} />
             <Route
               index
               path="/dashboard/overview"
