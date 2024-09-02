@@ -1,4 +1,5 @@
 import ItemNotFound from "@/components/ItemNotFound";
+import { ProductFormDialog } from "@/components/Product/ProductFormDialog";
 import { Card, CardTitle } from "@/components/ui/card";
 
 function DashProduct() {
@@ -6,6 +7,7 @@ function DashProduct() {
     <div className="flex flex-col h-full w-full gap-5">
       <section className="flex justify-between items-center">
         <CardTitle>상품관리</CardTitle>
+        <ProductFormDialog />
       </section>
       <section className="flex h-full">
         <Card className="w-full">

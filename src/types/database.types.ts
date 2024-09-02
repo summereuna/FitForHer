@@ -62,7 +62,7 @@ export type Database = {
           logo_url?: string | null
           name: string
           official_website?: Json | null
-          seller_id: string
+          seller_id?: string
           updated_at?: string
         }
         Update: {
@@ -98,8 +98,8 @@ export type Database = {
         }
         Insert: {
           created_at?: string
-          customer_id: string
-          id: string
+          customer_id?: string
+          id?: string
           is_active?: boolean
           product_id: string
           quantity: number
@@ -138,7 +138,7 @@ export type Database = {
           parent_id: string | null
         }
         Insert: {
-          id: string
+          id?: string
           name: string
           parent_id?: string | null
         }
@@ -170,7 +170,7 @@ export type Database = {
         }
         Insert: {
           created_at?: string
-          id: string
+          id?: string
           is_active?: boolean
           order_id: string
           price: number
@@ -219,7 +219,7 @@ export type Database = {
         Insert: {
           created_at?: string
           customer_id: string
-          id: string
+          id?: string
           is_active?: boolean
           order_status?: Database["public"]["Enums"]["order_status"]
           seller_id: string
@@ -259,18 +259,21 @@ export type Database = {
           image_url: string
           is_active: boolean
           product_id: string
+          seller_id: string
         }
         Insert: {
-          id: string
+          id?: string
           image_url: string
           is_active?: boolean
           product_id: string
+          seller_id?: string
         }
         Update: {
           id?: string
           image_url?: string
           is_active?: boolean
           product_id?: string
+          seller_id?: string
         }
         Relationships: [
           {
@@ -278,6 +281,13 @@ export type Database = {
             columns: ["product_id"]
             isOneToOne: false
             referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "product_images_seller_id_fkey"
+            columns: ["seller_id"]
+            isOneToOne: false
+            referencedRelation: "users"
             referencedColumns: ["id"]
           },
         ]
@@ -299,7 +309,7 @@ export type Database = {
           answer_text?: string | null
           created_at?: string
           customer_id: string
-          id: string
+          id?: string
           is_active?: boolean
           product_id: string
           question_text: string
@@ -333,11 +343,53 @@ export type Database = {
           },
         ]
       }
+      product_sizes: {
+        Row: {
+          id: string
+          is_active: boolean
+          product_id: string
+          seller_id: string
+          size: Database["public"]["Enums"]["product_size"]
+          stock_quantity: number
+        }
+        Insert: {
+          id?: string
+          is_active?: boolean
+          product_id: string
+          seller_id?: string
+          size: Database["public"]["Enums"]["product_size"]
+          stock_quantity: number
+        }
+        Update: {
+          id?: string
+          is_active?: boolean
+          product_id?: string
+          seller_id?: string
+          size?: Database["public"]["Enums"]["product_size"]
+          stock_quantity?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "product_sizes_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "product_sizes_seller_id_fkey"
+            columns: ["seller_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       products: {
         Row: {
           brand_id: string
           category_id: string
-          color: string | null
+          color: string
           created_at: string
           description: string
           id: string
@@ -345,29 +397,25 @@ export type Database = {
           name: string
           price: number
           seller_id: string
-          size: string | null
-          stock_quantity: number
           updated_at: string
         }
         Insert: {
           brand_id: string
           category_id: string
-          color?: string | null
+          color: string
           created_at?: string
           description: string
-          id: string
+          id?: string
           is_active?: boolean
           name: string
           price: number
-          seller_id: string
-          size?: string | null
-          stock_quantity: number
+          seller_id?: string
           updated_at?: string
         }
         Update: {
           brand_id?: string
           category_id?: string
-          color?: string | null
+          color?: string
           created_at?: string
           description?: string
           id?: string
@@ -375,8 +423,6 @@ export type Database = {
           name?: string
           price?: number
           seller_id?: string
-          size?: string | null
-          stock_quantity?: number
           updated_at?: string
         }
         Relationships: [
@@ -418,9 +464,9 @@ export type Database = {
         }
         Insert: {
           created_at?: string
-          customer_id: string
+          customer_id?: string
           description: string
-          id: string
+          id?: string
           image_url?: string | null
           is_active?: boolean
           order_item_id: string
@@ -472,8 +518,8 @@ export type Database = {
         }
         Insert: {
           created_at?: string
-          customer_id: string
-          id: string
+          customer_id?: string
+          id?: string
           is_active?: boolean
           is_default?: boolean
           postal_code: string
@@ -553,8 +599,8 @@ export type Database = {
           product_id: string
         }
         Insert: {
-          customer_id: string
-          id: string
+          customer_id?: string
+          id?: string
           is_active?: boolean
           product_id: string
         }
@@ -590,6 +636,7 @@ export type Database = {
     }
     Enums: {
       order_status: "processing" | "shipped" | "delivered" | "cancelled"
+      product_size: "FREE" | "XS" | "S" | "M" | "L" | "XL"
       user_role: "customer" | "seller" | "admin"
     }
     CompositeTypes: {

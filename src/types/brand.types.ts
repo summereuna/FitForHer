@@ -1,6 +1,4 @@
-import { Database, Enums } from "@/types/database.types";
-
-export type UserRole = Enums<"user_role">;
+import { Database } from "@/types/database.types";
 
 export type Brands = Database["public"]["Tables"]["brands"]["Row"];
 
