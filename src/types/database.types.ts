@@ -135,27 +135,16 @@ export type Database = {
         Row: {
           id: string
           name: string
-          parent_id: string | null
         }
         Insert: {
           id?: string
           name: string
-          parent_id?: string | null
         }
         Update: {
           id?: string
           name?: string
-          parent_id?: string | null
         }
-        Relationships: [
-          {
-            foreignKeyName: "categories_parent_id_fkey"
-            columns: ["parent_id"]
-            isOneToOne: false
-            referencedRelation: "categories"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
       order_items: {
         Row: {
@@ -437,7 +426,7 @@ export type Database = {
             foreignKeyName: "products_category_id_fkey"
             columns: ["category_id"]
             isOneToOne: false
-            referencedRelation: "categories"
+            referencedRelation: "sub_categories"
             referencedColumns: ["id"]
           },
           {
@@ -546,6 +535,32 @@ export type Database = {
             columns: ["customer_id"]
             isOneToOne: false
             referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      sub_categories: {
+        Row: {
+          id: string
+          name: string
+          parent_id: string
+        }
+        Insert: {
+          id?: string
+          name: string
+          parent_id: string
+        }
+        Update: {
+          id?: string
+          name?: string
+          parent_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sub_categories_parent_id_fkey"
+            columns: ["parent_id"]
+            isOneToOne: false
+            referencedRelation: "categories"
             referencedColumns: ["id"]
           },
         ]
