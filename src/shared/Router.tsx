@@ -12,6 +12,8 @@ import Tops from "@/pages/Category/Tops";
 import Dashboard from "@/pages/Dashboard/Dashboard";
 import DashOverview from "@/pages/Dashboard/DashOverview";
 import DashProduct from "@/pages/Dashboard/DashProduct";
+import DashProductEdit from "@/pages/Dashboard/DashProductEdit";
+import DashProductUpload from "@/pages/Dashboard/DashProductUpload";
 import DashReviewAndQnA from "@/pages/Dashboard/DashReviewAndQnA";
 import DashSetting from "@/pages/Dashboard/DashSetting";
 import DashTransaction from "@/pages/Dashboard/DashTransaction";
@@ -37,11 +39,13 @@ const PrivateRoute: React.FC<{ element: React.ElementType }> = ({
   ...rest
 }) => {
   const { isLoggedIn, isSessionLoading } = useAuth();
-  return !isSessionLoading && isLoggedIn ? (
-    <Element {...rest} />
-  ) : (
-    <Navigate to="/login" />
-  );
+
+  // 세션 로딩이 끝난 후에만 리다이렉트를 결정
+  if (isSessionLoading) {
+    return null; // 로딩 중일 때는 아무것도 렌더링하지 않음
+  }
+
+  return isLoggedIn ? <Element {...rest} /> : <Navigate to="/login" />;
 };
 
 // PublicRoute : 로그인 하지 않은 상태만 들어갈 수 있는 라우트
@@ -51,11 +55,13 @@ const PublicRoute: React.FC<{ element: React.ElementType }> = ({
   ...rest
 }) => {
   const { isLoggedIn, isSessionLoading } = useAuth();
-  return !isSessionLoading && !isLoggedIn ? (
-    <Element {...rest} />
-  ) : (
-    <Navigate to="/" />
-  );
+
+  // 세션 로딩이 끝난 후에만 리다이렉트를 결정
+  if (isSessionLoading) {
+    return null; // 로딩 중일 때는 아무것도 렌더링하지 않음
+  }
+
+  return !isLoggedIn ? <Element {...rest} /> : <Navigate to="/" />;
 };
 
 //셀러만 진입 가능한 페이지
@@ -107,7 +113,7 @@ export default function Router() {
         {/* -------------- 1. 일반 라우트 -------------- */}
 
         {/* -------------- 2. 셀러 전용 라우트 -------------- */}
-        <Route element={<SellerLayout />}>
+        <Route element={<PrivateRoute element={SellerLayout} />}>
           {/* 셀러가 물건 올리는 대시보드 */}
           <Route
             path="/dashboard"
@@ -120,6 +126,14 @@ export default function Router() {
               element={<DashOverview />}
             />
             <Route path="/dashboard/product" element={<DashProduct />} />
+            <Route
+              path="/dashboard/product/upload"
+              element={<DashProductUpload />}
+            />
+            <Route
+              path="/dashboard/product/:id/edit"
+              element={<DashProductEdit />}
+            />
             <Route
               path="/dashboard/transaction"
               element={<DashTransaction />}
