@@ -12,8 +12,15 @@ function Dashboard() {
   const { brandData, isError, isPending, isSuccess } = useBrand(
     session?.user.id as string
   );
+
+  //브랜드 데이터 가져오기 전까지 아무것도 안띄우기 => 회원가입 축하 메세지 깜빡임 방지
+  if (!isSuccess) {
+    return null;
+  }
+
   return (
     <>
+      {brandData && <Outlet />}
       {!brandData && (
         <Card className="max-w-2xl mx-auto">
           <div className="p-10 space-y-5">
@@ -90,7 +97,6 @@ function Dashboard() {
           </div>
         </Card>
       )}
-      {brandData && <Outlet />}
     </>
   );
 }
