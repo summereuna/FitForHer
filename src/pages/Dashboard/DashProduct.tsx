@@ -1,19 +1,40 @@
+import { useBrandProducts } from "@/api/productApi";
 import ItemNotFound from "@/components/ItemNotFound";
-import { ProductFormDialog } from "@/components/Product/ProductFormDialog";
+import ProductDataTable from "@/components/Product/ProductDataTable";
+import { Button } from "@/components/ui/button";
 import { Card, CardTitle } from "@/components/ui/card";
+import { useAuth } from "@/hooks/useAuth";
+import { useNavigate } from "react-router-dom";
 
 function DashProduct() {
+  const navigate = useNavigate();
+  const { authId } = useAuth();
+  const { brandProductsData, isPending, isError, isSuccess } = useBrandProducts(
+    authId as string
+  );
   return (
     <div className="flex flex-col h-full w-full gap-5">
       <section className="flex justify-between items-center">
         <CardTitle>상품관리</CardTitle>
-        <ProductFormDialog />
+        <Button
+          variant="outline"
+          onClick={() => {
+            navigate("/dashboard/product/upload");
+          }}
+        >
+          상품 등록하기
+        </Button>
       </section>
       <section className="flex h-full">
         <Card className="w-full">
-          <ItemNotFound
-            description={`등록된 상품이 없습니다.\n상품을 등록하세요.`}
-          />
+          {!brandProductsData && (
+            <ItemNotFound
+              description={`등록된 상품이 없습니다.\n상품을 등록하세요.`}
+            />
+          )}
+          {brandProductsData && (
+            <ProductDataTable brandProductsData={brandProductsData} />
+          )}
         </Card>
       </section>
     </div>

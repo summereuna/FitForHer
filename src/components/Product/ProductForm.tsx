@@ -1,14 +1,5 @@
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+
 import { Input } from "@/components/ui/input";
 
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -30,8 +21,12 @@ import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useEffect, useState } from "react";
 import { productFormSchema } from "@/schemas/productFormSchema";
-import { useUploadProduct, useUploadProductImages } from "@/api/productApi";
-import { cn } from "@/lib/utils";
+import {
+  BrandProductByIdQueryRelations,
+  useUploadProduct,
+  useUploadProductImages,
+} from "@/api/productApi";
+import { cn, sortProductImages } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 
 import { useBrand } from "@/api/brandApi";
@@ -40,9 +35,23 @@ import { useAuth } from "@/hooks/useAuth";
 import ColorComboBox from "@/components/Product/ColorComboBox";
 import CategoryComboBox from "@/components/Product/CategoryComboBox";
 import SizesSelect from "@/components/Product/SizesSelect";
+import {
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { useNavigate } from "react-router-dom";
+import { UpdateProductRequest } from "@/types/product.types";
 
-export function ProductFormDialog() {
-  const data = false;
+interface ProductFormProps {
+  productData?: BrandProductByIdQueryRelations;
+  onUpdateData?: (updatedDate: UpdateProductRequest) => void;
+}
+
+export function ProductForm({ productData, onUpdateData }: ProductFormProps) {
+  const navigate = useNavigate();
   const { authId } = useAuth();
   const { brandData } = useBrand(authId as string);
 
@@ -53,7 +62,7 @@ export function ProductFormDialog() {
       description: "",
       price: 0,
       color: "",
-      sizes: [{ size: "FREE", stock_quantity: 100 }],
+      sizes: [{ size: "FREE", stock_quantity: 0 }],
       category: "",
       imageUrls: [],
     },
@@ -100,21 +109,31 @@ export function ProductFormDialog() {
     e.target.value = "";
   };
 
-  // useEffect(() => {
-  //   if (brandData) {
-  //     const data = {
-  //       name: brandData.name,
-  //       description: brandData.description || "",
-  //       logo_url: brandData.logo_url || "",
-  //       sizes:
-  //         (brandData.sizes as { value?: string }[]) || [],
-  //     };
-  //     // console.log(brandData);
-  //     setImagePreview(brandData.logo_url);
+  useEffect(() => {
+    //기존 값 있는 경우 form 채우기
+    if (productData) {
+      const sortedImageUrls = sortProductImages(
+        productData.product_images.map(
+          (img: { image_url: string }) => img.image_url
+        )
+      );
+      const data = {
+        name: productData.name,
+        description: productData.description,
+        price: productData.price,
+        color: productData.color,
+        category: productData.sub_categories?.name,
+        imageUrls: sortedImageUrls || [],
+        sizes: productData.product_sizes || [
+          { size: "FREE", stock_quantity: 0 },
+        ],
+      };
 
-  //     form.reset(data);
-  //   }
-  // }, [brandData, form]);
+      setImagePreview(sortedImageUrls);
+
+      form.reset(data);
+    }
+  }, [productData, form]);
 
   useEffect(() => {
     if (isSuccessProductImages) {
@@ -133,20 +152,12 @@ export function ProductFormDialog() {
     };
   }, [imagePreview]);
 
-  useEffect(() => {
-    return () => {
-      if (imagePreview) {
-        imagePreview.forEach((preview) => {
-          URL.revokeObjectURL(preview);
-        });
-      }
-    };
-  }, [imagePreview]);
-
   function onSubmit(values: z.infer<typeof productFormSchema>) {
     // 브랜드 아이디 넣어야 함
-    if (brandData) {
-      const productData = {
+    if (!brandData) return;
+
+    if (!productData) {
+      const newProductData = {
         brand_id: brandData.id,
         category_id: values.category,
         color: values.color,
@@ -157,30 +168,54 @@ export function ProductFormDialog() {
         product_images: values.imageUrls, //이미지 테이블
       };
 
-      mutateUploadProduct(productData);
+      mutateUploadProduct(newProductData);
 
-      console.log("데이터 받기 완료?", isSuccessProduct);
       if (isSuccessProduct) {
         form.reset();
         setFileList([]); // 파일 리스트 초기화
         setImagePreview([]); // 이미지 프리뷰 초기화
       }
+    } else {
+      //업데이트시
+      const updatedProductData = {
+        id: productData.id,
+        category_id: productData.category_id,
+        category_name: values.category,
+        color: values.color,
+        description: values.description,
+        name: values.name,
+        price: values.price,
+        sizes: values.sizes, //사이즈 테이블
+        product_images: values.imageUrls, //이미지 테이블
+      };
+      onUpdateData?.(updatedProductData);
+
+      form.reset();
+      setFileList([]);
+      setImagePreview([]);
     }
   }
 
   // console.log(form.getValues("imageUrls"));
-
+  const handleCancel = () => {
+    form.reset();
+    setFileList([]);
+    setImagePreview([]);
+    navigate(-1);
+  };
   return (
-    <Dialog>
-      <DialogTrigger asChild>
-        <Button variant="outline">상품 등록하기</Button>
-      </DialogTrigger>
-      <DialogContent className="md:min-w-[80%] max-h-screen overflow-auto">
-        <DialogHeader>
-          <DialogTitle>상품 등록</DialogTitle>
-          <DialogDescription>{`판매할 상품을 등록하세요.`}</DialogDescription>
-        </DialogHeader>
+    <section>
+      {/* className="lg:min-w-[80%]" */}
+      <CardHeader className="space-y-4">
+        <CardTitle>{!productData ? "상품 등록" : "상품 수정"}</CardTitle>
+        <CardDescription>
+          {!productData
+            ? "판매할 상품을 등록하세요."
+            : "상품 정보를 수정하세요."}
+        </CardDescription>
         <Separator />
+      </CardHeader>
+      <CardContent>
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
@@ -270,12 +305,11 @@ export function ProductFormDialog() {
                   <FormItem>
                     <FormLabel>상품 이름</FormLabel>
                     <FormControl>
-                      <Input placeholder="상품 이름" {...field} />
+                      <Input
+                        placeholder="판매 페이지에 표시될 상품 이름을 입력하세요."
+                        {...field}
+                      />
                     </FormControl>
-
-                    <FormDescription>
-                      판매 페이지에 표시될 상품 이름을 입력하세요.
-                    </FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -289,13 +323,10 @@ export function ProductFormDialog() {
                     <FormControl>
                       <Textarea
                         className="resize-none"
-                        placeholder="상품 설명을 입력하세요."
+                        placeholder="상품에 대한 설명을 입력하세요."
                         {...field}
                       />
                     </FormControl>
-                    <FormDescription>
-                      상품에 대한 설명을 입력하세요.
-                    </FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -316,40 +347,38 @@ export function ProductFormDialog() {
                     <FormControl>
                       <Input
                         type="number"
-                        placeholder="상품 가격"
-                        // {...field}
-                        onChange={(value) =>
-                          field.onChange(value.target.valueAsNumber)
-                        }
+                        placeholder="상품의 가격을 입력하세요. (*가격은 0보다 큰 숫자여야 합니다.)"
+                        {...field}
+                        onChange={(e) => field.onChange(e.target.valueAsNumber)}
                       />
                     </FormControl>
-                    <FormDescription>상품의 가격을 입력하세요.</FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
               />
               <SizesSelect form={form} />
+
+              <Separator />
               <FormDescription>
-                *같은 상품이라도 색상이 다르면 상품을 별도로 등록해야 합니다.
+                *같은 상품이더라도 색상이 다르면 상품을 별도로 등록해야 합니다.
               </FormDescription>
-              <DialogFooter>
-                {!isSuccessProduct && (
-                  <Button type="submit" disabled={isPendingProduct}>
-                    등록하기
-                  </Button>
-                )}
-                {isSuccessProduct && (
-                  <DialogClose asChild>
-                    <Button type="submit" disabled={isPendingProduct}>
-                      등록하기
-                    </Button>
-                  </DialogClose>
-                )}
-              </DialogFooter>
+              <CardFooter className="flex space-x-3 justify-end">
+                <Button
+                  variant="outline"
+                  type="button"
+                  disabled={isPendingProduct}
+                  onClick={handleCancel}
+                >
+                  취소하기
+                </Button>
+                <Button type="submit" disabled={isPendingProduct}>
+                  {!productData ? "등록하기" : "수정하기"}
+                </Button>
+              </CardFooter>
             </div>
           </form>
         </Form>
-      </DialogContent>
-    </Dialog>
+      </CardContent>
+    </section>
   );
 }

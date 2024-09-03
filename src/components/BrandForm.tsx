@@ -41,8 +41,10 @@ interface BrandFormProps {
 }
 
 function BrandForm({ brandData }: BrandFormProps) {
-  const { mutateCreateBrand } = useCreateBrand();
-  const { mutateUpdateBrand } = useUpdateBrand();
+  const { mutateCreateBrand, isPending: isPendingCreateBrand } =
+    useCreateBrand();
+  const { mutateUpdateBrand, isPending: isPendingUpdateBrand } =
+    useUpdateBrand();
   const { mutateUploadBrandLogo, isSuccessBrandLogo, responseBrandLogoUrl } =
     useUploadBrandLogo();
 
@@ -66,7 +68,6 @@ function BrandForm({ brandData }: BrandFormProps) {
   });
 
   const [imagePreview, setImagePreview] = useState<string | null>(null);
-
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
 
@@ -113,9 +114,7 @@ function BrandForm({ brandData }: BrandFormProps) {
         official_website:
           (brandData.official_website as { value?: string }[]) || [],
       };
-      // console.log(brandData);
       setImagePreview(brandData.logo_url);
-
       form.reset(data);
     }
   }, [brandData, form]);
@@ -316,7 +315,12 @@ function BrandForm({ brandData }: BrandFormProps) {
             </div>
           </div>
         )}
-        <Button type="submit">{brandData ? "수정하기" : "등록하기"}</Button>
+        <Button
+          disabled={isPendingCreateBrand || isPendingUpdateBrand}
+          type="submit"
+        >
+          {brandData ? "수정하기" : "등록하기"}
+        </Button>
       </form>
     </Form>
   );
