@@ -7,7 +7,12 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { cn, getOnlyRepresentativePhoto, sortSizes } from "@/lib/utils";
+import {
+  cn,
+  getKoreanCategoryName,
+  getOnlyRepresentativePhoto,
+  sortSizes,
+} from "@/lib/utils";
 import Dropdown from "@/components/Dropdown";
 import { BrandProductsWithRelations } from "@/api/productApi";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -51,8 +56,16 @@ const ProductDataTable = ({ brandProductsData }: ProductDataTableProps) => {
               )}
             >
               <TableCell className="font-medium">
-                <p>{product.sub_categories?.categories?.name}</p>
-                <p>{product.sub_categories?.name}</p>
+                <p>
+                  {getKoreanCategoryName(
+                    product.sub_categories?.categories?.name as string
+                  )}
+                </p>
+                <p>
+                  {getKoreanCategoryName(
+                    product.sub_categories?.name as string
+                  )}
+                </p>
               </TableCell>
               <TableCell>
                 <Avatar className="size-20 rounded-none border-[1px] bg-white">
