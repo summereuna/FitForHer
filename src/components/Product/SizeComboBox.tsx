@@ -23,15 +23,7 @@ import {
 import { Icon } from "@/components/Icon";
 import { checkIcon, chevronUpDownIcon } from "@/shared/icons";
 import { productFormSchema } from "@/schemas/productFormSchema";
-
-const sizes = [
-  { label: "FREE", value: "FREE" },
-  { label: "XS", value: "XS" },
-  { label: "S", value: "S" },
-  { label: "M", value: "M" },
-  { label: "L", value: "L" },
-  { label: "XL", value: "XL" },
-] as const;
+import { sizes } from "@/shared/data/sizes";
 
 interface SizeComboBoxProps {
   form: UseFormReturn<z.infer<typeof productFormSchema>>;

@@ -7,15 +7,23 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { sortSizes } from "@/lib/utils";
+import { cn, getOnlyRepresentativePhoto, sortSizes } from "@/lib/utils";
 import Dropdown from "@/components/Dropdown";
 import { BrandProductsWithRelations } from "@/api/productApi";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Skeleton } from "@/components/ui/skeleton";
+import { useState } from "react";
 
 interface ProductDataTableProps {
   brandProductsData: BrandProductsWithRelations;
 }
 
 const ProductDataTable = ({ brandProductsData }: ProductDataTableProps) => {
+  const [imageLoaded, setImageLoaded] = useState(false);
+  const handleImageLoad = () => {
+    setImageLoaded(true);
+  };
+  console.log(brandProductsData);
   return (
     <section>
       <Table>
@@ -24,8 +32,8 @@ const ProductDataTable = ({ brandProductsData }: ProductDataTableProps) => {
           <TableRow>
             <TableHead className="w-[100px]">카테고리</TableHead>
             <TableHead>상품 사진</TableHead>
-            <TableHead>상품명</TableHead>
-            <TableHead>상품 설명</TableHead>
+            <TableHead className="w-[200px]">상품명</TableHead>
+            <TableHead className="w-[350px]">상품 설명</TableHead>
             <TableHead>컬러</TableHead>
             <TableHead>사이즈/재고수량</TableHead>
             <TableHead>가격</TableHead>
@@ -34,24 +42,35 @@ const ProductDataTable = ({ brandProductsData }: ProductDataTableProps) => {
         </TableHeader>
         <TableBody>
           {brandProductsData.map((product) => (
-            <TableRow key={product.id}>
+            <TableRow
+              key={product.id}
+              className={cn(
+                !product.is_active
+                  ? "pointer-events-none opacity-30 bg-gray-50 cursor-not-allowed select-none"
+                  : ""
+              )}
+            >
               <TableCell className="font-medium">
                 <p>{product.sub_categories?.categories?.name}</p>
                 <p>{product.sub_categories?.name}</p>
               </TableCell>
               <TableCell>
-                <div>
-                  <img
-                    alt="상품 대표 이미지"
-                    src={
-                      product.product_images.find(
-                        (img: { image_url: string }) =>
-                          img.image_url.includes("product_img_0")
-                      )?.image_url
-                    }
-                    className="size-20 object-cover"
-                  />
-                </div>
+                <Avatar className="size-20 rounded-none border-[1px] bg-white">
+                  {product.product_images && (
+                    <AvatarImage
+                      src={getOnlyRepresentativePhoto(product.product_images)}
+                      alt="상품 대표 사진"
+                      className="object-cover"
+                      onLoad={handleImageLoad}
+                    />
+                  )}
+                  {!imageLoaded && (
+                    <AvatarFallback className="rounded-none">
+                      <Avatar className="size-20 rounded-none bg-white-200 border-[1px]" />
+                      <Skeleton className="size-20 rounded-none" />
+                    </AvatarFallback>
+                  )}
+                </Avatar>
               </TableCell>
               <TableCell>{product.name}</TableCell>
               <TableCell>{product.description}</TableCell>

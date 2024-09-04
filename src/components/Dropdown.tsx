@@ -1,3 +1,4 @@
+import { useChangeActiveProduct } from "@/api/productApi";
 import { Icon } from "@/components/Icon";
 import { Button } from "@/components/ui/button";
 import {
@@ -18,6 +19,10 @@ interface DropdownProps {
 
 function Dropdown({ productId }: DropdownProps) {
   const navigate = useNavigate();
+
+  const { mutateChangeActiveProduct, isPendingChangeActiveProduct } =
+    useChangeActiveProduct();
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -28,12 +33,18 @@ function Dropdown({ productId }: DropdownProps) {
       <DropdownMenuContent className="min-w-6">
         <DropdownMenuGroup>
           <DropdownMenuItem
+            disabled={isPendingChangeActiveProduct}
             onClick={() => navigate(`/dashboard/product/${productId}/edit`)}
           >
             수정하기
           </DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownMenuItem>삭제하기</DropdownMenuItem>
+          <DropdownMenuItem
+            disabled={isPendingChangeActiveProduct}
+            onClick={() => mutateChangeActiveProduct(productId)}
+          >
+            삭제하기
+          </DropdownMenuItem>
         </DropdownMenuGroup>
       </DropdownMenuContent>
     </DropdownMenu>

@@ -635,3 +635,43 @@ export const useUpdateProduct = () => {
     errorMessage,
   };
 };
+
+//////////////////////////////////////////////////////////////////////
+// 프로덕트 논리적 삭제
+
+const changeActiveProduct = async (product_id: string) => {
+  const { error: productError } = await supabase
+    .from("products")
+    .update({ is_active: false })
+    .eq("id", product_id);
+  if (productError)
+    throw console.log("프로덕트 논리적 삭제 에러", productError);
+};
+
+export const useChangeActiveProduct = () => {
+  const queryClient = useQueryClient();
+  const { errorMessage, setErrorMessage } = useFormError();
+
+  const {
+    mutate: mutateChangeActiveProduct,
+    isPending: isPendingChangeActiveProduct,
+    isError,
+    isSuccess: isSuccessChangeActiveProduct,
+  } = useMutation({
+    mutationFn: changeActiveProduct,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["products"] });
+    },
+    onError: (error) => {
+      console.log(error);
+    },
+  });
+
+  return {
+    mutateChangeActiveProduct,
+    isError,
+    isPendingChangeActiveProduct,
+    isSuccessChangeActiveProduct,
+    errorMessage,
+  };
+};

@@ -12,6 +12,9 @@ function DashProduct() {
   const { brandProductsData, isPending, isError, isSuccess } = useBrandProducts(
     authId as string
   );
+
+  if (isPending) return null;
+
   return (
     <div className="flex flex-col h-full w-full gap-5">
       <section className="flex justify-between items-center">
@@ -27,12 +30,12 @@ function DashProduct() {
       </section>
       <section className="flex h-full">
         <Card className="w-full">
-          {!brandProductsData && (
+          {brandProductsData?.length === 0 && (
             <ItemNotFound
               description={`등록된 상품이 없습니다.\n상품을 등록하세요.`}
             />
           )}
-          {brandProductsData && (
+          {brandProductsData && brandProductsData?.length > 0 && (
             <ProductDataTable brandProductsData={brandProductsData} />
           )}
         </Card>
