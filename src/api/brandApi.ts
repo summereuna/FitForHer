@@ -97,7 +97,7 @@ export const useBrand = (seller_id: string) => {
     queryKey: ["brands"],
     queryFn: () => getBrandBySellerId(seller_id),
     enabled: !!seller_id, // id가 있을 때만 쿼리를 실행
-    staleTime: Infinity, // fresh 유지
+    // staleTime: Infinity, // fresh 유지
   });
 
   return { brandData, isPending, isError, isSuccess };
@@ -113,13 +113,16 @@ const updateBrands = async (updatedBrandData: BrandUpdateRequest) => {
   if (userError) throw userError;
   if (!user) throw new Error("인증되지 않은 사용자 입니다.");
 
+  // console.log("잘 바꼈니", updatedBrandData.logo_url);
   const { data, error } = await supabase
     .from("brands")
     .update(updatedBrandData)
     .eq("id", updatedBrandData.id)
-    .select("*");
+    .select("*")
+    .single();
 
   if (error) throw error;
+
   return data;
 };
 
@@ -136,13 +139,9 @@ export const useUpdateBrand = () => {
     isSuccess,
   } = useMutation({
     mutationFn: updateBrands,
-    onSuccess: (data) => {
-      if (data) {
-        console.log("✅", data);
-        queryClient.invalidateQueries({ queryKey: ["brands"] });
-
-        navigate("/dashboard/setting");
-      }
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["brands"] });
+      navigate("/dashboard/setting");
     },
     onError: (error) => {
       console.log(error);
