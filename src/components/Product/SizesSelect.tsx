@@ -51,13 +51,6 @@ const SizesSelect: FC<SizesSelectProps> = ({ form }) => {
                         placeholder="재고 수량"
                         {...field}
                         onChange={(e) => field.onChange(e.target.valueAsNumber)}
-                        // onChange={(e) => {
-                        //   const value = e.target.valueAsNumber;
-                        //   // NaN 체크 및 값 업데이트
-                        //   if (!isNaN(value)) {
-                        //     field.onChange(value);
-                        //   }
-                        // }}
                       />
                     </div>
                   </FormControl>
