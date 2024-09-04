@@ -1,92 +1,87 @@
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { CategoryProductsWithRelations } from "@/api/mainApi";
+import Product from "@/components/Product";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardDescription, CardTitle } from "@/components/ui/card";
-import { Skeleton } from "@/components/ui/skeleton";
+import { CardDescription, CardTitle } from "@/components/ui/card";
+import { getKoreanCategoryName } from "@/lib/utils";
 import { useNavigate } from "react-router-dom";
 
 interface CategorySectionProps {
-  data;
+  data: CategoryProductsWithRelations;
+  isPending: boolean;
 }
 
-const CategorySection = ({ data }: CategorySectionProps) => {
+const CategorySection = ({ data, isPending }: CategorySectionProps) => {
   const navigate = useNavigate();
-  const categoryInfo = [
+
+  if (isPending) return null;
+
+  const { name: topCategoryName, sub_categories } = data;
+  const [sub0, sub1, sub2] = sub_categories;
+
+  const productsSub0 = sub0.products;
+  const productsSub1 = sub1.products;
+  const productsSub2 = sub2.products;
+
+  let sameCategoryProducts = [
+    ...productsSub0,
+    ...productsSub1,
+    ...productsSub2,
+  ];
+
+  if (sameCategoryProducts.length >= 4) {
+    sameCategoryProducts = sameCategoryProducts.slice(0, 4);
+  }
+
+  const categoryDescription = [
     {
-      name: "저강도 운동",
-      description: "가벼운 착용감과 온종일 자유로운 움직임을 선사합니다.",
-      recommend: "요가, 필라테스",
-      path: "/category/tops?sub=",
+      name: "tops",
+      description:
+        "운동의 완벽함을 위한 선택, 운동의 한계를 넘어.\n다양한 브랜드의 상의 컬렉션에서 통기성과 편안함을 제공하는 상의를 만나보세요.",
     },
     {
-      name: "중강도 운동",
+      name: "pants",
       description:
-        "흐트러짐 없이 잡아주는 안정감으로 뛰어난 커버력을 가졌습니다.",
-      recommend: "헬스 트레이닝",
-      path: "/category/sports-bras?type=medium",
-    },
-    {
-      name: "고강도 운동",
-      description:
-        "높은 지지력으로 고강도 운동에도 흔들림 업슨 안정감을 경험할 수 있습니다.",
-      recommend: "러닝",
-      path: "/category/sports-bras?type=high",
-    },
-    {
-      name: "고강도 운동",
-      description:
-        "높은 지지력으로 고강도 운동에도 흔들림 업슨 안정감을 경험할 수 있습니다.",
-      recommend: "러닝",
-      path: "/category/sports-bras?type=high",
+        "움직임은 자유롭게, 스타일은 더욱 돋보이게.\n여러 브랜드의 하의 컬렉션에서 당신의 운동을 완성해 줄 완벽한 핏을 찾으세요.",
     },
   ];
+
   return (
     <section className="flex flex-row w-full space-y-5 h-m-80 flex-wrap lg:space-x-5 lg:flex-nowrap lg:space-y-0">
-      <div className="flex flex-col space-y-5 items-center w-full pb-5 lg:items lg:items-start">
-        <CardTitle>{"카테고리 이름"}</CardTitle>
-        <CardDescription>{"카테고리 설명"}</CardDescription>
+      <div
+        aria-label="카테고리 설명"
+        className="flex flex-col space-y-7 items-center w-full pb-5 lg:items lg:items-start"
+      >
+        <CardTitle>{getKoreanCategoryName(topCategoryName)}</CardTitle>
+        <CardDescription className="text-base leading-6 whitespace-pre-line text-center lg:text-left">
+          {topCategoryName === categoryDescription[0].name
+            ? categoryDescription[0].description
+            : categoryDescription[1].description}
+        </CardDescription>
+        <div className="flex flex-row space-x-2">
+          {sub_categories.map((sub_category, index) => (
+            <Badge
+              key={index}
+              variant="outline"
+              className="bg-white h-8 opacity-70 text-sm flex justify-center transition duration-200 ease-linear hover:bg-black hover:text-white cursor-pointer"
+              onClick={() => {
+                navigate(`category/${topCategoryName}/${sub_category.name}`);
+              }}
+            >
+              {getKoreanCategoryName(sub_category.name)}
+            </Badge>
+          ))}
+        </div>
         <Button
           variant={"outline"}
           className="w-32"
-          onClick={() => navigate(`/category/${categoryName}`)}
+          onClick={() => navigate(`/category/${topCategoryName}`)}
         >
           더보기
         </Button>
       </div>
-      {categoryInfo.map((item, index) => (
-        <div
-          className="flex flex-col w-full p-0 md:w-1/2 md:p-3 lg:p-0"
-          onClick={() => {
-            navigate(
-              `/category/${item.sub_categories.categories.name}/${item.sub_categories.name}`
-            );
-          }}
-        >
-          <Avatar className="w-full h-60 rounded-none border-[1px] bg-white">
-            <AvatarImage
-              src={item.image_url}
-              alt="브랜드 로고"
-              className="object-cover"
-            />
-            <AvatarFallback className="rounded-none">
-              <Avatar className="w-full h-full rounded-none bg-white-200" />
-              <Skeleton className="w-full h-full rounded-none" />
-            </AvatarFallback>
-          </Avatar>
-          <div
-            aria-label={"dd"}
-            key={index}
-            className="flex flex-col w-full py-5 text-sm space-y-2"
-          >
-            <CardDescription>
-              {item.sub_categories || "서브 카테고리"}
-            </CardDescription>
-            <CardTitle className="text-sm">{item.name || "상품명"}</CardTitle>
-            <CardDescription>{item.color || "컬러"}</CardDescription>
-            <CardTitle className="text-base">
-              {item.price || "가격"} 원
-            </CardTitle>
-          </div>
-        </div>
+      {sameCategoryProducts.map((item, index) => (
+        <Product key={index} item={item} />
       ))}
     </section>
   );
