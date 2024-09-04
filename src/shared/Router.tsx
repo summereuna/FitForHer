@@ -1,14 +1,12 @@
 import { useAuth } from "@/hooks/useAuth";
 import About from "@/pages/About";
 import BizSignup from "@/pages/BizSignup";
+import Cart from "@/pages/Cart";
 import Best from "@/pages/Category/Best";
 import Brands from "@/pages/Category/Brands";
-import Bras from "@/pages/Category/Bras";
-import Cart from "@/pages/Category/Cart";
 import Category from "@/pages/Category/Category";
 import New from "@/pages/Category/New";
-import Pants from "@/pages/Category/Pants";
-import Tops from "@/pages/Category/Tops";
+import TopCategory from "@/pages/Category/TopCategory";
 import Dashboard from "@/pages/Dashboard/Dashboard";
 import DashOverview from "@/pages/Dashboard/DashOverview";
 import DashProduct from "@/pages/Dashboard/DashProduct";
@@ -90,17 +88,19 @@ export default function Router() {
 
           {/* 카테고리 아울렛 */}
           <Route path="/category" element={<Category />}>
-            <Route index element={<New />} />
+            <Route index element={<TopCategory />} />
+            <Route
+              path="/category/:categoryName/:subCategoryName?"
+              element={<TopCategory />}
+            />
             <Route path="/category/new" element={<New />} />
-            <Route path="/category/tops" element={<Tops />} />
-            <Route path="/category/pants" element={<Pants />} />
-            <Route path="/category/sports-bras" element={<Bras />} />
             <Route path="/category/best" element={<Best />} />
             <Route path="/category/brands" element={<Brands />} />
           </Route>
 
           {/* 제품 상세 페이지 */}
           <Route path="/product/:id" element={<Product />}>
+            <Route index element={<ProductDetail />} />
             <Route
               index
               path="/product/:id/detail"
