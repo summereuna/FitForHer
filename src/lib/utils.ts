@@ -30,3 +30,21 @@ export const sortSizes = (
 export const sortProductImages = (images: string[]) => {
   return images.sort((a: string, b: string) => a.localeCompare(b));
 };
+
+//sortProductImages(
+//     product.product_images.map(
+//       (img: { image_url: string }) => img.image_url
+//     )
+//   )[0]
+
+/**
+ *
+ * @param imageArray
+ * @returns 상풒 대표 사진 url
+ */
+export const getOnlyRepresentativePhoto = (
+  imageArray: { image_url: string }[]
+) => {
+  return imageArray.find((img) => img.image_url.includes("product_img_0"))
+    ?.image_url;
+};
