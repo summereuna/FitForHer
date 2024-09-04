@@ -1,4 +1,4 @@
-import { CategoryTop } from "@/components/CategoryTop";
+import { CategoryTop } from "@/components/Category/CategoryTop";
 import { Icon } from "@/components/Icon";
 import { SearchBar } from "@/components/SearchBar";
 import { Separator } from "@/components/ui/separator";

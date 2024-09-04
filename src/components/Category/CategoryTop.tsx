@@ -20,11 +20,12 @@ export function CategoryTop() {
             <Icon className="size-6">{categoryIcon}</Icon>
           </button>
         </SheetTrigger>
+        {/*  */}
         <SheetContent side={"top"}>
           <SheetHeader>
-            <SheetTitle>Edit profile</SheetTitle>
+            <SheetTitle>전체 카테고리</SheetTitle>
             <SheetDescription>
-              Make changes to your profile here. Click save when you're done.
+              설명 설명 설명 설명 설명 설명 설명 설명 설명 설명 설명 설명
             </SheetDescription>
           </SheetHeader>
           <div>카테고리</div>
@@ -36,6 +37,7 @@ export function CategoryTop() {
             <SheetClose asChild></SheetClose>
           </SheetFooter>
         </SheetContent>
+        {/*  */}
       </Sheet>
     </div>
   );
