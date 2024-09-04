@@ -9,26 +9,26 @@ const BraCategorySection = () => {
   const navigate = useNavigate();
   const braCategoryInfo = [
     {
-      title: "저강도 운동",
+      title: "스포츠 브라\n라이트 서포트",
       description: "가벼운 착용감으로 자유로운 움직임을 경험하세요.",
-      recommend: "일상, 요가, 필라테스",
-      path: "/category/sports-bras?type=light",
+      recommend: "저강도 운동: 일상, 요가, 필라테스",
+      path: "/category/sports-bras/light",
       asset: lightImage,
     },
     {
-      title: "중강도 운동",
+      title: "미디엄 서포트",
       description:
         "흐트러짐 없이 잡아주는 안정감으로 뛰어난 커버력을 경험하세요.",
-      recommend: "헬스 트레이닝, 싸이클",
-      path: "/category/sports-bras?type=medium",
+      recommend: "중강도 운동: 헬스 트레이닝, 싸이클",
+      path: "/category/sports-bras/medium",
       asset: mediumImage,
     },
     {
-      title: "고강도 운동",
+      title: "하이 서포트",
       description:
         "높은 지지력으로 고강도 운동에도 흔들림 없는 안정감을 경험하세요.",
-      recommend: "러닝, 크로스핏, 에어로빅",
-      path: "/category/sports-bras?type=high",
+      recommend: "고강도 운동: 러닝, 크로스핏, 에어로빅",
+      path: "/category/sports-bras/high",
       asset: hightImage,
     },
   ];
@@ -44,13 +44,13 @@ const BraCategorySection = () => {
           className="w-full h-full object-cover object-top"
         />
         <div className="absolute top-0 left-0 right-0 bottom-0 flex flex-col min-w-60 space-y-5 p-5 h-full justify-end bg-black bg-opacity-50 transition duration-200 ease-linear hover:bg-black hover:bg-opacity-60">
-          <CardTitle className="text-white">
+          <CardTitle className="text-white whitespace-pre-line leading-8">
             {braCategoryInfo[0].title}
           </CardTitle>
           <CardDescription className="text-white">
             {braCategoryInfo[0].description}
             <br />
-            추천 운동: {braCategoryInfo[0].recommend}
+            {braCategoryInfo[0].recommend}
           </CardDescription>
           <Button
             variant={"outline"}
@@ -79,7 +79,7 @@ const BraCategorySection = () => {
             <CardDescription className="text-white">
               {braCategoryInfo[1].description}
               <br />
-              추천 운동: {braCategoryInfo[1].recommend}
+              {braCategoryInfo[1].recommend}
             </CardDescription>
             <Button
               variant={"outline"}
@@ -107,7 +107,7 @@ const BraCategorySection = () => {
             <CardDescription className="text-white">
               {braCategoryInfo[2].description}
               <br />
-              추천 운동: {braCategoryInfo[2].recommend}
+              {braCategoryInfo[2].recommend}
             </CardDescription>
             <Button
               variant={"outline"}

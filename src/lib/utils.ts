@@ -1,3 +1,4 @@
+import { categories } from "@/shared/data/categories";
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 
@@ -47,4 +48,12 @@ export const getOnlyRepresentativePhoto = (
 ) => {
   return imageArray.find((img) => img.image_url.includes("product_img_0"))
     ?.image_url;
+};
+
+export const getKoreanCategoryName = (
+  engCategoryName: string
+): string | undefined => {
+  const categoryList = categories;
+  const category = categoryList.find((item) => item.value === engCategoryName);
+  return category ? category.label : undefined;
 };
