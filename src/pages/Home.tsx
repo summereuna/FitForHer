@@ -16,21 +16,40 @@ export default function Home() {
     }
   }, [isSessionLoading, userRole, navigate]);
 
-  const { data: topProductsData, isPending: isPendingTop } =
-    useCategoryProducts("tops");
+  const {
+    data: topProductsData,
+    isPending: isPendingTop,
+    isSuccess: isSuccessTop,
+  } = useCategoryProducts("tops");
 
-  const { data: bottomProductsData, isPending: isPendingBottom } =
-    useCategoryProducts("pants");
+  const {
+    data: pantsProductsData,
+    isPending: isPendingPants,
+    isSuccess: isSuccessPants,
+  } = useCategoryProducts("pants");
 
   return (
     <div className="flex flex-col space-y-10">
       <section className="bg-gray-300 h-80"></section>
       <Separator />
-      <CategorySection data={topProductsData} isPending={isPendingTop} />
+      {isSuccessTop && topProductsData && (
+        <CategorySection
+          data={topProductsData}
+          isPending={isPendingTop}
+          isMainPage={true}
+        />
+      )}
+
       <Separator />
       <BraCategorySection />
       <Separator />
-      <CategorySection data={bottomProductsData} isPending={isPendingBottom} />
+      {isSuccessPants && pantsProductsData && (
+        <CategorySection
+          data={pantsProductsData}
+          isPending={isPendingPants}
+          isMainPage={true}
+        />
+      )}
     </div>
   );
 }

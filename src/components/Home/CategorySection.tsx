@@ -1,36 +1,36 @@
-import { CategoryProductsWithRelations } from "@/api/mainApi";
-import Product from "@/components/Product";
+import ProductItem from "@/components/ProductItem";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { CardDescription, CardTitle } from "@/components/ui/card";
 import { getKoreanCategoryName } from "@/lib/utils";
+import { CategoryProductsWithRelations, MainProduct } from "@/types/main.types";
 import { useNavigate } from "react-router-dom";
 
 interface CategorySectionProps {
   data: CategoryProductsWithRelations;
   isPending: boolean;
+  isMainPage: boolean;
 }
 
-const CategorySection = ({ data, isPending }: CategorySectionProps) => {
+const CategorySection = ({
+  data,
+  isPending,
+  isMainPage = false,
+}: CategorySectionProps) => {
   const navigate = useNavigate();
 
-  if (isPending) return null;
-
   const { name: topCategoryName, sub_categories } = data;
-  const [sub0, sub1, sub2] = sub_categories;
+  const mergedProducts: MainProduct[] = data.sub_categories.flatMap(
+    (subCategory) => subCategory.products
+  );
 
-  const productsSub0 = sub0.products;
-  const productsSub1 = sub1.products;
-  const productsSub2 = sub2.products;
+  let sortedProducts = mergedProducts.sort(
+    (a, b) =>
+      new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+  ); // 최신 순
 
-  let sameCategoryProducts = [
-    ...productsSub0,
-    ...productsSub1,
-    ...productsSub2,
-  ];
-
-  if (sameCategoryProducts.length >= 4) {
-    sameCategoryProducts = sameCategoryProducts.slice(0, 4);
+  if (sortedProducts.length >= 4) {
+    sortedProducts = sortedProducts.slice(0, 4); //4개만 보이게
   }
 
   const categoryDescription = [
@@ -46,42 +46,56 @@ const CategorySection = ({ data, isPending }: CategorySectionProps) => {
     },
   ];
 
+  if (isPending) return null;
+
   return (
-    <section className="flex flex-row w-full space-y-5 h-m-80 flex-wrap lg:space-x-5 lg:flex-nowrap lg:space-y-0">
-      <div
-        aria-label="카테고리 설명"
-        className="flex flex-col space-y-7 items-center w-full pb-5 lg:items lg:items-start"
-      >
-        <CardTitle>{getKoreanCategoryName(topCategoryName)}</CardTitle>
-        <CardDescription className="text-base leading-6 whitespace-pre-line text-center lg:text-left">
-          {topCategoryName === categoryDescription[0].name
-            ? categoryDescription[0].description
-            : categoryDescription[1].description}
-        </CardDescription>
-        <div className="flex flex-row space-x-2">
-          {sub_categories.map((sub_category, index) => (
-            <Badge
-              key={index}
-              variant="outline"
-              className="bg-white h-8 opacity-70 text-sm flex justify-center transition duration-200 ease-linear hover:bg-black hover:text-white cursor-pointer"
-              onClick={() => {
-                navigate(`category/${topCategoryName}/${sub_category.name}`);
-              }}
-            >
-              {getKoreanCategoryName(sub_category.name)}
-            </Badge>
-          ))}
-        </div>
-        <Button
-          variant={"outline"}
-          className="w-32"
-          onClick={() => navigate(`/category/${topCategoryName}`)}
+    <section className="flex flex-row w-full space-y-5 flex-wrap lg:space-x-5 lg:flex-nowrap lg:space-y-0">
+      {isMainPage && (
+        <div
+          aria-label="카테고리 설명"
+          className="flex flex-col space-y-7 items-center w-full pb-5 lg:items lg:items-start"
         >
-          더보기
-        </Button>
-      </div>
-      {sameCategoryProducts.map((item, index) => (
-        <Product key={index} item={item} />
+          <CardTitle>{getKoreanCategoryName(topCategoryName)}</CardTitle>
+          <CardDescription className="text-base leading-6 whitespace-pre-line text-center lg:text-left">
+            {topCategoryName === categoryDescription[0].name
+              ? categoryDescription[0].description
+              : categoryDescription[1].description}
+          </CardDescription>
+          <div className="flex flex-row space-x-2">
+            {sub_categories.map((sub_category, index) => (
+              <Badge
+                key={index}
+                variant="outline"
+                className="bg-white h-8 opacity-70 text-sm flex justify-center transition duration-200 ease-linear hover:bg-black hover:text-white cursor-pointer"
+                onClick={() => {
+                  navigate(`category/${topCategoryName}/${sub_category.name}`);
+                }}
+              >
+                {getKoreanCategoryName(sub_category.name)}
+              </Badge>
+            ))}
+          </div>
+          <Button
+            variant={"outline"}
+            className="w-32"
+            onClick={() => navigate(`/category/${topCategoryName}`)}
+          >
+            더보기
+          </Button>
+        </div>
+      )}
+
+      {sortedProducts.map((item, index) => (
+        <div
+          key={index}
+          aria-label="카테고리별 상품"
+          className="flex flex-col w-full p-0 md:w-1/2 md:p-3 lg:p-0"
+          onClick={() => {
+            navigate(`/product/${item.id}`);
+          }}
+        >
+          <ProductItem item={item} />
+        </div>
       ))}
     </section>
   );
