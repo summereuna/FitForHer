@@ -7,7 +7,7 @@ export const categories = [
   { topCategory: null, label: "스포츠 브라", value: "sports-bras" },
   { topCategory: "스포츠 브라", label: "저강도 운동", value: "light" },
   { topCategory: "스포츠 브라", label: "중강도 운동", value: "medium" },
-  { topCategory: "스포츠 브라", label: "고강도 운동", value: "hight" },
+  { topCategory: "스포츠 브라", label: "고강도 운동", value: "high" },
   //
   { topCategory: null, label: "하의", value: "pants" },
   { topCategory: "하의", label: "쇼츠", value: "shorts" },

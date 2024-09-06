@@ -4,9 +4,11 @@ import BizSignup from "@/pages/BizSignup";
 import Cart from "@/pages/Cart";
 import Best from "@/pages/Category/Best";
 import Brands from "@/pages/Category/Brands";
-import Category from "@/pages/Category/Category";
+import CategoryLayout from "@/pages/Category/CategoryLayout";
 import New from "@/pages/Category/New";
-import TopCategory from "@/pages/Category/TopCategory";
+import Pants from "@/pages/Category/Pants";
+import SportsBras from "@/pages/Category/SportsBras";
+import Tops from "@/pages/Category/Tops";
 import Dashboard from "@/pages/Dashboard/Dashboard";
 import DashOverview from "@/pages/Dashboard/DashOverview";
 import DashProduct from "@/pages/Dashboard/DashProduct";
@@ -87,15 +89,17 @@ export default function Router() {
           {/* 주문 폼 */}
 
           {/* 카테고리 아울렛 */}
-          <Route path="/category" element={<Category />}>
-            <Route index element={<TopCategory />} />
+          <Route path="/category" element={<CategoryLayout />}>
+            <Route index element={<New />} />
+            <Route path="new" element={<New />} />
+            <Route path="tops/:subCategoryName?" element={<Tops />} />
+            <Route path="pants/:subCategoryName?" element={<Pants />} />
             <Route
-              path="/category/:categoryName/:subCategoryName?"
-              element={<TopCategory />}
+              path="sports-bras/:subCategoryName?"
+              element={<SportsBras />}
             />
-            <Route path="/category/new" element={<New />} />
-            <Route path="/category/best" element={<Best />} />
-            <Route path="/category/brands" element={<Brands />} />
+            <Route path="best" element={<Best />} />
+            <Route path="brands" element={<Brands />} />
           </Route>
 
           {/* 제품 상세 페이지 */}

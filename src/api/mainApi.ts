@@ -28,6 +28,7 @@ const getCategoryProducts = async (
       )`
     )
     .eq("name", categoryName)
+    .filter("sub_categories.products.is_active", "eq", true)
     .order("created_at", {
       referencedTable: "sub_categories.products",
       ascending: false,
