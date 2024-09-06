@@ -1,9 +1,9 @@
-import { CategoryProductsWithRelations } from "@/api/mainApi";
 import Product from "@/components/Product";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { CardDescription, CardTitle } from "@/components/ui/card";
 import { getKoreanCategoryName } from "@/lib/utils";
+import { CategoryProductsWithRelations, MainProduct } from "@/types/main.types";
 import { useNavigate } from "react-router-dom";
 
 interface CategorySectionProps {
@@ -23,14 +23,20 @@ const CategorySection = ({ data, isPending }: CategorySectionProps) => {
   const productsSub1 = sub1.products;
   const productsSub2 = sub2.products;
 
-  let sameCategoryProducts = [
+  let sameCategoryProducts: MainProduct[] = [
     ...productsSub0,
     ...productsSub1,
     ...productsSub2,
   ];
 
   if (sameCategoryProducts.length >= 4) {
-    sameCategoryProducts = sameCategoryProducts.slice(0, 4);
+    //최신순
+    sameCategoryProducts = sameCategoryProducts
+      .sort(
+        (a, b) =>
+          new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+      )
+      .slice(0, 4);
   }
 
   const categoryDescription = [

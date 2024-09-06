@@ -4,9 +4,11 @@ import { Separator } from "@/components/ui/separator";
 import { CardDescription, CardTitle } from "@/components/ui/card";
 import { getKoreanCategoryName, getOnlyRepresentativePhoto } from "@/lib/utils";
 import { useNavigate } from "react-router-dom";
+import { Badge } from "@/components/ui/badge";
+import { MainProduct } from "@/types/main.types";
 
 interface ProductProps {
-  item: any; // ✅ 고치기
+  item: MainProduct;
 }
 
 const Product = ({ item }: ProductProps) => {
@@ -33,9 +35,16 @@ const Product = ({ item }: ProductProps) => {
           </AvatarFallback>
         </Avatar>
         <div className="flex flex-col w-full pt-5 text-sm space-y-2">
-          <CardDescription>
-            {getKoreanCategoryName(item.category_id?.name) || "서브 카테고리"}
-          </CardDescription>
+          <div className="flex flex-row space-x-2 items-center">
+            <CardDescription>{item.brands?.name || "브랜드"}</CardDescription>
+            <Badge
+              variant="outline"
+              className="bg-white opacity-70 text-xs flex justify-center "
+            >
+              {getKoreanCategoryName(item.sub_categories?.name as string) ||
+                "서브 카테고리"}
+            </Badge>
+          </div>
           <CardTitle className="text-sm">{item.name || "상품명"}</CardTitle>
           <div className="flex flex-row space-x-2 items-center text-xs text-muted-foreground">
             <div>{item.color || "컬러"}</div>

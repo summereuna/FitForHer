@@ -1,29 +1,8 @@
 import supabase from "@/shared/supabaseClient";
-import { QueryData } from "@supabase/supabase-js";
+import { CategoryProductsWithRelations } from "@/types/main.types";
 import { useQuery } from "@tanstack/react-query";
 
 // //셀러 상품 조회
-const categoryProductsQuery = supabase
-  .from("categories")
-  .select(
-    `*,
-  sub_categories(
-    name,
-    products (
-        *,
-        product_sizes( size, stock_quantity ),
-        product_images( image_url ),
-        category_id ( * )
-    )
-  )`
-  )
-  .single();
-
-// // 'productsQuery'에 대한 타입 생성
-export type CategoryProductsWithRelations = QueryData<
-  typeof categoryProductsQuery
->;
-
 const getCategoryProducts = async (
   categoryName: string
 ): Promise<CategoryProductsWithRelations> => {
@@ -34,17 +13,28 @@ const getCategoryProducts = async (
       sub_categories(
         name,
         products (
-            *,
+            id,
+            is_active,
+            name, 
+            description,
+            price,
+            created_at,
+            color,
+            brands( name ),
             product_sizes( size, stock_quantity ),
             product_images( image_url ),
-            category_id ( * )
+            sub_categories ( name )
         )
       )`
     )
     .eq("name", categoryName)
+    .order("created_at", {
+      referencedTable: "sub_categories.products",
+      ascending: false,
+    })
     .single(); //카테고리 배열안에 든거 다 가져오기
 
-  if (error) throw error;
+  if (error) throw console.log("쿼리 잘못됌", error);
 
   return data;
 };
