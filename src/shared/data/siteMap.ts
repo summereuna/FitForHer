@@ -1,5 +1,9 @@
 export const siteMap = [
   {
+    top: { label: "신제품", value: "new" },
+    sub: [],
+  },
+  {
     top: { label: "상의", value: "tops" },
     sub: [
       { label: "탑&티셔츠", value: "top-tshirts" },
@@ -22,10 +26,6 @@ export const siteMap = [
       { label: "레깅스", value: "leggings" },
       { label: "팬츠&조거", value: "pants-jogger" },
     ],
-  },
-  {
-    top: { label: "신제품", value: "new" },
-    sub: [],
   },
   {
     top: { label: "베스트", value: "best" },

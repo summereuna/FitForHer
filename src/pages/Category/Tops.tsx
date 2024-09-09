@@ -82,13 +82,13 @@ const Tops = () => {
             isFetchingNextPage={isFetchingNextPage}
           />
         )}
-        {selectedSubCategory && subCategoryName && (
+        {subCategoryData && selectedSubCategory && subCategoryName && (
           <SubCategory
             data={subCategoryData}
             handleChangeSortFilter={handleChangeSortFilter}
-            fetchNextPageSub={fetchNextPageSub}
-            hasNextPageSub={hasNextPageSub}
-            isFetchingNextPageSub={isFetchingNextPageSub}
+            fetchNextPage={fetchNextPageSub}
+            hasNextPage={hasNextPageSub}
+            isFetchingNextPage={isFetchingNextPageSub}
           />
         )}
       </main>

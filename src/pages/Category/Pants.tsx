@@ -82,10 +82,13 @@ const Pants = () => {
             isFetchingNextPage={isFetchingNextPage}
           />
         )}
-        {selectedSubCategory && subCategoryName && (
+        {subCategoryData && selectedSubCategory && subCategoryName && (
           <SubCategory
             data={subCategoryData}
             handleChangeSortFilter={handleChangeSortFilter}
+            fetchNextPage={fetchNextPageSub}
+            hasNextPage={hasNextPageSub}
+            isFetchingNextPage={isFetchingNextPageSub}
           />
         )}
       </main>

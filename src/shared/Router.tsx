@@ -20,7 +20,6 @@ import DashTransaction from "@/pages/Dashboard/DashTransaction";
 import Help from "@/pages/Help";
 import Home from "@/pages/Home";
 import Login from "@/pages/Login";
-import Product from "@/pages/Product/Product";
 import ProductDetail from "@/pages/Product/ProductDetail";
 import QnA from "@/pages/Product/QnA";
 import Review from "@/pages/Product/Review";
@@ -103,13 +102,7 @@ export default function Router() {
           </Route>
 
           {/* 제품 상세 페이지 */}
-          <Route path="/product/:id" element={<Product />}>
-            <Route index element={<ProductDetail />} />
-            <Route
-              index
-              path="/product/:id/detail"
-              element={<ProductDetail />}
-            />
+          <Route path="/product/:id" element={<ProductDetail />}>
             <Route path="/product/:id/review" element={<Review />} />
             <Route path="/product/:id/qna" element={<QnA />} />
           </Route>

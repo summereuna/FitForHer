@@ -1,5 +1,4 @@
 import { categories } from "@/shared/data/categories";
-import { MainProduct } from "@/types/main.types";
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 

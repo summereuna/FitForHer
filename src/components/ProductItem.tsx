@@ -4,10 +4,13 @@ import { Separator } from "@/components/ui/separator";
 import { CardDescription, CardTitle } from "@/components/ui/card";
 import { getKoreanCategoryName, getOnlyRepresentativePhoto } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
-import { MainProduct } from "@/types/main.types";
+import {
+  SameCategoryProduct,
+  SameSubCategoryProduct,
+} from "@/types/category.types";
 
 interface ProductItemProps {
-  item: MainProduct;
+  item: SameCategoryProduct | SameSubCategoryProduct;
 }
 
 const ProductItem = ({ item }: ProductItemProps) => {
