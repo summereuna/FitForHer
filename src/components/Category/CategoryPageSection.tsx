@@ -88,9 +88,8 @@ const CategoryPageSection = ({
             </div>
           ))}
 
-          {/* 페이지가 더 있을 경우 로딩 인디케이터*/}
-          {isFetchingNextPage && <p>로딩중...</p>}
-
+          {/* 페이지가 더 있을 경우 로딩 인디케이터
+          {isFetchingNextPage && <p>로딩중...</p>} */}
           {/* observerRef가 연결된 div: 이 div가 화면에 보일 때 다음 페이지를 불러옴 */}
           <div ref={observerRef} style={{ height: "1px" }} />
         </div>

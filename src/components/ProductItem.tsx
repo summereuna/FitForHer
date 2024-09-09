@@ -8,9 +8,10 @@ import {
   SameCategoryProduct,
   SameSubCategoryProduct,
 } from "@/types/category.types";
+import { RelatedProduct } from "@/types/customerProduct.types";
 
 interface ProductItemProps {
-  item: SameCategoryProduct | SameSubCategoryProduct;
+  item: SameCategoryProduct | SameSubCategoryProduct | RelatedProduct;
 }
 
 const ProductItem = ({ item }: ProductItemProps) => {

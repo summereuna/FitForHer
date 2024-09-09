@@ -1,5 +1,6 @@
 import { useProductDetail } from "@/api/customerProductApi";
 import { Icon } from "@/components/Icon";
+import RelatedProducts from "@/components/RelatedProducts";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -265,7 +266,7 @@ function ProductDetail() {
         </section>
       )}
       <section className="flex flex-col w-full h-full">
-        <nav aria-label="상품 상세 탭">
+        <nav aria-label="상품 탭">
           <ul className="w-full flex justify-between">
             <div className="w-full">
               <NavLink
@@ -297,6 +298,14 @@ function ProductDetail() {
           <Outlet />
         </section>
       </section>
+      {isSuccess && data && (
+        <section className="flex flex-col space-y-5 pb-5">
+          <CardTitle className="text-xl">추천 상품</CardTitle>
+          <RelatedProducts
+            subCategoryName={data?.sub_categories?.name as string}
+          />
+        </section>
+      )}
     </div>
   );
 }

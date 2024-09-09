@@ -99,8 +99,8 @@ const SubCategory = ({
         </div>
       )}
 
-      {/* 페이지가 더 있을 경우 페칭 중이면 로딩 중 표시*/}
-      {isFetchingNextPage && <p>로딩중...</p>}
+      {/* 페이지가 더 있을 경우 페칭 중이면 로딩 중 표시
+      {isFetchingNextPage && <p>로딩중...</p>} */}
 
       {/* observerRef div가 화면에 보면 다음 페이지 불러오기 */}
       <div ref={observerRef} style={{ height: "1px" }} />
