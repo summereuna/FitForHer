@@ -37,32 +37,6 @@ export type SameSubCategoryProduct = QueryData<
 
 //-----------------------------------------------------------------
 
-const productDetailResponse = supabase
-  .from("products")
-  .select(
-    `*,
-    product_sizes( size, stock_quantity ),
-    product_images( image_url ),
-    sub_categories (
-      name,
-      categories ( name )
-    ),
-    brands( * ),
-    product_questions( * )
-    `
-  )
-  .single();
-// .order("created_at", {
-//   referencedTable: "reviews",
-//   ascending: false,
-// })
-
-export type ProductDetailWithRelations = QueryData<
-  typeof productDetailResponse
->;
-
-//---------------------------------------------------------------------------
-
 const newestProductResponse = supabase
   .from("products")
   .select(
