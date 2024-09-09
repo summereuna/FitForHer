@@ -2,7 +2,7 @@ import supabase from "@/shared/supabaseClient";
 import { CategoryProductsWithRelations } from "@/types/main.types";
 import { useQuery } from "@tanstack/react-query";
 
-// //셀러 상품 조회
+// SELECT 메인 페이지 전체 상품 조회
 const getCategoryProducts = async (
   categoryName: string
 ): Promise<CategoryProductsWithRelations> => {

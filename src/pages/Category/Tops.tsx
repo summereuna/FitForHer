@@ -1,4 +1,4 @@
-import { useCategoryProducts } from "@/api/mainApi";
+import { useSameCateProducts, useSameSubCateProducts } from "@/api/categoryApi";
 import AsideFilter from "@/components/Category/AsideFilter";
 import CategoryPageSection from "@/components/Category/CategoryPageSection";
 import SubCategory from "@/pages/Category/SubCategory";
@@ -7,17 +7,38 @@ import { useNavigate, useParams } from "react-router-dom";
 
 const Tops = () => {
   const categoryName = "tops"; // 상위 카테고리 이름
-
   const { subCategoryName } = useParams();
-
   const navigate = useNavigate();
 
-  //상위 카테고리 데이터 페치
+  //------------------------------------------------------------
+
+  const [sortFilter, setSortFilter] = useState<
+    "newest" | "low-price" | "high-price"
+  >("newest");
+
+  const handleChangeSortFilter = (
+    sortBy: "newest" | "low-price" | "high-price"
+  ) => {
+    setSortFilter(sortBy);
+  };
+
+  //------------------------------------------------------------
+  //상위 카테고리 데이터 페치 (페이지네이션)
   const {
     data: categoryData,
-    isPending,
-    isSuccess,
-  } = useCategoryProducts(categoryName);
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useSameCateProducts(categoryName, sortFilter);
+
+  //하위카테고리
+  const {
+    data: subCategoryData,
+    fetchNextPage: fetchNextPageSub,
+    hasNextPage: hasNextPageSub,
+    isFetchingNextPage: isFetchingNextPageSub,
+  } = useSameSubCateProducts(subCategoryName!, sortFilter);
+  //------------------------------------------------------------
 
   // URL의 subCategoryName이 변경될 때마다 selectedSubCategory 상태를 업데이트
   const [selectedSubCategory, setSelectedSubCategory] = useState<string | null>(
@@ -43,18 +64,32 @@ const Tops = () => {
 
   return (
     <div className="flex flex-row space-x-10 w-full">
-      {isSuccess && categoryData && (
+      {categoryData && (
         <AsideFilter
-          data={categoryData}
+          topCateName={categoryName}
+          topCateData={categoryData}
+          subCateData={subCategoryData}
           onSubCategorySelect={handleSubCategorySelect}
         />
       )}
       <main className="flex flex-row w-full space-y-5 h-m-80 flex-wrap lg:space-x-5 lg:flex-nowrap lg:space-y-0">
-        {isSuccess && categoryData && !selectedSubCategory && (
-          <CategoryPageSection data={categoryData} isPending={isPending} />
+        {categoryData && !selectedSubCategory && (
+          <CategoryPageSection
+            data={categoryData}
+            handleChangeSortFilter={handleChangeSortFilter}
+            fetchNextPage={fetchNextPage}
+            hasNextPage={hasNextPage}
+            isFetchingNextPage={isFetchingNextPage}
+          />
         )}
-        {selectedSubCategory && subCategoryName && (
-          <SubCategory subCategoryName={subCategoryName} />
+        {subCategoryData && selectedSubCategory && subCategoryName && (
+          <SubCategory
+            data={subCategoryData}
+            handleChangeSortFilter={handleChangeSortFilter}
+            fetchNextPage={fetchNextPageSub}
+            hasNextPage={hasNextPageSub}
+            isFetchingNextPage={isFetchingNextPageSub}
+          />
         )}
       </main>
     </div>

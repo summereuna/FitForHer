@@ -10,10 +10,10 @@ function Header() {
   const { session, isLoggedIn, logout } = useAuth();
 
   const mainNavList = [
-    { id: "tops", name: "상의", path: `/category/tops` },
-    { id: "pants", name: "하의", path: `/category/pants` },
-    { id: "sports-bras", name: "스포츠브라", path: `/category/sports-bras` },
     { id: "new", name: "신제품", path: `/category/new` },
+    { id: "tops", name: "상의", path: `/category/tops` },
+    { id: "sports-bras", name: "스포츠브라", path: `/category/sports-bras` },
+    { id: "pants", name: "하의", path: `/category/pants` },
     { id: "best", name: "베스트", path: `/category/best` },
     { id: "brands", name: "브랜드", path: `/category/brands` },
   ];
