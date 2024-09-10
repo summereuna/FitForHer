@@ -1,4 +1,5 @@
 import { useProductDetail } from "@/api/customerProductApi";
+import { CartDrawer } from "@/components/Cart/CartDrawer";
 import { Icon } from "@/components/Icon";
 import RelatedProducts from "@/components/RelatedProducts";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -15,12 +16,17 @@ import {
 } from "@/components/ui/form";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Skeleton } from "@/components/ui/skeleton";
-import { getKoreanCategoryName, sortProductImages } from "@/lib/utils";
+import { useCart } from "@/hooks/useCart";
+import {
+  getKoreanCategoryName,
+  getOnlyRepresentativePhoto,
+  sortProductImages,
+} from "@/lib/utils";
 import { cartFormSchema } from "@/schemas/cartFormSchema";
 import { wishIcon } from "@/shared/icons";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { NavLink, Outlet, useParams } from "react-router-dom";
 import { z } from "zod";
@@ -28,6 +34,7 @@ import { z } from "zod";
 function ProductDetail() {
   const { id } = useParams();
   const { data, isSuccess } = useProductDetail(id as string);
+  const { addCartItem } = useCart();
   const imageArr = data?.product_images?.map((item) => item.image_url);
   const sortedImages = imageArr && sortProductImages(imageArr!);
 
@@ -52,6 +59,10 @@ function ProductDetail() {
 
   const [isAddedItem, setIsAddedItem] = useState(false);
 
+  const handleChangeIsAddedItem = useCallback(() => {
+    setIsAddedItem(false);
+  }, []);
+
   const form = useForm<z.infer<typeof cartFormSchema>>({
     resolver: zodResolver(cartFormSchema),
     defaultValues: {
@@ -61,17 +72,34 @@ function ProductDetail() {
   });
 
   const onSubmit = (values: z.infer<typeof cartFormSchema>) => {
+    if (!data) return;
+
     const newCartItem = {
+      id: data.id,
+      name: data.name,
+      description: data.description,
+      image: getOnlyRepresentativePhoto(data.product_images)!,
+      color: data.color,
+      price: data.price,
       size: values.size,
       size_quantity: values.size_quantity,
     };
 
-    if (newCartItem) {
-      console.log("새로운 장바구니 아이템:", newCartItem);
-      setIsAddedItem(true);
-    }
+    if (!newCartItem) return;
+
     //contextApi로 장바구니에 아이템 추가하기
+    addCartItem(newCartItem);
+    //버튼 상태 바꾸기
+    setIsAddedItem(true);
   };
+
+  //페이지 언마운트시 isAddedItem 상태 클린업
+  //같은 라우트 페이지로 이동시에도 적용되도록 id 의존성 배열에 추가
+  useEffect(() => {
+    return () => {
+      setIsAddedItem(false);
+    };
+  }, [id]);
 
   // console.log("폼 에러:", form.formState.errors);
   return (
@@ -239,14 +267,10 @@ function ProductDetail() {
                       </Button>
                     )}
                     {isAddedItem && (
-                      <Button
-                        type="button"
-                        size={"lg"}
-                        variant="secondary"
-                        className="w-full border-[1px]"
-                      >
-                        장바구니 보기
-                      </Button>
+                      <CartDrawer
+                        isInNav={false}
+                        onChangeIsAddedItem={handleChangeIsAddedItem}
+                      />
                     )}
                   </form>
                 </Form>

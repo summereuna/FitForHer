@@ -1,13 +1,20 @@
+import { CartDrawer } from "@/components/Cart/CartDrawer";
 import { CategoryTop } from "@/components/Category/CategoryTop";
 import { Icon } from "@/components/Icon";
 import { SearchBar } from "@/components/SearchBar";
 import { Separator } from "@/components/ui/separator";
 import { useAuth } from "@/hooks/useAuth";
+import { useCart } from "@/hooks/useCart";
 import { cartIcon, wishIcon } from "@/shared/icons";
 import { Link, NavLink } from "react-router-dom";
 
 function Header() {
   const { session, isLoggedIn, logout } = useAuth();
+  const { cartItems } = useCart();
+  const totalCountCartItems = cartItems.reduce(
+    (total, item) => total + item.size_quantity,
+    0
+  );
 
   const mainNavList = [
     { id: "new", name: "신제품", path: `/category/new` },
@@ -56,14 +63,14 @@ function Header() {
           <NavLink to={`/wish`}>
             <Icon className="size-6">{wishIcon}</Icon>
           </NavLink>
-          <NavLink to={`/cart`}>
-            <div className="relative">
-              <Icon className="size-6">{cartIcon}</Icon>
-              <div className="absolute top-[5px] left-[9px] text-[8px]">
-                {"2"}
+          <div className="relative">
+            <CartDrawer isInNav={true} />
+            {cartItems.length > 0 && (
+              <div className="absolute top-0 right-[-7px] text-[8px] text-white bg-black size-4 rounded-full flex justify-center items-center">
+                {totalCountCartItems}
               </div>
-            </div>
-          </NavLink>
+            )}
+          </div>
         </div>
       </div>
       <header className="mt-3 py-2 px-16 text-sm border-t-[1px] border-b-[1px]">
