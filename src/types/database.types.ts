@@ -86,51 +86,6 @@ export type Database = {
           },
         ]
       }
-      carts: {
-        Row: {
-          created_at: string
-          customer_id: string
-          id: string
-          is_active: boolean
-          product_id: string
-          quantity: number
-          updated_at: string
-        }
-        Insert: {
-          created_at?: string
-          customer_id?: string
-          id?: string
-          is_active?: boolean
-          product_id: string
-          quantity: number
-          updated_at?: string
-        }
-        Update: {
-          created_at?: string
-          customer_id?: string
-          id?: string
-          is_active?: boolean
-          product_id?: string
-          quantity?: number
-          updated_at?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "carts_customer_id_fkey"
-            columns: ["customer_id"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "carts_product_id_fkey"
-            columns: ["product_id"]
-            isOneToOne: false
-            referencedRelation: "products"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       categories: {
         Row: {
           id: string
@@ -155,6 +110,7 @@ export type Database = {
           price: number
           product_id: string
           quantity: number
+          size: Database["public"]["Enums"]["product_size"]
           updated_at: string
         }
         Insert: {
@@ -165,6 +121,7 @@ export type Database = {
           price: number
           product_id: string
           quantity: number
+          size: Database["public"]["Enums"]["product_size"]
           updated_at?: string
         }
         Update: {
@@ -175,6 +132,7 @@ export type Database = {
           price?: number
           product_id?: string
           quantity?: number
+          size?: Database["public"]["Enums"]["product_size"]
           updated_at?: string
         }
         Relationships: [
@@ -650,7 +608,11 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      order_status: "processing" | "shipped" | "delivered" | "cancelled"
+      order_status:
+        | "order_completed"
+        | "pending_shipment"
+        | "shipment_started"
+        | "order_cancelled"
       product_size: "FREE" | "XS" | "S" | "M" | "L" | "XL"
       user_role: "customer" | "seller" | "admin"
     }

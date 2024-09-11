@@ -1,7 +1,6 @@
 import { useAuth } from "@/hooks/useAuth";
 import About from "@/pages/About";
 import BizSignup from "@/pages/BizSignup";
-import Cart from "@/pages/Cart";
 import Best from "@/pages/Category/Best";
 import Brands from "@/pages/Category/Brands";
 import CategoryLayout from "@/pages/Category/CategoryLayout";
@@ -9,6 +8,7 @@ import New from "@/pages/Category/New";
 import Pants from "@/pages/Category/Pants";
 import SportsBras from "@/pages/Category/SportsBras";
 import Tops from "@/pages/Category/Tops";
+import Checkout from "@/pages/Checkout";
 import Dashboard from "@/pages/Dashboard/Dashboard";
 import DashOverview from "@/pages/Dashboard/DashOverview";
 import DashProduct from "@/pages/Dashboard/DashProduct";
@@ -84,8 +84,11 @@ export default function Router() {
           <Route path="/login" element={<PublicRoute element={Login} />} />
 
           <Route path="/wish" element={<PrivateRoute element={Wish} />} />
-          <Route path="/cart" element={<Cart />} />
           {/* 주문 폼 */}
+          <Route
+            path="/checkout"
+            element={<PrivateRoute element={Checkout} />}
+          />
 
           {/* 카테고리 아울렛 */}
           <Route path="/category" element={<CategoryLayout />}>
