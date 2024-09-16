@@ -16,7 +16,7 @@ import {
   InputOTPSlot,
 } from "@/components/ui/input-otp";
 import { Separator } from "@/components/ui/separator";
-import { CheckoutStage, ShippingDataType } from "@/pages/Checkout";
+import { CheckoutStage, ShippingDataType } from "@/pages/Checkout/Checkout";
 import { shippingFormSchema } from "@/schemas/shippingFormSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";

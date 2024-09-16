@@ -1,5 +1,5 @@
 import { Item } from "@/context/CartContext";
-import { CustomerInfo, OrderProductType } from "@/pages/Checkout";
+import { CustomerInfo, OrderProductType } from "@/pages/Checkout/Checkout";
 import * as PortOne from "@portone/browser-sdk/v2";
 import { useQuery } from "@tanstack/react-query";
 

@@ -1,6 +1,6 @@
 import { Item } from "@/context/CartContext";
 import useFormError from "@/hooks/useFormError";
-import { PreReducedItem } from "@/pages/Checkout";
+import { PreReducedItem } from "@/pages/Checkout/Checkout";
 import supabase from "@/shared/supabaseClient";
 import { OrderRequest } from "@/types/order.types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -193,6 +193,7 @@ const createOrder = async ({
   newOrder: OrderRequest;
   cartItems: Item[];
 }) => {
+  console.log("✅", newOrder);
   const { data: orderData, error: orderError } = await supabase
     .from("orders")
     .insert(newOrder)
@@ -201,7 +202,6 @@ const createOrder = async ({
 
   if (orderError) throw orderError;
   const orderId = orderData.id;
-  // return console.log(orderId);
 
   const createOrderItem = async (item: Item) => {
     const { data: orderItemData, error: orderItemError } = await supabase
@@ -225,9 +225,9 @@ const createOrder = async ({
     createOrderItem(item)
   );
 
-  const orderItemsData = await Promise.all(createOrderItemPromises);
-  const data = { orderData, orderItemsData };
-  return data;
+  await Promise.all(createOrderItemPromises);
+
+  return orderId;
 };
 
 export const useOrder = () => {

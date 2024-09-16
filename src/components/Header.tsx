@@ -1,6 +1,7 @@
 import { CartDrawer } from "@/components/Cart/CartDrawer";
 import { CategoryTop } from "@/components/Category/CategoryTop";
 import { Icon } from "@/components/Icon";
+import MyDropdown from "@/components/MyDropdown";
 import { SearchBar } from "@/components/SearchBar";
 import { Separator } from "@/components/ui/separator";
 import { useAuth } from "@/hooks/useAuth";
@@ -9,7 +10,7 @@ import { wishIcon } from "@/shared/icons";
 import { Link, NavLink } from "react-router-dom";
 
 function Header() {
-  const { session, isLoggedIn, logout } = useAuth();
+  const { session, isLoggedIn, logout, userRole } = useAuth();
   const { cartItems } = useCart();
   const totalCountCartItems = cartItems.reduce(
     (total, item) => total + item.size_quantity,
@@ -36,7 +37,12 @@ function Header() {
               <>
                 <button onClick={() => logout()}>로그아웃</button>
                 <Separator orientation="vertical" className="h-3 bg-primary" />
-                <span>{session?.user?.user_metadata.name}님</span>
+                {userRole === "seller" && (
+                  <span>{session?.user?.user_metadata.name}님</span>
+                )}
+                {userRole === "customer" && (
+                  <MyDropdown name={session?.user?.user_metadata.name} />
+                )}
               </>
             )}
             {!isLoggedIn && (
@@ -60,7 +66,7 @@ function Header() {
           <SearchBar />
         </search>
         <div className="flex flex-row justify-end space-x-4 w-20">
-          <NavLink to={`/wish`}>
+          <NavLink to={`/my/wish`}>
             <Icon className="size-6">{wishIcon}</Icon>
           </NavLink>
           <div className="relative">

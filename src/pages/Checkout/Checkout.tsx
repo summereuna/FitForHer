@@ -42,6 +42,7 @@ export type CheckoutStage = "shipping" | "checkout";
 
 const Checkout = () => {
   const navigate = useNavigate();
+  const { cartItems } = useCart();
   const [stage, setStage] = useState<CheckoutStage>("shipping");
   const [shippingData, setShippingData] = useState<ShippingDataType>();
 
@@ -61,8 +62,6 @@ const Checkout = () => {
   ) => {
     try {
       const { queryParams } = await pay(customerInfo, products);
-      // clearCart(); //여기서 하니까 나중에 비교를 못함
-
       if (queryParams) {
         navigate(`/checkout/payment-redirect?${queryParams}`);
       }
@@ -71,17 +70,9 @@ const Checkout = () => {
     }
   };
 
-  // useEffect(() => {
-  //   // localStorage에서 stage 정보를 불러옴
-  //   // const savedStage = localStorage.getItem("orderStage");
-
-  //   if (savedStage === "shipping" || savedStage === "checkout") {
-  //     setStage(savedStage);
-  //   } else {
-  //     //처음 진입시 기본 값 shipping으로 설정
-  //     localStorage.setItem("orderStage", "shipping");
-  //   }
-  // }, []);
+  useEffect(() => {
+    if (cartItems.length === 0) navigate("/", { replace: true });
+  }, [cartItems.length, navigate]);
 
   return (
     <section className="grid grid-cols-1 gap-y-5 lg:gap-y-0 lg:grid-cols-3 lg:space-x-10">
