@@ -88,3 +88,8 @@ export const getKoreanCategoryName = (
 //       return products;
 //   }
 // };
+
+export const formatPhoneNumber = (phoneNumber: string) => {
+  phoneNumber = phoneNumber.replace(/\D/g, "");
+  return phoneNumber.replace(/(\d{3})(\d{4})(\d{4})/, "$1-$2-$3");
+};

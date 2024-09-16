@@ -16,7 +16,7 @@ import {
   InputOTPSlot,
 } from "@/components/ui/input-otp";
 import { Separator } from "@/components/ui/separator";
-import { CheckoutStage } from "@/pages/Checkout";
+import { CheckoutStage, ShippingDataType } from "@/pages/Checkout";
 import { shippingFormSchema } from "@/schemas/shippingFormSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -24,10 +24,13 @@ import { useNavigate } from "react-router-dom";
 import { z } from "zod";
 
 interface ShippingFormProps {
-  onChangeStage: (stage: CheckoutStage) => void;
+  onSubmitShippingData: (
+    stage: CheckoutStage,
+    shippingData: ShippingDataType
+  ) => void;
 }
 
-const ShippingForm = ({ onChangeStage }: ShippingFormProps) => {
+const ShippingForm = ({ onSubmitShippingData }: ShippingFormProps) => {
   const navigate = useNavigate();
 
   const form = useForm<z.infer<typeof shippingFormSchema>>({
@@ -45,7 +48,7 @@ const ShippingForm = ({ onChangeStage }: ShippingFormProps) => {
   });
 
   const onSubmit = (values: z.infer<typeof shippingFormSchema>) => {
-    const shippingInfo = {
+    const shippingData = {
       order_status: values.order_status,
       name: values.name,
       email: values.email,
@@ -54,8 +57,8 @@ const ShippingForm = ({ onChangeStage }: ShippingFormProps) => {
       postal_code: values.postal_code,
     };
 
-    console.log(shippingInfo);
-    onChangeStage("checkout");
+    console.log(shippingData);
+    onSubmitShippingData("checkout", shippingData);
   };
 
   // console.log(form.formState.errors);

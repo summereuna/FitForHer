@@ -74,6 +74,12 @@ function ProductDetail() {
   const onSubmit = (values: z.infer<typeof cartFormSchema>) => {
     if (!data) return;
 
+    const getSize = data.product_sizes.find(
+      (size) => size.size === values.size
+    );
+
+    if (!getSize) return;
+
     const newCartItem = {
       id: data.id,
       name: data.name,
@@ -83,6 +89,7 @@ function ProductDetail() {
       price: data.price,
       size: values.size,
       size_quantity: values.size_quantity,
+      product_sizes_id: getSize.id,
     };
 
     if (!newCartItem) return;
@@ -226,7 +233,7 @@ function ProductDetail() {
                           <FormControl>
                             <RadioGroup
                               onValueChange={field.onChange}
-                              defaultValue={field.value}
+                              defaultValue={field.value.size}
                               className="flex flex-row space-x-2 items-center text-muted-foreground w-full"
                             >
                               {data.product_sizes?.map((size) => (

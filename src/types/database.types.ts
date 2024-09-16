@@ -110,7 +110,7 @@ export type Database = {
           price: number
           product_id: string
           quantity: number
-          size: Database["public"]["Enums"]["product_size"]
+          size_id: string
           updated_at: string
         }
         Insert: {
@@ -121,7 +121,7 @@ export type Database = {
           price: number
           product_id: string
           quantity: number
-          size: Database["public"]["Enums"]["product_size"]
+          size_id: string
           updated_at?: string
         }
         Update: {
@@ -132,7 +132,7 @@ export type Database = {
           price?: number
           product_id?: string
           quantity?: number
-          size?: Database["public"]["Enums"]["product_size"]
+          size_id?: string
           updated_at?: string
         }
         Relationships: [
@@ -150,6 +150,13 @@ export type Database = {
             referencedRelation: "products"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "order_items_size_id_fkey"
+            columns: ["size_id"]
+            isOneToOne: false
+            referencedRelation: "product_sizes"
+            referencedColumns: ["id"]
+          },
         ]
       }
       orders: {
@@ -158,8 +165,9 @@ export type Database = {
           customer_id: string
           id: string
           is_active: boolean
+          name: string
           order_status: Database["public"]["Enums"]["order_status"]
-          seller_id: string
+          payment_id: string
           total_amount: number
           updated_at: string
         }
@@ -168,8 +176,9 @@ export type Database = {
           customer_id: string
           id?: string
           is_active?: boolean
+          name: string
           order_status?: Database["public"]["Enums"]["order_status"]
-          seller_id: string
+          payment_id: string
           total_amount: number
           updated_at?: string
         }
@@ -178,8 +187,9 @@ export type Database = {
           customer_id?: string
           id?: string
           is_active?: boolean
+          name?: string
           order_status?: Database["public"]["Enums"]["order_status"]
-          seller_id?: string
+          payment_id?: string
           total_amount?: number
           updated_at?: string
         }
@@ -187,13 +197,6 @@ export type Database = {
           {
             foreignKeyName: "orders_customer_id_fkey"
             columns: ["customer_id"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "orders_seller_id_fkey"
-            columns: ["seller_id"]
             isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["id"]
@@ -446,53 +449,6 @@ export type Database = {
             columns: ["order_item_id"]
             isOneToOne: false
             referencedRelation: "order_items"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      shipping_addresses: {
-        Row: {
-          created_at: string
-          customer_id: string
-          id: string
-          is_active: boolean
-          is_default: boolean
-          postal_code: string
-          recipient_address: string
-          recipient_name: string
-          recipient_phone: string
-          updated_at: string
-        }
-        Insert: {
-          created_at?: string
-          customer_id?: string
-          id?: string
-          is_active?: boolean
-          is_default?: boolean
-          postal_code: string
-          recipient_address: string
-          recipient_name: string
-          recipient_phone: string
-          updated_at?: string
-        }
-        Update: {
-          created_at?: string
-          customer_id?: string
-          id?: string
-          is_active?: boolean
-          is_default?: boolean
-          postal_code?: string
-          recipient_address?: string
-          recipient_name?: string
-          recipient_phone?: string
-          updated_at?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "shipping_addresses_customer_id_fkey"
-            columns: ["customer_id"]
-            isOneToOne: false
-            referencedRelation: "users"
             referencedColumns: ["id"]
           },
         ]

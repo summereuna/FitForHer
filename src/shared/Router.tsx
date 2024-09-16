@@ -9,6 +9,7 @@ import Pants from "@/pages/Category/Pants";
 import SportsBras from "@/pages/Category/SportsBras";
 import Tops from "@/pages/Category/Tops";
 import Checkout from "@/pages/Checkout";
+import CheckoutComplete from "@/pages/CheckoutComplete";
 import Dashboard from "@/pages/Dashboard/Dashboard";
 import DashOverview from "@/pages/Dashboard/DashOverview";
 import DashProduct from "@/pages/Dashboard/DashProduct";
@@ -88,6 +89,10 @@ export default function Router() {
           <Route
             path="/checkout"
             element={<PrivateRoute element={Checkout} />}
+          />
+          <Route
+            path="/checkout/payment-redirect"
+            element={<PrivateRoute element={CheckoutComplete} />}
           />
 
           {/* 카테고리 아울렛 */}

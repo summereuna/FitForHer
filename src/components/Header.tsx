@@ -5,7 +5,7 @@ import { SearchBar } from "@/components/SearchBar";
 import { Separator } from "@/components/ui/separator";
 import { useAuth } from "@/hooks/useAuth";
 import { useCart } from "@/hooks/useCart";
-import { cartIcon, wishIcon } from "@/shared/icons";
+import { wishIcon } from "@/shared/icons";
 import { Link, NavLink } from "react-router-dom";
 
 function Header() {

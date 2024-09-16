@@ -95,7 +95,7 @@ const SubCategory = ({
 
       {data && data.pages[0].length === 0 && (
         <div className="w-full">
-          <ItemNotFound description="해당 카테고리에는 아직 등록된 상품이 없습니다." />
+          <ItemNotFound description="해당 카테고리에 아직 등록된 상품이 없습니다." />
         </div>
       )}
 
