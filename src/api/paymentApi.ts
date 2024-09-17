@@ -71,20 +71,26 @@ export const pay = async (
   return { response, queryParams };
 };
 
+export const getPayment = async (paymentId: string) => {
+  const response = await fetch(
+    `https://api.portone.io/payments/${encodeURIComponent(paymentId)}`,
+    {
+      headers: { Authorization: `PortOne ${PORTONE_API_SECRET}` },
+    }
+  );
+
+  if (!response.ok) throw new Error(`response: ${await response.json()}`);
+
+  const payment = await response.json();
+
+  return payment;
+};
+
 // 결제 완료 위한 결제내역 조회
 export const verifyPayment = async (paymentId: string, cartItems: Item[]) => {
   // 1. 포트원 결제내역 단건조회 API 호출
   try {
-    const response = await fetch(
-      `https://api.portone.io/payments/${encodeURIComponent(paymentId)}`,
-      {
-        headers: { Authorization: `PortOne ${PORTONE_API_SECRET}` },
-      }
-    );
-
-    if (!response.ok) throw new Error(`response: ${await response.json()}`);
-
-    const payment = await response.json();
+    const payment = await getPayment(paymentId);
 
     // 2. 고객사 내부 주문 데이터의 가격과 실제 지불된 금액을 비교
     const totalPriceOrderItems = cartItems.reduce(

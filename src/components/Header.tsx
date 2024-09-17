@@ -40,7 +40,7 @@ function Header() {
                 {userRole === "seller" && (
                   <span>{session?.user?.user_metadata.name}님</span>
                 )}
-                {userRole === "customer" && (
+                {userRole !== "seller" && (
                   <MyDropdown name={session?.user?.user_metadata.name} />
                 )}
               </>

@@ -1,3 +1,4 @@
+import { Enums } from "@/types/database.types";
 import { createContext, useCallback, useEffect, useState } from "react";
 
 export interface Item {
@@ -7,7 +8,7 @@ export interface Item {
   image: string;
   color: string;
   price: number;
-  size: string;
+  size: Enums<"product_size">;
   size_quantity: number;
   product_sizes_id: string;
 }

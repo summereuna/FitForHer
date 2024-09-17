@@ -1,9 +1,14 @@
+import { getPayment } from "@/api/paymentApi";
 import { Item } from "@/context/CartContext";
 import useFormError from "@/hooks/useFormError";
 import { PreReducedItem } from "@/pages/Checkout/Checkout";
 import supabase from "@/shared/supabaseClient";
-import { OrderRequest } from "@/types/order.types";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+  GetOrderByOrderIdDataResponse,
+  OrderRequest,
+  OrdersByUserIdResponse,
+} from "@/types/order.types";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 //재고 우선 감소
 export const reducePreQuantities = async (updateData: PreReducedItem[]) => {
@@ -230,7 +235,7 @@ const createOrder = async ({
   return orderId;
 };
 
-export const useOrder = () => {
+export const useCreateOrder = () => {
   const queryClient = useQueryClient();
   const { errorMessage, setErrorMessage } = useFormError();
 
@@ -270,4 +275,95 @@ export const useOrder = () => {
     isSuccessOrder,
     errorMessage,
   };
+};
+
+//----------------------------------------------------------
+//주문내역
+const getOrdersByUserId = async (
+  myId: string
+): Promise<OrdersByUserIdResponse> => {
+  const {
+    data: { user },
+    error: userError,
+  } = await supabase.auth.getUser();
+  if (userError) throw userError;
+  if (!user) throw new Error("인증되지 않은 사용자 입니다.");
+
+  const { data, error } = await supabase
+    .from("orders")
+    .select(
+      `id,
+      created_at,
+      name,
+      order_status,
+      total_amount,
+      order_items ( products ( brands (name), product_images ( * )))`
+    )
+    .eq("customer_id", myId)
+    .order("created_at", { ascending: false });
+
+  if (error) throw error;
+
+  return data;
+};
+
+export const useOrdersByUserId = (myId: string) => {
+  const {
+    data: myOrdersData,
+    isPending,
+    isError,
+    isSuccess,
+  } = useQuery({
+    queryKey: ["orders", myId],
+    queryFn: () => getOrdersByUserId(myId),
+    enabled: !!myId, // id가 있을 때만 쿼리를 실행
+  });
+
+  return { myOrdersData, isPending, isError, isSuccess };
+};
+
+//----------------------------------------------------------
+//주문 상세
+const getOrderbyOrderId = async (
+  orderId: string
+): Promise<GetOrderByOrderIdDataResponse> => {
+  const {
+    data: { user },
+    error: userError,
+  } = await supabase.auth.getUser();
+  if (userError) throw userError;
+  if (!user) throw new Error("인증되지 않은 사용자 입니다.");
+
+  const { data: orderData, error } = await supabase
+    .from("orders")
+    .select(
+      `id,
+      payment_id,
+      created_at,
+      order_status,
+      total_amount,
+      order_items ( id, quantity,
+      products ( id, name, color, price, brands (name), product_images ( * )), product_sizes ( size ))`
+    )
+    .eq("id", orderId)
+    .order("created_at", { ascending: false })
+    .single();
+
+  if (error) throw error;
+
+  const paymentId = orderData.payment_id;
+  const payment = await getPayment(paymentId);
+
+  const data: GetOrderByOrderIdDataResponse = { orderData, payment };
+  return data;
+};
+
+export const useOrdersByOrderId = (orderId: string) => {
+  const { data, isPending, isError, isSuccess } = useQuery({
+    queryKey: ["orders", orderId],
+    queryFn: () => getOrderbyOrderId(orderId),
+    enabled: !!orderId, // id가 있을 때만 쿼리를 실행
+  });
+
+  return { data, isPending, isError, isSuccess };
 };

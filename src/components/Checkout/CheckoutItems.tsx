@@ -61,7 +61,15 @@ const CheckoutItems = () => {
           className="overflow-y-auto flex flex-col px-5 space-y-5 pb-5"
         >
           {cartItems.map((item) => (
-            <CheckoutItem key={`${item.id}_${item.size}`} item={item} />
+            <CheckoutItem
+              key={`${item.id}_${item.size}`}
+              image={item.image}
+              name={item.name}
+              color={item.color}
+              size={item.size}
+              size_quantity={item.size_quantity}
+              price={item.price}
+            />
           ))}
         </section>
       </CardContent>

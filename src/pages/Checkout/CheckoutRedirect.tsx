@@ -1,4 +1,4 @@
-import { useOrder, useReIncreasePreQuantity } from "@/api/orderApi";
+import { useCreateOrder, useReIncreasePreQuantity } from "@/api/orderApi";
 import { usePayment } from "@/api/paymentApi";
 import ItemNotFound from "@/components/ItemNotFound";
 import { CardTitle } from "@/components/ui/card";
@@ -24,8 +24,10 @@ const CheckoutRedirect = () => {
   );
 
   const { mutateCreateOrder, orderData, isErrorOrder, isSuccessOrder } =
-    useOrder();
+    useCreateOrder();
 
+  //이 페이지에선 cartItems이 바뀔 일이 없으므로 eslint 무시하도록 하겠음
+  /* eslint-disable react-hooks/exhaustive-deps */
   useEffect(() => {
     if (isSuccess && payment && payment.status === "PAID") {
       const newOrder = {
@@ -37,7 +39,9 @@ const CheckoutRedirect = () => {
       mutateCreateOrder({ newOrder, cartItems });
       clearCart();
     }
-  }, [isSuccess, payment, clearCart, mutateCreateOrder]); //cartItems 이거 넣음 무한렌더링 발생함
+  }, [isSuccess, payment, clearCart, mutateCreateOrder]); 
+  //clearCart 함수 내부에서 cartItems 배열을 초기화 하고 있기 때문에
+  //cartItems를 디펜던시에 포함하면 무한렌더링 발생하므로 뺌, 종속성일 필요도 없고
 
   useEffect(() => {
     if (isError) {

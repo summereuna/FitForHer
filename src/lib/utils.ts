@@ -1,4 +1,5 @@
 import { categories } from "@/shared/data/categories";
+import { Enums } from "@/types/database.types";
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 
@@ -93,3 +94,49 @@ export const formatPhoneNumber = (phoneNumber: string) => {
   phoneNumber = phoneNumber.replace(/\D/g, "");
   return phoneNumber.replace(/(\d{3})(\d{4})(\d{4})/, "$1-$2-$3");
 };
+
+export const getOrderStatusKorean = (status: Enums<"order_status">) => {
+  switch (status) {
+    case "order_completed":
+      return "주문완료";
+
+    case "pending_shipment":
+      return "발송대기";
+
+    case "shipment_started":
+      return "발송시작";
+
+    case "order_cancelled":
+      return "주문취소";
+
+    default:
+      return "주문완료";
+  }
+};
+
+import dayjs from "dayjs";
+import "dayjs/locale/ko";
+dayjs.locale("ko");
+import relativeTime from "dayjs/plugin/relativeTime";
+dayjs.extend(relativeTime);
+import localizedFormat from "dayjs/plugin/localizedFormat";
+dayjs.extend(localizedFormat);
+
+/**
+ * 몇 년 전, 몇 개월 전, 몇 일 전, 몇 시간 전, 몇 분전, 몇 초전 으로 표시
+ * @param createdAt
+ * @returns
+ */
+export function getTimesAgo(createdAt: string) {
+  return dayjs(createdAt).fromNow();
+}
+
+/**
+ * 2024년 10월 1일, 오후 10:10
+ * 이런 식으로 표시
+ * @param createdAt
+ * @returns
+ */
+export function getCreatedTime(createdAt: string) {
+  return dayjs(createdAt).format("LLL");
+}
