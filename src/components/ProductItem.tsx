@@ -9,9 +9,14 @@ import {
   SameSubCategoryProduct,
 } from "@/types/category.types";
 import { RelatedProduct } from "@/types/customerProduct.types";
+import { MainProduct } from "@/types/main.types";
 
 interface ProductItemProps {
-  item: SameCategoryProduct | SameSubCategoryProduct | RelatedProduct;
+  item:
+    | SameCategoryProduct
+    | SameSubCategoryProduct
+    | RelatedProduct
+    | MainProduct;
 }
 
 const ProductItem = ({ item }: ProductItemProps) => {

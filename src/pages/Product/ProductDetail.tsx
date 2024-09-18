@@ -24,6 +24,7 @@ import {
 } from "@/lib/utils";
 import { cartFormSchema } from "@/schemas/cartFormSchema";
 import { wishIcon } from "@/shared/icons";
+import { Enums } from "@/types/database.types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
@@ -66,7 +67,7 @@ function ProductDetail() {
   const form = useForm<z.infer<typeof cartFormSchema>>({
     resolver: zodResolver(cartFormSchema),
     defaultValues: {
-      size: "",
+      size: "FREE",
       size_quantity: 1,
     },
   });
@@ -87,7 +88,7 @@ function ProductDetail() {
       image: getOnlyRepresentativePhoto(data.product_images)!,
       color: data.color,
       price: data.price,
-      size: values.size,
+      size: values.size as Enums<"product_size">,
       size_quantity: values.size_quantity,
       product_sizes_id: getSize.id,
     };
@@ -233,7 +234,7 @@ function ProductDetail() {
                           <FormControl>
                             <RadioGroup
                               onValueChange={field.onChange}
-                              defaultValue={field.value.size}
+                              defaultValue={field.value}
                               className="flex flex-row space-x-2 items-center text-muted-foreground w-full"
                             >
                               {data.product_sizes?.map((size) => (

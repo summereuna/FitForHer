@@ -18,7 +18,7 @@ import {
   OrdersByBrandIdResponse,
   UpdateOrderItemStatusRequest,
 } from "@/types/order.types";
-import TransactionDropdown from "@/components/TransactionDropdown";
+// import TransactionDropdown from "@/components/TransactionDropdown";
 import { orderItemStatus } from "@/shared/data/status";
 import OrderItemStatusSelectForm from "@/components/Product/OrderItemStatusSelectForm";
 import { useUpdateOrderItemStatus } from "@/api/orderApi";
@@ -121,7 +121,7 @@ const TransactionDataTable = ({
               </TableCell>
               <TableCell>{item.price.toLocaleString()} 원</TableCell>
               <TableCell className="text-right">
-                <TransactionDropdown productId={item.id} />
+                {/* <TransactionDropdown productId={item.id} /> */}
               </TableCell>
             </TableRow>
           ))}

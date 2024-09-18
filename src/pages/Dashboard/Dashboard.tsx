@@ -9,9 +9,7 @@ import { useBrand } from "@/api/brandApi";
 function Dashboard() {
   const { session } = useAuth();
   const navigate = useNavigate();
-  const { brandData, isError, isPending, isSuccess } = useBrand(
-    session?.user.id as string
-  );
+  const { brandData, isSuccess } = useBrand(session?.user.id as string);
 
   //브랜드 데이터 가져오기 전까지 아무것도 안띄우기 => 회원가입 축하 메세지 깜빡임 방지
   if (!isSuccess) {

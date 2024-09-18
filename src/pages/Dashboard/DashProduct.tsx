@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 function DashProduct() {
   const navigate = useNavigate();
   const { authId } = useAuth();
-  const { brandProductsData, isPending, isError, isSuccess } = useBrandProducts(
+  const { brandProductsData, isPending, isSuccess } = useBrandProducts(
     authId as string
   );
 

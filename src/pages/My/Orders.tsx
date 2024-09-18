@@ -8,9 +8,7 @@ import { Separator } from "@radix-ui/react-separator";
 
 const Orders = () => {
   const { authId, session } = useAuth();
-  const { myOrdersData, isPending, isError, isSuccess } = useOrdersByUserId(
-    authId as string
-  );
+  const { myOrdersData, isSuccess } = useOrdersByUserId(authId as string);
 
   //console.log(myOrdersData);
   const filteredMyOrdersData = myOrdersData?.filter(

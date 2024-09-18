@@ -24,9 +24,7 @@ const OrderDetail = () => {
   const navigate = useNavigate();
   const { id } = useParams();
 
-  const { data, isError, isPending, isSuccess } = useOrdersByOrderId(
-    id as string
-  );
+  const { data, isSuccess } = useOrdersByOrderId(id as string);
 
   // console.log(data);
   const { mutateCancelOrder } = useCancelOrder();
@@ -214,10 +212,10 @@ const OrderDetail = () => {
                   </div>
                   <div className="flex flex-row justify-between">
                     <CardDescription className="text-base font-medium text-black">
-                    {"order_completed" === data.orderData.order_status &&
-                    "총 결제 금액"}
-                  {"order_cancelled" === data.orderData.order_status &&
-                    "총 환불 금액"}
+                      {"order_completed" === data.orderData.order_status &&
+                        "총 결제 금액"}
+                      {"order_cancelled" === data.orderData.order_status &&
+                        "총 환불 금액"}
                     </CardDescription>
                     <CardDescription className="text-base font-medium text-black">
                       총 {data.payment.amount.total.toLocaleString()} 원

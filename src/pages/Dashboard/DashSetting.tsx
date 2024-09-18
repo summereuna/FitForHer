@@ -3,14 +3,10 @@ import BrandForm from "@/components/BrandForm";
 import { CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { useAuth } from "@/hooks/useAuth";
-import { useNavigate } from "react-router-dom";
 
 function DashSetting() {
   const { session } = useAuth();
-  const navigate = useNavigate();
-  const { brandData, isError, isPending, isSuccess } = useBrand(
-    session?.user.id as string
-  );
+  const { brandData } = useBrand(session?.user.id as string);
   return (
     <div>
       <section aria-label="브랜드 정보" className="space-y-5">

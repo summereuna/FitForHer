@@ -9,7 +9,7 @@ import { Separator } from "@/components/ui/separator";
 import { useCart } from "@/hooks/useCart";
 
 const CheckoutItems = () => {
-  const { cartItems, updateCartItem, deleteCartItem, clearCart } = useCart();
+  const { cartItems } = useCart();
 
   const totalPriceCartItems = cartItems.reduce(
     (total, item) => total + item.size_quantity * item.price,
