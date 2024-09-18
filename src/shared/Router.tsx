@@ -1,7 +1,6 @@
 import { useAuth } from "@/hooks/useAuth";
 import About from "@/pages/About";
 import BizSignup from "@/pages/BizSignup";
-import Cart from "@/pages/Cart";
 import Best from "@/pages/Category/Best";
 import Brands from "@/pages/Category/Brands";
 import CategoryLayout from "@/pages/Category/CategoryLayout";
@@ -9,6 +8,8 @@ import New from "@/pages/Category/New";
 import Pants from "@/pages/Category/Pants";
 import SportsBras from "@/pages/Category/SportsBras";
 import Tops from "@/pages/Category/Tops";
+import Checkout from "@/pages/Checkout/Checkout";
+import CheckoutRedirect from "@/pages/Checkout/CheckoutRedirect";
 import Dashboard from "@/pages/Dashboard/Dashboard";
 import DashOverview from "@/pages/Dashboard/DashOverview";
 import DashProduct from "@/pages/Dashboard/DashProduct";
@@ -20,6 +21,8 @@ import DashTransaction from "@/pages/Dashboard/DashTransaction";
 import Help from "@/pages/Help";
 import Home from "@/pages/Home";
 import Login from "@/pages/Login";
+import OrderFail from "@/pages/Checkout/OrderFail";
+import OrderSuccess from "@/pages/Checkout/OrderSuccess";
 import ProductDetail from "@/pages/Product/ProductDetail";
 import QnA from "@/pages/Product/QnA";
 import Review from "@/pages/Product/Review";
@@ -30,6 +33,8 @@ import SellerLayout from "@/shared/SellerLayout";
 import SellerRoute from "@/shared/SellerRoute";
 
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import Orders from "@/pages/My/Orders";
+import OrderDetail from "@/pages/My/OrderDetail";
 
 // PrivateRoute : 로그인이 필요한 페이지에 접근할 수 있도록 하는 컴포넌트
 // 로그인이 되어있지 않은 사용자는 login 페이지로 리다이렉트
@@ -83,9 +88,35 @@ export default function Router() {
 
           <Route path="/login" element={<PublicRoute element={Login} />} />
 
-          <Route path="/wish" element={<PrivateRoute element={Wish} />} />
-          <Route path="/cart" element={<Cart />} />
+          <Route path="/my/wish" element={<PrivateRoute element={Wish} />} />
+
           {/* 주문 폼 */}
+          <Route
+            path="/checkout"
+            element={<PrivateRoute element={Checkout} />}
+          />
+          <Route
+            path="/checkout/payment-redirect"
+            element={<PrivateRoute element={CheckoutRedirect} />}
+          />
+          <Route
+            path="/checkout/order/fail"
+            element={<PrivateRoute element={OrderFail} />}
+          />
+          <Route
+            path="/checkout/order/success/:id"
+            element={<PrivateRoute element={OrderSuccess} />}
+          />
+
+          {/* 나의 페이지 / 오더 */}
+          <Route
+            path="/my/orders"
+            element={<PrivateRoute element={Orders} />}
+          />
+          <Route
+            path="/my/orders/:id"
+            element={<PrivateRoute element={OrderDetail} />}
+          />
 
           {/* 카테고리 아울렛 */}
           <Route path="/category" element={<CategoryLayout />}>

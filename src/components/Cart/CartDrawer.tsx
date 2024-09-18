@@ -41,7 +41,7 @@ export function CartDrawer({ isInNav, onChangeIsAddedItem }: CartDrawerProps) {
 
   const handleOrder = () => {
     console.log("아이템 주문하기");
-    navigate("/order");
+    navigate("/checkout");
   };
 
   // console.log(cartItems);

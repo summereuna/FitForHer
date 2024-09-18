@@ -5,7 +5,7 @@ const productDetailResponse = supabase
   .from("products")
   .select(
     `*,
-    product_sizes( size, stock_quantity ),
+    product_sizes( id, size, stock_quantity ),
     product_images( image_url ),
     sub_categories (
       name,
@@ -31,7 +31,7 @@ const relatedProductDetailResponse = supabase
   .from("products")
   .select(
     `*,
-            product_sizes( size, stock_quantity ),
+            product_sizes( id, size, stock_quantity ),
             product_images( image_url ),
             sub_categories!inner (
             name,
@@ -44,6 +44,4 @@ const relatedProductDetailResponse = supabase
   .filter("is_active", "eq", true)
   .single(); //타입 써야해서 싱글로 받음
 
-export type RelatedProduct = QueryData<
-  typeof relatedProductDetailResponse
->;
+export type RelatedProduct = QueryData<typeof relatedProductDetailResponse>;

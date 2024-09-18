@@ -49,11 +49,11 @@ const SellerLayout = () => {
       <HeaderForSeller />
       <main
         aria-label="대시보드 메인"
-        className="flex flex-grow  border-t-[1px] mt-4"
+        className="flex flex-grow border-t-[1px] mt-4"
       >
         <aside
           aria-label="대시보드 어사이드 네비"
-          className="text-[13px] border-r-[1px] flex-grow flex min-w-56"
+          className="text-[13px] border-r-[1px] flex-grow flex min-w-16 lg:min-w-56"
         >
           <nav aria-label="대시보드 탐색" className="h-full w-full">
             <ul className="flex flex-col h-full">
@@ -61,14 +61,14 @@ const SellerLayout = () => {
                 <NavLink
                   key={li.id}
                   className={({ isActive }) =>
-                    `pl-16 flex flex-row items-center w-full space-x-3 border-b-[1px] py-5 transition duration-200 ease-in-out ${
+                    `pl-5 lg:pl-16 flex flex-row items-center w-full space-x-3 border-b-[1px] py-5 transition duration-200 ease-in-out ${
                       isActive ? "font-semibold bg-gray-200" : ""
                     }`
                   }
                   to={li.path}
                 >
                   <Icon className="size-5">{li.icon}</Icon>
-                  <div>{li.name}</div>
+                  <div className="hidden lg:block">{li.name}</div>
                 </NavLink>
               ))}
             </ul>

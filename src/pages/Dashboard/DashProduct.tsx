@@ -35,7 +35,7 @@ function DashProduct() {
               description={`등록된 상품이 없습니다.\n상품을 등록하세요.`}
             />
           )}
-          {brandProductsData && brandProductsData?.length > 0 && (
+          {isSuccess && brandProductsData && brandProductsData.length > 0 && (
             <ProductDataTable brandProductsData={brandProductsData} />
           )}
         </Card>

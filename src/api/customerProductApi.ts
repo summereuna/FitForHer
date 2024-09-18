@@ -12,7 +12,7 @@ const getProductDetail = async (
     .from("products")
     .select(
       `*,
-        product_sizes( size, stock_quantity ),
+        product_sizes( id, size, stock_quantity ),
         product_images( image_url ),
         sub_categories (
           name,
@@ -58,7 +58,7 @@ const getRelatedProductDetail = async (
     .from("products")
     .select(
       `*,
-        product_sizes( size, stock_quantity ),
+        product_sizes( id, size, stock_quantity ),
         product_images( image_url ),
         sub_categories!inner (
           name,

@@ -1,168 +1,142 @@
-import Chart from "@/components/Chart";
+import { useBrand } from "@/api/brandApi";
+import { useDashboardItemsByBrandId } from "@/api/orderApi";
+import CategoryChart from "@/components/CategoryChart";
+import CheckoutItem from "@/components/Checkout/CheckoutItem";
 import CountCard from "@/components/CountCard";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import ItemNotFound from "@/components/ItemNotFound";
+import { PopoverInfo } from "@/components/PopoverInfo";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useAuth } from "@/hooks/useAuth";
+import { getOnlyRepresentativePhoto } from "@/lib/utils";
 
 function DashOverview() {
+  const { authId } = useAuth();
+  const { brandData } = useBrand(authId as string);
+
+  const { dashboardItemsData } = useDashboardItemsByBrandId(brandData!.id);
+
+  const totalAmount = dashboardItemsData?.reduce(
+    (total, item) => total + item.price * item.quantity,
+    0
+  );
+
+  const totalTransactions = dashboardItemsData?.reduce(
+    (total, item) => total + item.quantity,
+    0
+  );
+
+  const totalOrders = new Set(dashboardItemsData?.map((item) => item.order_id))
+    .size;
+
+  const threeTransactions = dashboardItemsData?.slice(0, 3);
+
   return (
-    // <div className="gird grid-rows-3">
-    //   <section aria-label="대시보드 상단" className="flex flex-row space-x-3">
-    //     <CountCard title={"총 수량"} description={"ㅇㅇㅇ"} amount={2000} />
-    //     <CountCard title={"제품 판매 수량"} description={"ㅇㅇㅇ"} amount={2000} />
-    //     <CountCard title={"총 "} description={"ㅇㅇㅇ"} amount={2000} />
-    //     <CountCard title={"총 수량"} description={"ㅇㅇㅇ"} amount={2000} />
-    //   </section>
-    //   <section aria-label="대시보드 중단"></section>
-    //   <section aria-label="대시보드 하단"></section>
-    // </div>
     <div className="flex-col md:flex">
-      {/* <div className="border-b">
-          <div className="flex h-16 items-center px-4">
-            <TeamSwitcher />
-            <MainNav className="mx-6" />
-            <div className="ml-auto flex items-center space-x-4">
-              <Search />
-              <UserNav />
-            </div>
-          </div>
-        </div> */}
-      <div className="space-y-4 p-8 pt-6 flex-1">
+      <div className="space-y-4 flex-1">
         <div className="flex items-center justify-between space-y-2">
-          <h2 className="text-3xl font-bold tracking-tight">대시보드</h2>
-          <div className="flex items-center space-x-2">
-            {/* <CalendarDateRangePicker /> */}
+          <CardTitle className="tracking-tight">대시보드</CardTitle>
+          {/* <div className="flex items-center space-x-2">
             <Button>다운로드</Button>
-          </div>
+          </div> */}
         </div>
-        <section defaultValue="overview" className="space-y-4">
-          <div aria-label="overview" className="space-y-4">
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-              <Card>
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium">총 수입</CardTitle>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    className="h-4 w-4 text-muted-foreground"
-                  >
-                    <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
-                  </svg>
+        <section className="space-y-4">
+          <section aria-label="대시보드" className="space-y-4">
+            <div
+              aria-label="대시보드 상단"
+              className="grid gap-4 md:grid-cols-2 lg:grid-cols-4"
+            >
+              <CountCard
+                title={"총 수입"}
+                description={"상품 판매 총 수입을 나타냅니다. (단위: 원)"}
+                amount={totalAmount || 0}
+              />
+              <CountCard
+                title={"좋아요 수"}
+                description={
+                  "고객들이 브랜드에 남긴 좋아요 수를 집계한 값입니다."
+                }
+                amount={brandData?.brand_likes.length || 0}
+              />
+              <CountCard
+                title={"총 판매량"}
+                description={"브랜드 상품에 대한 총 판매 수량을 나타냅니다."}
+                amount={totalTransactions || 0}
+              />
+              <CountCard
+                title={"총 주문량"}
+                description={"브랜드 상품이 포함된 총 주문 수량을 나타냅니다."}
+                amount={totalOrders || 0}
+              />
+            </div>
+            <div
+              aria-label="대시보드 하단"
+              className="grid gap-4 md:grid-cols-2 lg:grid-cols-7"
+            >
+              <Card className="md:col-span-7 lg:col-span-4">
+                <CardHeader className="flex flex-row items-center space-x-1">
+                  <CardTitle>카테고리별 판매량</CardTitle>
+                  <PopoverInfo
+                    title={`카테고리별 판매량`}
+                    description={`카테고리별 판매량을 보여주는 차트입니다. 차트 위에 마우스를 올리면 카테고리별 판매량을 확인할 수 있습니다. 중앙에는 총 판매량이 표시됩니다.`}
+                  />
                 </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold">₩ 45,231.89</div>
-                  <p className="text-xs text-muted-foreground">
-                    +20.1% from last month
-                  </p>
+                <CardContent className="pl-2">
+                  {dashboardItemsData && (
+                    <CategoryChart data={dashboardItemsData} />
+                  )}
+                  {dashboardItemsData?.length === 0 && (
+                    <section className="flex justify-center items-center w-full h-full">
+                      <ItemNotFound description={"판매된 상품이 없습니다."} />
+                    </section>
+                  )}
                 </CardContent>
               </Card>
-              <Card>
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium">
-                    좋아요 수
-                  </CardTitle>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    className="h-4 w-4 text-muted-foreground"
-                  >
-                    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
-                    <circle cx="9" cy="7" r="4" />
-                    <path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" />
-                  </svg>
+              <Card className="md:col-span-7 lg:col-span-3">
+                <CardHeader className="flex flex-row items-center space-x-1">
+                  <CardTitle>최근 판매 상품</CardTitle>
+                  <PopoverInfo
+                    title={`최근 판매 상품`}
+                    description={`최근 판매된 상품이 최대 3건, 최신순으로 표시됩니다. 판매 상품에 대한 자세한 내용을 보려면 "판매관리" 탭을 이용하세요.`}
+                  />
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-bold">+2350</div>
-                  <p className="text-xs text-muted-foreground">
-                    +180.1% from last month
-                  </p>
-                </CardContent>
-              </Card>
-              <Card>
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium">
-                    총 판매량
-                  </CardTitle>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    className="h-4 w-4 text-muted-foreground"
+                  <section
+                    aria-label="최근 판매 상품 목록"
+                    className="overflow-y-auto flex flex-col space-y-5"
                   >
-                    <rect width="20" height="14" x="2" y="5" rx="2" />
-                    <path d="M2 10h20" />
-                  </svg>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold">+12,234</div>
-                  <p className="text-xs text-muted-foreground">
-                    +19% from last month
-                  </p>
-                </CardContent>
-              </Card>
-              <Card>
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium">
-                    총 주문량
-                  </CardTitle>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    className="h-4 w-4 text-muted-foreground"
-                  >
-                    <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
-                  </svg>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold">+573</div>
-                  <p className="text-xs text-muted-foreground">
-                    +201 since last hour
-                  </p>
+                    {threeTransactions &&
+                      threeTransactions.map(
+                        (item) =>
+                          item.product_sizes && (
+                            <CheckoutItem
+                              key={item.id}
+                              image={
+                                (getOnlyRepresentativePhoto(
+                                  item.products.product_images.filter(
+                                    (img: { id: string; image_url: string }) =>
+                                      img.image_url
+                                  )
+                                ) as string) ||
+                                item.products.product_images[0].image_url
+                              }
+                              name={item.products.name}
+                              color={item.products.color}
+                              size={item.product_sizes.size}
+                              size_quantity={item.quantity}
+                              price={item.products.price}
+                            />
+                          )
+                      )}
+                    {dashboardItemsData?.length === 0 && (
+                      <section className="flex justify-center items-center w-full h-full">
+                        <ItemNotFound description={"판매된 상품이 없습니다."} />
+                      </section>
+                    )}
+                  </section>
                 </CardContent>
               </Card>
             </div>
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-              <Card className="col-span-4">
-                <CardHeader>
-                  <CardTitle>총 판매량</CardTitle>
-                </CardHeader>
-                <CardContent className="pl-2">{/* <Chart /> */}</CardContent>
-              </Card>
-              <Card className="col-span-3">
-                <CardHeader>
-                  <CardTitle>Recent Sales</CardTitle>
-                  <CardDescription>
-                    You made 265 sales this month.
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>{/* <RecentSales /> */}</CardContent>
-              </Card>
-            </div>
-          </div>
+          </section>
         </section>
       </div>
     </div>

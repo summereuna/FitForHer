@@ -40,9 +40,6 @@ function HeaderForSeller() {
         <Link to={`/dashboard`} className="text-xl font-semibold w-20">
           F4H
         </Link>
-        <search aria-label="검색" className="w-80">
-          <SearchBar />
-        </search>
         <div className="flex flex-row justify-end space-x-4 w-20">
           <NavLink to={`/dashboard`}>
             <Icon className="size-6">{storeIcon}</Icon>

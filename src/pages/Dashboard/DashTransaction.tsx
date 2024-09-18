@@ -1,24 +1,38 @@
+import { useBrand } from "@/api/brandApi";
+import { useOrdersByBrandId } from "@/api/orderApi";
 import ItemNotFound from "@/components/ItemNotFound";
-import { Button } from "@/components/ui/button";
+import TransactionDataTable from "@/components/Product/TransactionDataTable";
 import { Card, CardTitle } from "@/components/ui/card";
+import { useAuth } from "@/hooks/useAuth";
 
 function DashTransaction() {
+  const { authId } = useAuth();
+  const { brandData } = useBrand(authId as string);
+
+  const { brandOrderItemsData, isError, isPending, isSuccess } =
+    useOrdersByBrandId(brandData!.id);
+
+  // console.log(brandOrderItemsData);
+
   return (
     <div className="flex flex-col h-full w-full gap-5">
       <section className="flex justify-between items-center">
         <CardTitle>판매관리</CardTitle>
-        {/* <Button type="button" variant={"outline"}>
-          상품 등록하기
-        </Button> */}
       </section>
       <section className="flex h-full">
         <Card className="w-full">
-          <ItemNotFound description={`판매된 상품이 없습니다.`} />
+          {brandOrderItemsData?.length === 0 && (
+            <ItemNotFound description={`판매된 상품이 없습니다.`} />
+          )}
+          {isSuccess &&
+            brandOrderItemsData &&
+            brandOrderItemsData.length > 0 && (
+              <TransactionDataTable transactionItemData={brandOrderItemsData} />
+            )}
         </Card>
       </section>
     </div>
   );
-  return <div>DashTransaction</div>;
 }
 
 export default DashTransaction;

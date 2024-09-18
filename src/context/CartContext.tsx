@@ -1,11 +1,5 @@
-import {
-  createContext,
-  Dispatch,
-  SetStateAction,
-  useCallback,
-  useEffect,
-  useState,
-} from "react";
+import { Enums } from "@/types/database.types";
+import { createContext, useCallback, useEffect, useState } from "react";
 
 export interface Item {
   id: string;
@@ -14,8 +8,14 @@ export interface Item {
   image: string;
   color: string;
   price: number;
-  size: string;
+  size: Enums<"product_size">;
   size_quantity: number;
+  product_sizes_id: string;
+}
+
+export interface ReducedItem {
+  productSizesId: string;
+  orderQuantity: number;
 }
 
 interface CartContextProps {
@@ -25,6 +25,8 @@ interface CartContextProps {
   deleteCartItem: (productId: string, size: string) => void;
   clearCart: () => void;
   isInitializedLocalCart: boolean;
+  reducedItems: ReducedItem[];
+
   // isCartOpen: boolean;
   // setIsCartOpen: Dispatch<SetStateAction<boolean>>;
   // closeCart: () => void;
@@ -102,6 +104,11 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   };
 
+  const reducedItems: ReducedItem[] = cartItems.map((item) => ({
+    productSizesId: item.product_sizes_id,
+    orderQuantity: item.size_quantity,
+  }));
+
   const [isInitializedLocalCart, setIsInitializedLocalCart] = useState(false);
 
   const initCart = useCallback(() => {
@@ -126,6 +133,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
         deleteCartItem,
         clearCart,
         isInitializedLocalCart,
+        reducedItems, //미리 차감할 아이템
         // isCartOpen,
         // setIsCartOpen,
         // closeCart,

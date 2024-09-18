@@ -86,51 +86,6 @@ export type Database = {
           },
         ]
       }
-      carts: {
-        Row: {
-          created_at: string
-          customer_id: string
-          id: string
-          is_active: boolean
-          product_id: string
-          quantity: number
-          updated_at: string
-        }
-        Insert: {
-          created_at?: string
-          customer_id?: string
-          id?: string
-          is_active?: boolean
-          product_id: string
-          quantity: number
-          updated_at?: string
-        }
-        Update: {
-          created_at?: string
-          customer_id?: string
-          id?: string
-          is_active?: boolean
-          product_id?: string
-          quantity?: number
-          updated_at?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "carts_customer_id_fkey"
-            columns: ["customer_id"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "carts_product_id_fkey"
-            columns: ["product_id"]
-            isOneToOne: false
-            referencedRelation: "products"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       categories: {
         Row: {
           id: string
@@ -155,6 +110,8 @@ export type Database = {
           price: number
           product_id: string
           quantity: number
+          size_id: string
+          status: Database["public"]["Enums"]["order_item_status"]
           updated_at: string
         }
         Insert: {
@@ -165,6 +122,8 @@ export type Database = {
           price: number
           product_id: string
           quantity: number
+          size_id: string
+          status?: Database["public"]["Enums"]["order_item_status"]
           updated_at?: string
         }
         Update: {
@@ -175,6 +134,8 @@ export type Database = {
           price?: number
           product_id?: string
           quantity?: number
+          size_id?: string
+          status?: Database["public"]["Enums"]["order_item_status"]
           updated_at?: string
         }
         Relationships: [
@@ -192,6 +153,13 @@ export type Database = {
             referencedRelation: "products"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "order_items_size_id_fkey"
+            columns: ["size_id"]
+            isOneToOne: false
+            referencedRelation: "product_sizes"
+            referencedColumns: ["id"]
+          },
         ]
       }
       orders: {
@@ -200,8 +168,9 @@ export type Database = {
           customer_id: string
           id: string
           is_active: boolean
+          name: string
           order_status: Database["public"]["Enums"]["order_status"]
-          seller_id: string
+          payment_id: string
           total_amount: number
           updated_at: string
         }
@@ -210,8 +179,9 @@ export type Database = {
           customer_id: string
           id?: string
           is_active?: boolean
+          name: string
           order_status?: Database["public"]["Enums"]["order_status"]
-          seller_id: string
+          payment_id: string
           total_amount: number
           updated_at?: string
         }
@@ -220,8 +190,9 @@ export type Database = {
           customer_id?: string
           id?: string
           is_active?: boolean
+          name?: string
           order_status?: Database["public"]["Enums"]["order_status"]
-          seller_id?: string
+          payment_id?: string
           total_amount?: number
           updated_at?: string
         }
@@ -229,13 +200,6 @@ export type Database = {
           {
             foreignKeyName: "orders_customer_id_fkey"
             columns: ["customer_id"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "orders_seller_id_fkey"
-            columns: ["seller_id"]
             isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["id"]
@@ -492,53 +456,6 @@ export type Database = {
           },
         ]
       }
-      shipping_addresses: {
-        Row: {
-          created_at: string
-          customer_id: string
-          id: string
-          is_active: boolean
-          is_default: boolean
-          postal_code: string
-          recipient_address: string
-          recipient_name: string
-          recipient_phone: string
-          updated_at: string
-        }
-        Insert: {
-          created_at?: string
-          customer_id?: string
-          id?: string
-          is_active?: boolean
-          is_default?: boolean
-          postal_code: string
-          recipient_address: string
-          recipient_name: string
-          recipient_phone: string
-          updated_at?: string
-        }
-        Update: {
-          created_at?: string
-          customer_id?: string
-          id?: string
-          is_active?: boolean
-          is_default?: boolean
-          postal_code?: string
-          recipient_address?: string
-          recipient_name?: string
-          recipient_phone?: string
-          updated_at?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "shipping_addresses_customer_id_fkey"
-            columns: ["customer_id"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       sub_categories: {
         Row: {
           id: string
@@ -650,7 +567,17 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      order_status: "processing" | "shipped" | "delivered" | "cancelled"
+      order_item_status:
+        | "shipment_pending"
+        | "shipment_progressing"
+        | "shipment_complete"
+        | "order_confirmed"
+        | "order_cancelled"
+      order_status:
+        | "order_completed"
+        | "pending_shipment"
+        | "shipment_started"
+        | "order_cancelled"
       product_size: "FREE" | "XS" | "S" | "M" | "L" | "XL"
       user_role: "customer" | "seller" | "admin"
     }

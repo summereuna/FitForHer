@@ -22,11 +22,14 @@ type Variant =
   | undefined;
 
 interface AlertProps {
-  type: "button" | "submit" | "reset" | undefined;
-  variant: Variant;
+  type?: "button" | "submit" | "reset" | undefined;
+  variant?: Variant;
   buttonChildren: string;
   title: string;
   description: string;
+  noButton: string;
+  yesButton: string;
+  onClick: () => void;
 }
 
 function Alert({
@@ -35,6 +38,9 @@ function Alert({
   buttonChildren,
   title,
   description,
+  noButton,
+  yesButton,
+  onClick,
 }: AlertProps) {
   return (
     <AlertDialog>
@@ -49,8 +55,8 @@ function Alert({
           <AlertDialogDescription>{description}</AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>취소</AlertDialogCancel>
-          <AlertDialogAction>계속</AlertDialogAction>
+          <AlertDialogCancel>{noButton}</AlertDialogCancel>
+          <AlertDialogAction onClick={onClick}>{yesButton}</AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

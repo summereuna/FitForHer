@@ -1,4 +1,5 @@
 import { useCategoryProducts } from "@/api/mainApi";
+import Banner from "@/components/Home/Banner";
 import BraCategorySection from "@/components/Home/BraCategorySection";
 import CategorySection from "@/components/Home/CategorySection";
 import { Separator } from "@/components/ui/separator";
@@ -30,7 +31,8 @@ export default function Home() {
 
   return (
     <div className="flex flex-col space-y-10">
-      <section className="bg-gray-300 h-80"></section>
+      {/* <img src={banner} alt="배너" className="h-80 w-full object-cover" /> */}
+      <Banner />
       <Separator />
       {isSuccessTop && topProductsData && (
         <CategorySection
