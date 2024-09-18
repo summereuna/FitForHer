@@ -100,10 +100,10 @@ export const getOrderStatusKorean = (status: Enums<"order_status">) => {
     case "order_completed":
       return "주문완료";
 
-    case "pending_shipment":
+    case "pending_shipment": //안씀
       return "발송대기";
 
-    case "shipment_started":
+    case "shipment_started": //안씀
       return "발송시작";
 
     case "order_cancelled":
@@ -111,6 +111,30 @@ export const getOrderStatusKorean = (status: Enums<"order_status">) => {
 
     default:
       return "주문완료";
+  }
+};
+
+export const getOrderItemStatusKorean = (
+  status: Enums<"order_item_status">
+) => {
+  switch (status) {
+    case "shipment_pending":
+      return "배송대기";
+
+    case "shipment_progressing":
+      return "배송중";
+
+    case "shipment_complete":
+      return "배송완료";
+
+    case "order_confirmed":
+      return "구매확정";
+
+    case "order_cancelled":
+      return "주문취소";
+
+    default:
+      return "배송대기";
   }
 };
 

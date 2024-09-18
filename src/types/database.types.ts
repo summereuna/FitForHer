@@ -111,6 +111,7 @@ export type Database = {
           product_id: string
           quantity: number
           size_id: string
+          status: Database["public"]["Enums"]["order_item_status"]
           updated_at: string
         }
         Insert: {
@@ -122,6 +123,7 @@ export type Database = {
           product_id: string
           quantity: number
           size_id: string
+          status?: Database["public"]["Enums"]["order_item_status"]
           updated_at?: string
         }
         Update: {
@@ -133,6 +135,7 @@ export type Database = {
           product_id?: string
           quantity?: number
           size_id?: string
+          status?: Database["public"]["Enums"]["order_item_status"]
           updated_at?: string
         }
         Relationships: [
@@ -564,6 +567,12 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
+      order_item_status:
+        | "shipment_pending"
+        | "shipment_progressing"
+        | "shipment_complete"
+        | "order_confirmed"
+        | "order_cancelled"
       order_status:
         | "order_completed"
         | "pending_shipment"

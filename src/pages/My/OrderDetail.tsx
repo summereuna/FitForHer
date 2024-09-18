@@ -1,4 +1,5 @@
-import { useOrdersByOrderId } from "@/api/orderApi";
+import { useCancelOrder, useOrdersByOrderId } from "@/api/orderApi";
+import Alert from "@/components/Alert";
 import CheckoutItem from "@/components/Checkout/CheckoutItem";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -13,8 +14,10 @@ import {
   formatPhoneNumber,
   getCreatedTime,
   getOnlyRepresentativePhoto,
+  getOrderItemStatusKorean,
   getOrderStatusKorean,
 } from "@/lib/utils";
+import { Enums } from "@/types/database.types";
 import { useNavigate, useParams } from "react-router-dom";
 
 const OrderDetail = () => {
@@ -26,6 +29,17 @@ const OrderDetail = () => {
   );
 
   // console.log(data);
+  const { mutateCancelOrder } = useCancelOrder();
+
+  const handleCancelOrder = () => {
+    // console.log("주문 취소");
+    const newStatusData = {
+      orderId: id as string,
+      newStatus: "order_cancelled" as Enums<"order_status">,
+    };
+    mutateCancelOrder(newStatusData);
+  };
+
   return (
     <div className="flex flex-col space-y-10">
       <CardTitle>주문 내역 상세</CardTitle>
@@ -35,6 +49,22 @@ const OrderDetail = () => {
             <div className="flex flex-col w-full space-y-5">
               <Separator orientation="horizontal" />
               <CardContent className="flex flex-col p-0 px-5 space-y-5">
+                {"order_completed" === data.orderData.order_status && (
+                  <Badge
+                    variant="default"
+                    className="h-8 w-20 flex justify-center text-xs"
+                  >
+                    {getOrderStatusKorean(data.orderData.order_status)}
+                  </Badge>
+                )}
+                {"order_cancelled" === data.orderData.order_status && (
+                  <Badge
+                    variant="destructive"
+                    className="h-8 w-20 flex justify-center text-xs"
+                  >
+                    {getOrderStatusKorean(data.orderData.order_status)}
+                  </Badge>
+                )}
                 <CardDescription>
                   결제일: {getCreatedTime(data.orderData.created_at)} 결제
                 </CardDescription>
@@ -58,36 +88,44 @@ const OrderDetail = () => {
                   aria-label="장바구니 상품 목록"
                   className="flex flex-col space-y-2"
                 >
-                  <Badge
-                    variant="outline"
-                    className="bg-white h-8 w-24 opacity-70 flex justify-center text-sm"
-                  >
+                  {/* <CardTitle className="text-lg">
                     {getOrderStatusKorean(data.orderData.order_status)}
-                  </Badge>
+                  </CardTitle> */}
+
                   {data.orderData.order_items.map(
                     (item) =>
                       item.products &&
                       item.product_sizes &&
                       item.products.brands && (
-                        <CheckoutItem
+                        <div
                           key={item.id}
-                          image={
-                            (getOnlyRepresentativePhoto(
-                              item.products.product_images.filter(
-                                (img: { id: string; image_url: string }) =>
-                                  img.image_url
-                              )
-                            ) as string) ||
-                            item.products.product_images[0].image_url
-                          }
-                          name={item.products.name}
-                          color={item.products.color}
-                          size={item.product_sizes.size}
-                          size_quantity={item.quantity}
-                          price={item.products.price}
-                          productId={item.products.id}
-                          brandName={item.products.brands.name}
-                        />
+                          className="relative flex flex-row items-center"
+                        >
+                          <CheckoutItem
+                            image={
+                              (getOnlyRepresentativePhoto(
+                                item.products.product_images.filter(
+                                  (img: { id: string; image_url: string }) =>
+                                    img.image_url
+                                )
+                              ) as string) ||
+                              item.products.product_images[0].image_url
+                            }
+                            name={item.products.name}
+                            color={item.products.color}
+                            size={item.product_sizes.size}
+                            size_quantity={item.quantity}
+                            price={item.products.price}
+                            productId={item.products.id}
+                            brandName={item.products.brands.name}
+                          />
+                          <Badge
+                            variant="outline"
+                            className="absolute right-2 bg-white h-8 w-20 opacity-70 flex justify-center text-xs"
+                          >
+                            {getOrderItemStatusKorean(item.status)}
+                          </Badge>
+                        </div>
                       )
                   )}
                 </section>
@@ -184,13 +222,24 @@ const OrderDetail = () => {
               {/*  */}
               <section className="flex flex-row justify-end pt-5">
                 <div className="flex gap-5 min-w-40">
+                  {data.orderData.order_status !== "order_cancelled" && (
+                    <Alert
+                      variant={"outline"}
+                      buttonChildren={"주문 취소"}
+                      title={"주문 취소"}
+                      description={`주문을 취소하면 되돌릴 수 없습니다.\n정말 주문을 취소하시겠습니까?`}
+                      noButton={"아니오"}
+                      yesButton={"네"}
+                      onClick={handleCancelOrder}
+                    />
+                  )}
+
                   <Button
                     type="button"
-                    variant="outline"
                     className="w-full"
                     onClick={() => navigate(-1)}
                   >
-                    확인
+                    뒤로가기
                   </Button>
                 </div>
               </section>

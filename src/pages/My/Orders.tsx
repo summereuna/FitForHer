@@ -24,33 +24,35 @@ const Orders = () => {
           {myOrdersData?.length === 0 && (
             <ItemNotFound description={`주문 내역이 없습니다.`} />
           )}
-          {myOrdersData && (
+          {isSuccess && myOrdersData && (
             <section
               aria-label="주문내역"
               className="w-full overflow-y-auto flex flex-col divide-y-[1px]"
             >
-              <CardTitle className="pb-5">주문내역</CardTitle>
-              {myOrdersData.map((item) => (
-                <OrderItem
-                  key={item.id}
-                  id={item.id}
-                  status={item.order_status}
-                  created_at={item.created_at}
-                  image={
-                    getOnlyRepresentativePhoto(
-                      item.order_items[0].products.product_images.filter(
-                        (img: { id: string; image_url: string }) =>
-                          img.image_url
-                      )
-                    ) as string
-                  }
-                  name={item.name}
-                  // color={item.color}
-                  // size={item.size}
-                  // size_quantity={item.size_quantity}
-                  totalPrice={item.total_amount}
-                />
-              ))}
+              <CardTitle className="pb-5">
+                주문내역 ({myOrdersData.length})
+              </CardTitle>
+              {myOrdersData.map(
+                (item) =>
+                  item.order_items[0].products && (
+                    <OrderItem
+                      key={item.id}
+                      id={item.id}
+                      status={item.order_status}
+                      created_at={item.created_at}
+                      image={
+                        getOnlyRepresentativePhoto(
+                          item.order_items[0].products.product_images.filter(
+                            (img: { id: string; image_url: string }) =>
+                              img.image_url
+                          )
+                        ) as string
+                      }
+                      name={item.name}
+                      totalPrice={item.total_amount}
+                    />
+                  )
+              )}
             </section>
           )}
         </section>

@@ -1,14 +1,19 @@
+import { Enums } from "@/types/database.types";
 import { getPayment } from "@/api/paymentApi";
 import { Item } from "@/context/CartContext";
 import useFormError from "@/hooks/useFormError";
-import { PreReducedItem } from "@/pages/Checkout/Checkout";
 import supabase from "@/shared/supabaseClient";
 import {
+  CancelOrderRequest,
   GetOrderByOrderIdDataResponse,
   OrderRequest,
+  OrdersByBrandIdResponse,
   OrdersByUserIdResponse,
+  ReIncreaseCanceledItemsRequest,
+  UpdateOrderItemStatusRequest,
 } from "@/types/order.types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { PreReducedItem } from "@/components/Checkout/CheckoutMethodForm";
 
 //재고 우선 감소
 export const reducePreQuantities = async (updateData: PreReducedItem[]) => {
@@ -102,6 +107,24 @@ export const useReducePreQuantity = () => {
 };
 
 //-----------------------------------------------------------------------------
+
+const reIncreaseQuantity = async (
+  productSizesId: string,
+  reducedStock: number
+) => {
+  const { data, error } = await supabase
+    .from("product_sizes")
+    .update({
+      stock_quantity: reducedStock,
+    })
+    .eq("id", productSizesId)
+    .select();
+
+  if (error) throw error;
+
+  return data;
+};
+
 //재고 감소 취소
 export const reIncreasePreQuantities = async (updateData: PreReducedItem[]) => {
   const reIncreasePreQuantity = async (
@@ -129,15 +152,16 @@ export const reIncreasePreQuantities = async (updateData: PreReducedItem[]) => {
     const currentStock = productSizeData?.stock_quantity;
     const reducedStock = currentStock + orderQuantity;
 
-    const { data, error } = await supabase
-      .from("product_sizes")
-      .update({
-        stock_quantity: reducedStock,
-      })
-      .eq("id", productSizesId)
-      .select();
+    const data = await reIncreaseQuantity(productSizesId, reducedStock);
+    // const { data, error } = await supabase
+    //   .from("product_sizes")
+    //   .update({
+    //     stock_quantity: reducedStock,
+    //   })
+    //   .eq("id", productSizesId)
+    //   .select();
 
-    if (error) throw error;
+    // if (error) throw error;
 
     return data;
   };
@@ -342,7 +366,7 @@ const getOrderbyOrderId = async (
       created_at,
       order_status,
       total_amount,
-      order_items ( id, quantity,
+      order_items ( id, quantity, status,
       products ( id, name, color, price, brands (name), product_images ( * )), product_sizes ( size ))`
     )
     .eq("id", orderId)
@@ -366,4 +390,223 @@ export const useOrdersByOrderId = (orderId: string) => {
   });
 
   return { data, isPending, isError, isSuccess };
+};
+
+//----------------------------------------------------------
+//----------------------------------------------------------
+// 구매자: status 수정 (주문 취소!!)
+const cancelOrder = async (newStatusData: CancelOrderRequest) => {
+  const { orderId, newStatus } = newStatusData;
+
+  const {
+    data: { user },
+    error: userError,
+  } = await supabase.auth.getUser();
+  if (userError) throw userError;
+  if (!user) throw new Error("인증되지 않은 사용자 입니다.");
+
+  //newStatus 상태에 따라 바뀌게
+  const { data: orderData, error: orderError } = await supabase
+    .from("orders")
+    .update({
+      order_status: newStatus,
+    })
+    .eq("id", orderId)
+    .select()
+    .single();
+
+  if (orderError) throw orderError;
+
+  //newStatus가 주문취소인 경우, order_items 테이블도 주문 취소되게 하기
+  const { data: orderItemsData, error } = await supabase
+    .from("order_items")
+    .update({
+      status: newStatus as Enums<"order_item_status">,
+    })
+    .eq("order_id", orderId)
+    .select();
+
+  if (error) throw error;
+
+  //주문 취소된 items에 대해 재고 복구
+  const reIncreaseCanceledItems = async ({
+    productSizesId,
+    orderQuantity,
+  }: ReIncreaseCanceledItemsRequest) => {
+    // 1.현재 재고 수량을 먼저 조회
+    const { data: productSizeData, error: getQuantityError } = await supabase
+      .from("product_sizes")
+      .select("stock_quantity")
+      .eq("id", productSizesId)
+      .single(); // 단일 항목 조회
+
+    if (getQuantityError) throw getQuantityError;
+
+    // 2. 재고를 복구한 값으로 업데이트
+    const currentStock = productSizeData?.stock_quantity;
+    const reducedStock = currentStock + orderQuantity;
+    await reIncreaseQuantity(productSizesId, reducedStock);
+  };
+
+  //재고 복구해야할 아이템 목록
+  //병렬 처리
+  const reIncreaseOrderItemPromises = orderItemsData.map((item) =>
+    reIncreaseCanceledItems({
+      productSizesId: item.size_id,
+      orderQuantity: item.quantity,
+    })
+  );
+
+  await Promise.all(reIncreaseOrderItemPromises);
+
+  return { order: orderData, order_items: orderItemsData };
+};
+
+export const useCancelOrder = () => {
+  const queryClient = useQueryClient();
+  const { errorMessage, setErrorMessage } = useFormError();
+
+  const {
+    mutate: mutateCancelOrder,
+    isPending,
+    isError,
+    isSuccess,
+  } = useMutation({
+    mutationFn: cancelOrder,
+    onSuccess: (data) => {
+      console.log(data);
+      queryClient.invalidateQueries({ queryKey: ["orders"] });
+    },
+    onError: (error) => {
+      console.log(error);
+      // switch (error.code) {
+      //   case "user_already_exists":
+      //     setErrorMessage("이미 가입한 사용자입니다.");
+      //     break;
+      //   case "weak_password":
+      //     setErrorMessage("비밀번호가 너무 약합니다.");
+      //     break;
+      //   default:
+      //     setErrorMessage("회원가입에 실패했습니다. 다시 시도해 주세요.");
+      //     break;
+      // }
+      // return errorMessage;
+    },
+  });
+
+  return {
+    mutateCancelOrder,
+    isPending,
+    isError,
+    isSuccess,
+    errorMessage,
+  };
+};
+
+//----------------------------------------------------------
+//----------------------------------------------------------
+//판매자: 판매 관리 조회
+const getOrdersByBrandId = async (
+  brandId: string
+): Promise<OrdersByBrandIdResponse> => {
+  const {
+    data: { user },
+    error: userError,
+  } = await supabase.auth.getUser();
+  if (userError) throw userError;
+  if (!user) throw new Error("인증되지 않은 사용자 입니다.");
+
+  const { data, error } = await supabase
+    .from("order_items")
+    .select(
+      `*,
+      product_sizes ( size ),
+      orders ( * ),
+      products!inner ( *, brands!inner ( id ), product_images ( * ))`
+    )
+    .eq("products.brands.id", brandId)
+    .order("created_at", { ascending: false });
+
+  if (error) throw error;
+
+  return data;
+};
+
+export const useOrdersByBrandId = (brandId: string) => {
+  const {
+    data: brandOrderItemsData,
+    isPending,
+    isError,
+    isSuccess,
+  } = useQuery({
+    queryKey: ["orderItems", brandId],
+    queryFn: () => getOrdersByBrandId(brandId),
+    enabled: !!brandId, // id가 있을 때만 쿼리를 실행
+  });
+
+  return { brandOrderItemsData, isPending, isError, isSuccess };
+};
+
+//----------------------------------------------------------
+// 판매자: status 수정
+
+const updateOrderItemStatus = async (
+  newStatusData: UpdateOrderItemStatusRequest
+) => {
+  const { orderItemId, newStatus } = newStatusData;
+
+  //newStatus 상태에 따라 바뀌게
+  const { data, error } = await supabase
+    .from("order_items")
+    .update({
+      status: newStatus,
+    })
+    .eq("id", orderItemId)
+    .select();
+
+  if (error) throw error;
+  //✅newStatus가 주문취소인 경우, order 테이블도 주문 취소되게 하기..?
+
+  return data;
+};
+
+export const useUpdateOrderItemStatus = () => {
+  const queryClient = useQueryClient();
+  const { errorMessage, setErrorMessage } = useFormError();
+
+  const {
+    mutate: mutateUpdateOrderItemStatus,
+    isPending,
+    isError,
+    isSuccess,
+  } = useMutation({
+    mutationFn: updateOrderItemStatus,
+    onSuccess: (data) => {
+      console.log(data);
+      queryClient.invalidateQueries({ queryKey: ["orderItems"] });
+    },
+    onError: (error) => {
+      console.log(error);
+      // switch (error.code) {
+      //   case "user_already_exists":
+      //     setErrorMessage("이미 가입한 사용자입니다.");
+      //     break;
+      //   case "weak_password":
+      //     setErrorMessage("비밀번호가 너무 약합니다.");
+      //     break;
+      //   default:
+      //     setErrorMessage("회원가입에 실패했습니다. 다시 시도해 주세요.");
+      //     break;
+      // }
+      // return errorMessage;
+    },
+  });
+
+  return {
+    mutateUpdateOrderItemStatus,
+    isPending,
+    isError,
+    isSuccess,
+    errorMessage,
+  };
 };

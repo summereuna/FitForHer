@@ -129,24 +129,3 @@ export const usePayment = (paymentId: string, cartItems: Item[]) => {
 
   return { payment, isPending, isError, isSuccess };
 };
-//verifyPayment
-// 2. 고객사 내부 주문 데이터의 가격과 실제 지불된 금액 비교
-//여기선 수퍼베이스에서 가져와야함
-//   const orderData = await OrderService.getOrderData(order);
-
-//   if (orderData.amount === payment.amount.total) {
-//     switch (payment.status) {
-//       case "VIRTUAL_ACCOUNT_ISSUED": {
-//         const paymentMethod = payment.paymentMethod;
-//         // 가상 계좌가 발급된 상태입니다.
-//         // 계좌 정보를 이용해 원하는 로직을 구성하세요.
-//         break;
-//       }
-//       case "PAID": {
-//         // 모든 금액을 지불했습니다! 완료 시 원하는 로직을 구성하세요.
-//         break;
-//       }
-//     }
-//   } else {
-//     // 결제 금액이 불일치하여 위/변조 시도가 의심됩니다.
-//   }
