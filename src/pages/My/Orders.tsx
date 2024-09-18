@@ -13,10 +13,13 @@ const Orders = () => {
   );
 
   //console.log(myOrdersData);
+  const filteredMyOrdersData = myOrdersData?.filter(
+    (item) => item.order_status !== "order_cancelled"
+  );
 
-  const usersTotalAmountOrderItems =
-    myOrdersData &&
-    myOrdersData?.reduce((total, item) => total + item.total_amount, 0);
+  const totalAmountOrderCompletedItems =
+    filteredMyOrdersData &&
+    filteredMyOrdersData?.reduce((total, item) => total + item.total_amount, 0);
   return (
     <section className="h-full w-full">
       <section className="h-full grid grid-cols-1 gap-y-10 lg:gap-y-0 lg:grid-cols-3 lg:space-x-10">
@@ -75,7 +78,7 @@ const Orders = () => {
               총 결제액
             </CardDescription>
             <CardDescription className="text-base text-black font-medium">
-              {usersTotalAmountOrderItems?.toLocaleString() || 0} 원
+              {totalAmountOrderCompletedItems?.toLocaleString() || 0} 원
             </CardDescription>
           </div>
           <Separator orientation="horizontal" className="bg-gray-200 h-[1px]" />

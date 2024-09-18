@@ -5,7 +5,7 @@ import { CardDescription, CardTitle } from "@/components/ui/card";
 import { Enums } from "@/types/database.types";
 import { Icon } from "@/components/Icon";
 import { chevronRightIcon } from "@/shared/icons";
-import { getCreatedTime, getOrderStatusKorean } from "@/lib/utils";
+import { cn, getCreatedTime, getOrderStatusKorean } from "@/lib/utils";
 import { useNavigate } from "react-router-dom";
 
 interface OrderItemProps {
@@ -35,7 +35,14 @@ const OrderItem = ({
       className="flex flex-col justify-start w-full space-y-2 p-5 cursor-pointer transition duration-150 ease-linear hover:bg-muted"
       onClick={() => navigate(`/my/orders/${id}`)}
     >
-      <CardTitle className="text-lg">{getOrderStatusKorean(status)}</CardTitle>
+      <CardTitle
+        className={cn(
+          "text-lg",
+          status === "order_completed" ? "" : "text-destructive"
+        )}
+      >
+        {getOrderStatusKorean(status)}
+      </CardTitle>
       <div className="flex flex-row justify-start w-full space-x-5">
         <Avatar
           aria-label="주문 상품 사진"
@@ -59,21 +66,36 @@ const OrderItem = ({
             {`${getCreatedTime(created_at)} 결제`}
           </CardDescription>
           <CardTitle className="text-sm">{name || "주문명"}</CardTitle>
-          {/* <div className="flex flex-row space-x-2 items-center text-sm text-muted-foreground">
-          <CardDescription>{color || "컬러"}</CardDescription>
-          <Separator orientation="vertical" className="bg-gray-400 h-[12px]" />
-          <CardDescription>{size}</CardDescription>
-          <Separator orientation="vertical" className="bg-gray-400 h-[12px]" />
-          <CardDescription>{size_quantity} 개</CardDescription>
-        </div> */}
-          <CardTitle className="text-sm">
+          <CardTitle
+            className={cn(
+              "text-sm",
+              status === "order_completed"
+                ? ""
+                : "line-through text-muted-foreground"
+            )}
+          >
             {totalPrice.toLocaleString() || "가격"} 원
           </CardTitle>
           <div className="flex flex-row space-x-1 items-center text-sm">
-            <CardDescription className="text-blue-500">
+            <CardDescription
+              className={cn(
+                status === "order_completed"
+                  ? "text-blue-500"
+                  : "text-destructive"
+              )}
+            >
               {"주문상세"}
             </CardDescription>
-            <Icon className="size-3 text-blue-500">{chevronRightIcon}</Icon>
+            <Icon
+              className={cn(
+                "size-3",
+                status === "order_completed"
+                  ? "text-blue-500"
+                  : "text-destructive"
+              )}
+            >
+              {chevronRightIcon}
+            </Icon>
           </div>
         </div>
       </div>

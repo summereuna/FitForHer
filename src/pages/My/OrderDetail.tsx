@@ -166,7 +166,12 @@ const OrderDetail = () => {
           <section className="col-span-1">
             <section className="flex flex-col p-0 gap-0">
               <CardHeader aria-label="결제 정보" className="space-y-5 p-0">
-                <CardTitle className="text-xl">결제 정보</CardTitle>
+                <CardTitle className="text-xl">
+                  {"order_completed" === data.orderData.order_status &&
+                    "결제 정보"}
+                  {"order_cancelled" === data.orderData.order_status &&
+                    "환불 정보"}
+                </CardTitle>
                 <Separator orientation="horizontal" />
               </CardHeader>
               <CardContent className="flex flex-col p-0">
@@ -209,7 +214,10 @@ const OrderDetail = () => {
                   </div>
                   <div className="flex flex-row justify-between">
                     <CardDescription className="text-base font-medium text-black">
-                      총 결제 금액
+                    {"order_completed" === data.orderData.order_status &&
+                    "총 결제 금액"}
+                  {"order_cancelled" === data.orderData.order_status &&
+                    "총 환불 금액"}
                     </CardDescription>
                     <CardDescription className="text-base font-medium text-black">
                       총 {data.payment.amount.total.toLocaleString()} 원
