@@ -79,7 +79,11 @@ export const useCreateBrand = () => {
 const getBrandBySellerId = async (seller_id: string) => {
   const { data, error } = await supabase
     .from("brands")
-    .select("*")
+    .select(
+      `*,
+      brand_likes( * )
+      `
+    )
     .eq("seller_id", seller_id)
     .maybeSingle();
   if (error) throw error;

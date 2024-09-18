@@ -52,11 +52,28 @@ const ordersByBrandIdResponse = supabase
     `*,
     product_sizes ( size ),
     orders ( * ),
-    products!inner ( *, brands!inner ( id ), product_images ( * ))`
+    products!inner ( *, product_images ( * ))`
   )
   .order("created_at", { ascending: false });
 
 export type OrdersByBrandIdResponse = QueryData<typeof ordersByBrandIdResponse>;
+
+//------------------------------------
+
+const dashboardItemsByBrandIdResponse = supabase
+  .from("order_items")
+  .select(
+    `id, order_id, price, quantity, status,
+    product_sizes ( size ),
+    orders ( * ),
+    products!inner ( *, product_images ( * ), sub_categories ( name, categories (name) ))`
+  )
+  .neq("status", "order_cancelled")
+  .order("created_at", { ascending: false });
+
+export type DashboardItemsByBrandIdResponse = QueryData<
+  typeof dashboardItemsByBrandIdResponse
+>;
 
 //------------------------------------
 

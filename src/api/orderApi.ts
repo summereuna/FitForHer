@@ -5,6 +5,7 @@ import useFormError from "@/hooks/useFormError";
 import supabase from "@/shared/supabaseClient";
 import {
   CancelOrderRequest,
+  DashboardItemsByBrandIdResponse,
   GetOrderByOrderIdDataResponse,
   OrderRequest,
   OrdersByBrandIdResponse,
@@ -522,9 +523,9 @@ const getOrdersByBrandId = async (
       `*,
       product_sizes ( size ),
       orders ( * ),
-      products!inner ( *, brands!inner ( id ), product_images ( * ))`
+      products!inner ( *, product_images ( * ))`
     )
-    .eq("products.brands.id", brandId)
+    .eq("products.brand_id", brandId)
     .order("created_at", { ascending: false });
 
   if (error) throw error;
@@ -545,6 +546,50 @@ export const useOrdersByBrandId = (brandId: string) => {
   });
 
   return { brandOrderItemsData, isPending, isError, isSuccess };
+};
+
+//----------------------------------------------------------
+//판매자: 대시보드 조회(판매된 상품-주문완료인 것만 조회)
+const getDashboardItemsByBrandId = async (
+  brandId: string
+): Promise<DashboardItemsByBrandIdResponse> => {
+  const {
+    data: { user },
+    error: userError,
+  } = await supabase.auth.getUser();
+  if (userError) throw userError;
+  if (!user) throw new Error("인증되지 않은 사용자 입니다.");
+
+  const { data, error } = await supabase
+    .from("order_items")
+    .select(
+      `id, order_id, price, quantity, status,
+      product_sizes ( size ),
+      orders ( * ),
+      products!inner ( *, product_images ( * ), sub_categories ( name, categories (name) ))`
+    )
+    .eq("products.brand_id", brandId)
+    .neq("status", "order_cancelled") //주문 취소된 건은 빼고 가져오기
+    .order("created_at", { ascending: false });
+
+  if (error) throw error;
+
+  return data;
+};
+
+export const useDashboardItemsByBrandId = (brandId: string) => {
+  const {
+    data: dashboardItemsData,
+    isPending,
+    isError,
+    isSuccess,
+  } = useQuery({
+    queryKey: ["dashboardItems", brandId],
+    queryFn: () => getDashboardItemsByBrandId(brandId),
+    enabled: !!brandId, // id가 있을 때만 쿼리를 실행
+  });
+
+  return { dashboardItemsData, isPending, isError, isSuccess };
 };
 
 //----------------------------------------------------------

@@ -68,7 +68,12 @@ const TransactionDataTable = ({
                   : ""
               )}
             >
-              <TableCell className="font-medium">
+              <TableCell
+                className={cn(
+                  "font-medium",
+                  item.status === "order_cancelled" ? "text-destructive" : ""
+                )}
+              >
                 {/* {item.orders && (
                   <OrderItemStatusSelectForm
                     dbStatus={item.orders.order_status}
