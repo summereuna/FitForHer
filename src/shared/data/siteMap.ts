@@ -27,12 +27,12 @@ export const siteMap = [
       { label: "팬츠&조거", value: "pants-jogger" },
     ],
   },
-  {
-    top: { label: "베스트", value: "best" },
-    sub: [],
-  },
-  {
-    top: { label: "브랜드", value: "brands" },
-    sub: [],
-  },
+  // {
+  //   top: { label: "베스트", value: "best" },
+  //   sub: [],
+  // },
+  // {
+  //   top: { label: "브랜드", value: "brands" },
+  //   sub: [],
+  // },
 ] as const;
