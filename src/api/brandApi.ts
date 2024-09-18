@@ -1,4 +1,4 @@
-import useFormError from "@/hooks/useFormError";
+// import useFormError from "@/hooks/useFormError";
 import supabase from "@/shared/supabaseClient";
 import {
   BrandRegistrationRequest,
@@ -23,7 +23,8 @@ const createBrands = async (newBrandData: BrandRegistrationRequest) => {
   const { data, error } = await supabase
     .from("brands")
     .insert({ name, seller_id: user.id })
-    .select();
+    .select()
+    .single();
 
   if (error) throw error;
   return data;
@@ -33,7 +34,7 @@ export const useCreateBrand = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
-  const { errorMessage, setErrorMessage } = useFormError();
+  // const { errorMessage, setErrorMessage } = useFormError();
 
   const {
     mutate: mutateCreateBrand,
@@ -42,10 +43,10 @@ export const useCreateBrand = () => {
     isSuccess,
   } = useMutation({
     mutationFn: createBrands,
-    onSuccess: ({ id, name }) => {
+    onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["brands"] });
 
-      if (id) {
+      if (data.id) {
         navigate("/dashboard/setting");
       }
     },
@@ -71,7 +72,7 @@ export const useCreateBrand = () => {
     isError,
     isPending,
     isSuccess,
-    errorMessage,
+    // errorMessage,
   };
 };
 
@@ -134,7 +135,7 @@ export const useUpdateBrand = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
-  const { errorMessage, setErrorMessage } = useFormError();
+  // const { errorMessage, setErrorMessage } = useFormError();
 
   const {
     mutate: mutateUpdateBrand,
@@ -169,7 +170,7 @@ export const useUpdateBrand = () => {
     isError,
     isPending,
     isSuccess,
-    errorMessage,
+    // errorMessage,
   };
 };
 
@@ -212,7 +213,7 @@ const upsertBrandLogo = async (file: File) => {
 export const useUploadBrandLogo = () => {
   const queryClient = useQueryClient();
 
-  const { errorMessage, setErrorMessage } = useFormError();
+  // const { errorMessage, setErrorMessage } = useFormError();
 
   const {
     mutate: mutateUploadBrandLogo,
@@ -250,6 +251,6 @@ export const useUploadBrandLogo = () => {
     isPendingBrandLogo,
     isSuccessBrandLogo,
     responseBrandLogoUrl,
-    errorMessage,
+    // errorMessage,
   };
 };

@@ -63,6 +63,7 @@ const CheckoutMethodForm = ({ onPay, shippingData }: CheckoutMethodForm) => {
         addressLine2: "",
       },
       zipcode: shippingData.postal_code,
+      method: values.method,
     };
 
     const products = cartItems.map((item) => ({

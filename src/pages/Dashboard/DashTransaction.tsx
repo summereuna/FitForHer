@@ -9,8 +9,7 @@ function DashTransaction() {
   const { authId } = useAuth();
   const { brandData } = useBrand(authId as string);
 
-  const { brandOrderItemsData, isError, isPending, isSuccess } =
-    useOrdersByBrandId(brandData!.id);
+  const { brandOrderItemsData, isSuccess } = useOrdersByBrandId(brandData!.id);
 
   // console.log(brandOrderItemsData);
 

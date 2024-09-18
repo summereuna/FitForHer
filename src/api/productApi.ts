@@ -1,4 +1,4 @@
-import useFormError from "@/hooks/useFormError";
+// import useFormError from "@/hooks/useFormError";
 import supabase from "@/shared/supabaseClient";
 import {
   InsertSizesRequired,
@@ -58,7 +58,7 @@ const uploadProductImages = async (files: File[]) => {
 export const useUploadProductImages = () => {
   const queryClient = useQueryClient();
 
-  const { errorMessage, setErrorMessage } = useFormError();
+  // const { errorMessage, setErrorMessage } = useFormError();
 
   const {
     mutate: mutateUploadProductImages,
@@ -97,7 +97,7 @@ export const useUploadProductImages = () => {
     isPendingProductImages,
     isSuccessProductImages,
     responseProductImagesUrl,
-    errorMessage,
+    // errorMessage,
   };
 };
 
@@ -239,7 +239,7 @@ export const useUploadProduct = () => {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
 
-  const { errorMessage, setErrorMessage } = useFormError();
+  // const { errorMessage, setErrorMessage } = useFormError();
 
   const {
     mutate: mutateUploadProduct,
@@ -277,7 +277,7 @@ export const useUploadProduct = () => {
     isPendingProduct,
     isSuccessProduct,
     responseProductData,
-    errorMessage,
+    // errorMessage,
   };
 };
 
@@ -430,7 +430,7 @@ const updateBrandProducts = async (
     id: product_id,
     name,
     price,
-    updated_at,
+    // updated_at,
     sizes,
     product_images,
   } = updatedProductRequestData;
@@ -490,7 +490,7 @@ const updateBrandProducts = async (
   //     "스토리지 temporary에 새 파일 있는지 확인 중 에러",
   //     existNewFilesError
   //   );
-
+  if (error) throw error;
   //새로운 이미지 파일 없으면 얼리 리턴
   if (!data) return;
   //근데 data[0]이 엠티 어쩌구 라서 ;;;
@@ -596,7 +596,7 @@ export const useUpdateProduct = () => {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
 
-  const { errorMessage, setErrorMessage } = useFormError();
+  // const { errorMessage, setErrorMessage } = useFormError();
 
   const {
     mutate: mutateUpdateProduct,
@@ -632,7 +632,7 @@ export const useUpdateProduct = () => {
     isError,
     isPendingUpdateProduct,
     isSuccessUpdateProduct,
-    errorMessage,
+    // errorMessage,
   };
 };
 
@@ -650,7 +650,7 @@ const changeActiveProduct = async (product_id: string) => {
 
 export const useChangeActiveProduct = () => {
   const queryClient = useQueryClient();
-  const { errorMessage, setErrorMessage } = useFormError();
+  // const { errorMessage, setErrorMessage } = useFormError();
 
   const {
     mutate: mutateChangeActiveProduct,
@@ -672,6 +672,6 @@ export const useChangeActiveProduct = () => {
     isError,
     isPendingChangeActiveProduct,
     isSuccessChangeActiveProduct,
-    errorMessage,
+    // errorMessage,
   };
 };

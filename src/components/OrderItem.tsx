@@ -1,6 +1,5 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Separator } from "@/components/ui/separator";
 import { CardDescription, CardTitle } from "@/components/ui/card";
 import { Enums } from "@/types/database.types";
 import { Icon } from "@/components/Icon";

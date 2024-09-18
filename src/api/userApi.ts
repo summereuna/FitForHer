@@ -1,5 +1,5 @@
 import supabase from "@/shared/supabaseClient";
-import { useQueryClient, useMutation, useQuery } from "@tanstack/react-query";
+import { useQueryClient, useMutation } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 
 //타입
@@ -40,7 +40,7 @@ export const useCreateUser = () => {
     isSuccess,
   } = useMutation({
     mutationFn: signupFunction,
-    onSuccess: (data) => {
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["users"] });
       navigate("/login");
     },

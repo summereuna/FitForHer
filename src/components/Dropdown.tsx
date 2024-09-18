@@ -1,6 +1,5 @@
 import { useChangeActiveProduct } from "@/api/productApi";
 import { Icon } from "@/components/Icon";
-import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,

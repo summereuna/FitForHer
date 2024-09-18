@@ -8,8 +8,7 @@ interface RelatedProductsProps {
 
 const RelatedProducts = ({ subCategoryName }: RelatedProductsProps) => {
   const navigate = useNavigate();
-  const { data, isError, isPending, isSuccess } =
-    useRelatedProductDetail(subCategoryName);
+  const { data } = useRelatedProductDetail(subCategoryName);
 
   // console.log(data);
   return (

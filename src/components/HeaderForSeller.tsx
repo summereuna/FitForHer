@@ -1,5 +1,4 @@
 import { Icon } from "@/components/Icon";
-import { SearchBar } from "@/components/SearchBar";
 import { Separator } from "@/components/ui/separator";
 import { useAuth } from "@/hooks/useAuth";
 import { storeIcon } from "@/shared/icons";
@@ -13,8 +12,8 @@ function HeaderForSeller() {
       <div className="bg-white py-2 px-16">
         <nav aria-label="사용자 탐색">
           <ul className=" flex flex-row justify-end items-center space-x-4 text-xs">
-            <NavLink to={`/help`}>고객센터</NavLink>
-            <Separator orientation="vertical" className="h-3 bg-primary" />
+            {/* <NavLink to={`/help`}>고객센터</NavLink> */}
+            {/* <Separator orientation="vertical" className="h-3 bg-primary" /> */}
             {isLoggedIn && (
               <>
                 <button onClick={() => logout()}>로그아웃</button>

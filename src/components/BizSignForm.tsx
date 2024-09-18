@@ -1,12 +1,5 @@
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import {
   Form,
   FormControl,
@@ -17,15 +10,10 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Separator } from "@/components/ui/separator";
 import { signupFormSchema } from "@/schemas/signupFormSchema";
 import { SignupUsersRequest } from "@/types/user.types";
-
 import { zodResolver } from "@hookform/resolvers/zod";
-
-import { RadioGroup, RadioGroupItem } from "@radix-ui/react-radio-group";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
 import { z } from "zod";
 
 interface BizSignFormProps {
@@ -52,7 +40,6 @@ export default function BizSignForm({
   });
 
   const onSubmit = (values: z.infer<typeof signupFormSchema>) => {
-    // console.log(values);
     const newUser = {
       email: values.email,
       password: values.password,
@@ -64,7 +51,6 @@ export default function BizSignForm({
     onSignup(newUser);
   };
 
-  // console.log(form.formState.errors);
   return (
     <div className="flex w-full justify-center content-center">
       <Card>
@@ -73,26 +59,6 @@ export default function BizSignForm({
             <span>FIT FOR HER</span>
             <span className="text-lg font-medium">비즈니스 회원 가입하기</span>
           </div>
-
-          {/* <div className="flex flex-row justify-center items-center space-x-5 text-xs">
-            <div className="relative flex flex-col items-center space-y-2">
-              <div className="w-5 h-5 bg-black rounded-full flex justify-center items-center">
-                <span className="text-white">1</span>
-              </div>
-              <span>판매자 정보 입력</span>
-              <Separator
-                orientation="horizontal"
-                className="absolute top-[0.1rem] -right-[1.8rem] bg-gray-300 w-10"
-              />
-            </div>
-
-            <div className="flex flex-col items-center space-y-2">
-              <div className="w-5 h-5 bg-gray-300 rounded-full flex justify-center items-center">
-                <span className="text-white">2</span>
-              </div>
-              <span className="text-gray-300">브랜드 정보 입력</span>
-            </div>
-          </div> */}
         </CardHeader>
         <CardContent>
           <Form {...form}>

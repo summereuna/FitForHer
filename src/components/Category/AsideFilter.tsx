@@ -1,13 +1,17 @@
 import { CardTitle } from "@/components/ui/card";
 import { getKoreanCategoryName } from "@/lib/utils";
 import { siteMap } from "@/shared/data/siteMap";
+import {
+  SameCategoryProduct,
+  SameSubCategoryProduct,
+} from "@/types/category.types";
 import { InfiniteData } from "@tanstack/react-query";
 import { Link, useParams } from "react-router-dom";
 
 interface AsideFilterProps {
   topCateName: string;
-  topCateData: InfiniteData<TData, TPageParam>;
-  subCateData?: InfiniteData<TData, TPageParam>;
+  topCateData: InfiniteData<SameCategoryProduct[]>;
+  subCateData?: InfiniteData<SameSubCategoryProduct[]>;
   onSubCategorySelect: (subCategoryName: string) => void;
 }
 
