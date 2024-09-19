@@ -28,7 +28,6 @@ const ProductDataTable = ({ brandProductsData }: ProductDataTableProps) => {
   const handleImageLoad = () => {
     setImageLoaded(true);
   };
-  console.log(brandProductsData);
   return (
     <section>
       <Table>

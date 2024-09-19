@@ -24,7 +24,6 @@ export function SearchBar() {
   });
 
   function onSubmit(keyword: z.infer<typeof SearchFormSchema>) {
-    console.log(`${keyword.keyword}`);
     navigate(`/search?keyword=${keyword.keyword}`);
     form.reset();
     // toast({

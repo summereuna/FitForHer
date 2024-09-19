@@ -16,6 +16,9 @@ import {
 } from "@/components/ui/form";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Skeleton } from "@/components/ui/skeleton";
+import { ToastAction } from "@/components/ui/toast";
+import { toast } from "@/hooks/use-toast";
+import { useAuth } from "@/hooks/useAuth";
 import { useCart } from "@/hooks/useCart";
 import {
   getKoreanCategoryName,
@@ -29,10 +32,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { NavLink, Outlet, useParams } from "react-router-dom";
+import { NavLink, Outlet, useNavigate, useParams } from "react-router-dom";
 import { z } from "zod";
 
 function ProductDetail() {
+  const navigate = useNavigate();
+  const { session } = useAuth();
   const { id } = useParams();
   const { data, isSuccess } = useProductDetail(id as string);
   const { addCartItem } = useCart();
@@ -73,6 +78,19 @@ function ProductDetail() {
   });
 
   const onSubmit = (values: z.infer<typeof cartFormSchema>) => {
+    if (!session) {
+      toast({
+        title: "로그인이 필요합니다!",
+        description: "로그인 후 장바구니 추가 및 구매가 가능합니다.",
+        action: (
+          <ToastAction altText="go to login" onClick={() => navigate("/login")}>
+            로그인
+          </ToastAction>
+        ),
+      });
+      return;
+    }
+
     if (!data) return;
 
     const getSize = data.product_sizes.find(
@@ -109,7 +127,6 @@ function ProductDetail() {
     };
   }, [id]);
 
-  // console.log("폼 에러:", form.formState.errors);
   return (
     <div className="flex flex-col space-y-10">
       {isSuccess && data && (

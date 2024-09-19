@@ -118,7 +118,6 @@ const updateBrands = async (updatedBrandData: BrandUpdateRequest) => {
   if (userError) throw userError;
   if (!user) throw new Error("인증되지 않은 사용자 입니다.");
 
-  // console.log("잘 바꼈니", updatedBrandData.logo_url);
   const { data, error } = await supabase
     .from("brands")
     .update(updatedBrandData)

@@ -11,8 +11,6 @@ function DashTransaction() {
 
   const { brandOrderItemsData, isSuccess } = useOrdersByBrandId(brandData!.id);
 
-  // console.log(brandOrderItemsData);
-
   return (
     <div className="flex flex-col h-full w-full gap-5">
       <section className="flex justify-between items-center">

@@ -10,7 +10,6 @@ const Orders = () => {
   const { authId, session } = useAuth();
   const { myOrdersData, isSuccess } = useOrdersByUserId(authId as string);
 
-  //console.log(myOrdersData);
   const filteredMyOrdersData = myOrdersData?.filter(
     (item) => item.order_status !== "order_cancelled"
   );

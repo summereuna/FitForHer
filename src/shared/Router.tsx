@@ -36,6 +36,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Orders from "@/pages/My/Orders";
 import OrderDetail from "@/pages/My/OrderDetail";
 import Search from "@/pages/Category/Search";
+import NotFound from "@/pages/NotFound";
 
 // PrivateRoute : 로그인이 필요한 페이지에 접근할 수 있도록 하는 컴포넌트
 // 로그인이 되어있지 않은 사용자는 login 페이지로 리다이렉트
@@ -79,18 +80,15 @@ export default function Router() {
         <Route element={<Layout />}>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
+          <Route path="*" element={<NotFound />} />
           {/* <Route path="/help" element={<Help />} /> */}
-
           <Route path="/signup" element={<PublicRoute element={Signup} />} />
           <Route
             path="/signup/biz"
             element={<PublicRoute element={BizSignup} />}
           />
-
           <Route path="/login" element={<PublicRoute element={Login} />} />
-
           <Route path="/my/wish" element={<PrivateRoute element={Wish} />} />
-
           {/* 주문 폼 */}
           <Route
             path="/checkout"
@@ -108,7 +106,6 @@ export default function Router() {
             path="/checkout/order/success/:id"
             element={<PrivateRoute element={OrderSuccess} />}
           />
-
           {/* 나의 페이지 / 오더 */}
           <Route
             path="/my/orders"
@@ -118,7 +115,6 @@ export default function Router() {
             path="/my/orders/:id"
             element={<PrivateRoute element={OrderDetail} />}
           />
-
           {/* 카테고리 아울렛 */}
           <Route path="/category" element={<CategoryLayout />}>
             <Route index element={<New />} />
@@ -132,10 +128,8 @@ export default function Router() {
             {/* <Route path="best" element={<Best />} /> */}
             {/* <Route path="brands" element={<Brands />} /> */}
           </Route>
-
           {/* 제품 서치 */}
           <Route path="/search" element={<Search />} />
-
           {/* 제품 상세 페이지 */}
           <Route path="/product/:id" element={<ProductDetail />}>
             <Route path="/product/:id/review" element={<Review />} />

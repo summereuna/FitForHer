@@ -48,7 +48,6 @@ const CheckoutMethodForm = ({ onPay, shippingData }: CheckoutMethodForm) => {
   });
 
   const onSubmit = (values: z.infer<typeof FormSchema>) => {
-    // console.log(values.method);
     if (!authId) return;
     if (!cartItems) return;
     if (!shippingData) return;
@@ -79,7 +78,6 @@ const CheckoutMethodForm = ({ onPay, shippingData }: CheckoutMethodForm) => {
     onPay(customerInfo, products);
   };
 
-  // console.log(form.formState.errors);
   return (
     <CardContent className="flex flex-col p-0 px-5">
       <Form {...form}>

@@ -1,5 +1,6 @@
 import { useSearchProducts } from "@/api/searchApi";
 import CategoryPageSection from "@/components/Category/CategoryPageSection";
+import ItemNotFound from "@/components/ItemNotFound";
 import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
 
@@ -20,7 +21,6 @@ const Search = () => {
   };
 
   //------------------------------------------------------------
-  console.log("키워드:", keyword);
 
   const {
     data: searchData,
@@ -30,15 +30,20 @@ const Search = () => {
   } = useSearchProducts(sortFilter, keyword as string);
 
   return (
-    <div className="flex justify-center items-center w-full">
+    <div className="flex justify-center w-full h-full">
       <main>
-        {searchData && (
+        {searchData && searchData?.pages[0].length > 0 && (
           <CategoryPageSection
             data={searchData}
             handleChangeSortFilter={handleChangeSortFilter}
             fetchNextPage={fetchNextPage}
             hasNextPage={hasNextPage}
             isFetchingNextPage={isFetchingNextPage}
+          />
+        )}
+        {searchData?.pages[0].length === 0 && (
+          <ItemNotFound
+            description={`검색어: ${keyword}\n찾는 상품이 없습니다.`}
           />
         )}
       </main>
