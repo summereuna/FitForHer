@@ -77,8 +77,7 @@ export const useReducePreQuantity = () => {
     isSuccess,
   } = useMutation({
     mutationFn: reducePreQuantities,
-    onSuccess: (data) => {
-      console.log(data);
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["pre-quantity"] });
     },
     onError: (error) => {
@@ -223,7 +222,6 @@ const createOrder = async ({
   newOrder: OrderRequest;
   cartItems: Item[];
 }) => {
-  console.log("✅", newOrder);
   const { data: orderData, error: orderError } = await supabase
     .from("orders")
     .insert(newOrder)
@@ -474,8 +472,7 @@ export const useCancelOrder = () => {
     isSuccess,
   } = useMutation({
     mutationFn: cancelOrder,
-    onSuccess: (data) => {
-      console.log(data);
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["orders"] });
     },
     onError: (error) => {
@@ -626,8 +623,7 @@ export const useUpdateOrderItemStatus = () => {
     isSuccess,
   } = useMutation({
     mutationFn: updateOrderItemStatus,
-    onSuccess: (data) => {
-      console.log(data);
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["orderItems"] });
     },
     onError: (error) => {

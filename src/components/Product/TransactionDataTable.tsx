@@ -34,7 +34,6 @@ const TransactionDataTable = ({
   const handleImageLoad = () => {
     setImageLoaded(true);
   };
-  // console.log(transactionItemData);
 
   const { mutateUpdateOrderItemStatus } = useUpdateOrderItemStatus();
 

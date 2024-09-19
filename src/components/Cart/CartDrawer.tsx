@@ -40,11 +40,9 @@ export function CartDrawer({ isInNav, onChangeIsAddedItem }: CartDrawerProps) {
   const totalPrice = totalPriceCartItems + shippingCharge;
 
   const handleOrder = () => {
-    console.log("아이템 주문하기");
     navigate("/checkout");
   };
 
-  // console.log(cartItems);
 
   // 장바구니 비워지면 isAddedItem 상태도 false로 바꾸기
   useEffect(() => {

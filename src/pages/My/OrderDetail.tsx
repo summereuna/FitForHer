@@ -26,11 +26,9 @@ const OrderDetail = () => {
 
   const { data, isSuccess } = useOrdersByOrderId(id as string);
 
-  // console.log(data);
   const { mutateCancelOrder } = useCancelOrder();
 
   const handleCancelOrder = () => {
-    // console.log("주문 취소");
     const newStatusData = {
       orderId: id as string,
       newStatus: "order_cancelled" as Enums<"order_status">,

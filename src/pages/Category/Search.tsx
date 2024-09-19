@@ -20,7 +20,6 @@ const Search = () => {
   };
 
   //------------------------------------------------------------
-  console.log("키워드:", keyword);
 
   const {
     data: searchData,

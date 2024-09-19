@@ -36,7 +36,6 @@ const uploadProductImages = async (files: File[]) => {
       throw uploadError;
     }
 
-    // console.log(uploadFile);
     //스토리지에서 public url 가져오기
     const { data } = await supabase.storage
       .from("images")
@@ -70,7 +69,6 @@ export const useUploadProductImages = () => {
     mutationFn: uploadProductImages,
     onSuccess: (data) => {
       if (data) {
-        console.log("onSuccess:", data);
         queryClient.invalidateQueries({ queryKey: ["products"] });
       }
     },
@@ -249,8 +247,7 @@ export const useUploadProduct = () => {
     data: responseProductData,
   } = useMutation({
     mutationFn: uploadProduct,
-    onSuccess: (data) => {
-      console.log("onSuccess:", data);
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["products"] });
       navigate("/dashboard/product");
     },
@@ -496,7 +493,6 @@ const updateBrandProducts = async (
   //근데 data[0]이 엠티 어쩌구 라서 ;;;
 
   //새로운 이미지 파일 있으면 진행
-  // console.log(data.length > 1);
   const isExistNewFiles = !!(data.length > 1);
 
   //여기가 진짜 이미지 없는 경우 얼리 리턴으로 마무리
@@ -529,8 +525,6 @@ const updateBrandProducts = async (
       "기존 이미지 파일 개수 확인하기 에러",
       prevImageFilesError
     );
-  // console.log("기존 개수:", prevImageFileList?.length);
-  // const prevIndex = prevImageFiles?.length;
 
   //5-2. 기존 파일 삭제
   const removePrevFiles = async (index: number) => {
@@ -605,8 +599,7 @@ export const useUpdateProduct = () => {
     isSuccess: isSuccessUpdateProduct,
   } = useMutation({
     mutationFn: updateBrandProducts,
-    onSuccess: (data) => {
-      console.log("onSuccess:", data);
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["products"] });
       navigate("/dashboard/product");
     },

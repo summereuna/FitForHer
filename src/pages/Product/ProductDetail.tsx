@@ -109,7 +109,6 @@ function ProductDetail() {
     };
   }, [id]);
 
-  // console.log("폼 에러:", form.formState.errors);
   return (
     <div className="flex flex-col space-y-10">
       {isSuccess && data && (

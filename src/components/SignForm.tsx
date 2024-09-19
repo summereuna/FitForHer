@@ -49,7 +49,6 @@ export default function SignForm({
   });
 
   const onSubmit = (values: z.infer<typeof signupFormSchema>) => {
-    // console.log(values);
     const newUser = {
       email: values.email,
       password: values.password,
@@ -61,7 +60,6 @@ export default function SignForm({
     onSignup(newUser);
   };
 
-  // console.log(form.formState.errors);
   return (
     <div className="flex w-full justify-center content-center">
       <Card>

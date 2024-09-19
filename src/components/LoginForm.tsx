@@ -53,16 +53,10 @@ export default function LoginForm() {
       }
     } catch (error) {
       if (error instanceof AuthError) {
-        // console.log("code", error.code);
-        // console.log("message", error.message);
-        // console.log("name", error.name);
-        // console.log("stack", error.stack);
-        // console.log("status", error.status);
         setErrorMessage("로그인을 할 수 없습니다.");
       }
     }
   };
-  // console.log(form.formState.errors);
 
   const handleLoginGoogle = async (e: React.MouseEvent) => {
     const provider = e.currentTarget.id as Provider;
@@ -73,11 +67,6 @@ export default function LoginForm() {
       setIsPending(false); // 로딩 끝
     } catch (error) {
       if (error instanceof AuthError) {
-        // console.log("code", error.code);
-        // console.log("message", error.message);
-        // console.log("name", error.name);
-        // console.log("stack", error.stack);
-        // console.log("status", error.status);
         setErrorMessage("로그인을 할 수 없습니다.");
         setIsPending(false); // 로딩 끝
       }

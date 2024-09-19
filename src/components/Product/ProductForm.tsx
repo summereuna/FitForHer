@@ -196,7 +196,6 @@ export function ProductForm({ productData, onUpdateData }: ProductFormProps) {
     }
   }
 
-  // console.log(form.getValues("imageUrls"));
   const handleCancel = () => {
     form.reset();
     setFileList([]);

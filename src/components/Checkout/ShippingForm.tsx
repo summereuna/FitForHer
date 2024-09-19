@@ -56,11 +56,9 @@ const ShippingForm = ({ onSubmitShippingData }: ShippingFormProps) => {
       postal_code: values.postal_code,
     };
 
-    console.log(shippingData);
     onSubmitShippingData("checkout", shippingData);
   };
 
-  // console.log(form.formState.errors);
   return (
     <CardContent className="flex flex-col p-0 px-5">
       <Form {...form}>
