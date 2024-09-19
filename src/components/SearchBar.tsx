@@ -6,6 +6,7 @@ import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { searchIcon } from "@/shared/icons";
 import { Icon } from "@/components/Icon";
+import { useNavigate } from "react-router-dom";
 
 const SearchFormSchema = z.object({
   keyword: z.string().min(1, {
@@ -14,6 +15,7 @@ const SearchFormSchema = z.object({
 });
 
 export function SearchBar() {
+  const navigate = useNavigate();
   const form = useForm<z.infer<typeof SearchFormSchema>>({
     resolver: zodResolver(SearchFormSchema),
     defaultValues: {
@@ -23,6 +25,7 @@ export function SearchBar() {
 
   function onSubmit(keyword: z.infer<typeof SearchFormSchema>) {
     console.log(`${keyword.keyword}`);
+    navigate(`/search?keyword=${keyword.keyword}`);
     form.reset();
     // toast({
     //   title: "You submitted the following values:",

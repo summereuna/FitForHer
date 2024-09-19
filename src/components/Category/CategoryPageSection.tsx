@@ -1,6 +1,7 @@
 import CategoryFilterSelect from "@/components/Category/CategoryFilterSelect";
 import ProductItem from "@/components/ProductItem";
 import { SameCategoryProduct } from "@/types/category.types";
+import { SearchProduct } from "@/types/search.types";
 import {
   FetchNextPageOptions,
   InfiniteData,
@@ -10,7 +11,7 @@ import { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
 interface CategoryPageSectionProps {
-  data: InfiniteData<SameCategoryProduct[]>;
+  data: InfiniteData<SameCategoryProduct[]> | InfiniteData<SearchProduct[]>;
   handleChangeSortFilter: (
     sortBy: "newest" | "low-price" | "high-price"
   ) => void;

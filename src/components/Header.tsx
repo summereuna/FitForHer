@@ -26,6 +26,7 @@ function Header() {
     // { id: "brands", name: "브랜드", path: `/category/brands` },
   ];
 
+
   return (
     <div aria-label="전체 탐색">
       <div className="bg-white py-2 px-16">
