@@ -9,6 +9,9 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import { ToastAction } from "@/components/ui/toast";
+import { toast } from "@/hooks/use-toast";
+import { useAuth } from "@/hooks/useAuth";
 import { useCart } from "@/hooks/useCart";
 import { cartIcon } from "@/shared/icons";
 import { useEffect } from "react";
@@ -21,7 +24,8 @@ interface CartDrawerProps {
 
 export function CartDrawer({ isInNav, onChangeIsAddedItem }: CartDrawerProps) {
   const navigate = useNavigate();
-
+  const { session } = useAuth();
+  
   const {
     cartItems,
     updateCartItem,
@@ -40,9 +44,21 @@ export function CartDrawer({ isInNav, onChangeIsAddedItem }: CartDrawerProps) {
   const totalPrice = totalPriceCartItems + shippingCharge;
 
   const handleOrder = () => {
+    if (!session) {
+      toast({
+        title: "로그인이 필요합니다!",
+        description: "로그인 후 장바구니 추가 및 구매가 가능합니다.",
+        action: (
+          <ToastAction altText="go to login" onClick={() => navigate("/login")}>
+            로그인
+          </ToastAction>
+        ),
+      });
+      return;
+    }
+
     navigate("/checkout");
   };
-
 
   // 장바구니 비워지면 isAddedItem 상태도 false로 바꾸기
   useEffect(() => {
