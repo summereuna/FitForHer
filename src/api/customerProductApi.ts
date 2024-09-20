@@ -52,7 +52,8 @@ export const useProductDetail = (productId: string) => {
 //-------------------------------------------------------------
 //추천 상품
 const getRelatedProductDetail = async (
-  subCategoryName: string
+  subCategoryName: string,
+  id: string
 ): Promise<RelatedProduct[]> => {
   const { data, error } = await supabase
     .from("products")
@@ -70,6 +71,7 @@ const getRelatedProductDetail = async (
     )
     .filter("is_active", "eq", true)
     .eq("sub_categories.name", subCategoryName)
+    .neq("id", id)
     .order("size", {
       referencedTable: "product_sizes",
       ascending: true,
@@ -80,10 +82,13 @@ const getRelatedProductDetail = async (
   return data;
 };
 
-export const useRelatedProductDetail = (subCategoryName: string) => {
+export const useRelatedProductDetail = (
+  subCategoryName: string,
+  id: string
+) => {
   const { data, isPending, isError, isSuccess } = useQuery({
-    queryKey: ["products-detail", subCategoryName],
-    queryFn: () => getRelatedProductDetail(subCategoryName),
+    queryKey: ["products-detail", subCategoryName, id],
+    queryFn: () => getRelatedProductDetail(subCategoryName, id),
     enabled: !!subCategoryName,
   });
 

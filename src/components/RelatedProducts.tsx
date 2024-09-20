@@ -1,14 +1,15 @@
 import { useRelatedProductDetail } from "@/api/customerProductApi";
 import ProductItem from "@/components/ProductItem";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 interface RelatedProductsProps {
   subCategoryName: string;
 }
 
 const RelatedProducts = ({ subCategoryName }: RelatedProductsProps) => {
+  const { id } = useParams();
   const navigate = useNavigate();
-  const { data } = useRelatedProductDetail(subCategoryName);
+  const { data } = useRelatedProductDetail(subCategoryName, id as string);
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
