@@ -20,12 +20,12 @@
 
 #### 테스트 계정
 >  1. 구매자
-> <br/>ID: test@test.com<br/>PW: test123!!!
+> <br/>ID: test@f4h.com<br/>PW: xptmxm123!!!
 >
 >  2. 판매자
 > <br/>ID: lululemon@test.com<br/>PW: fnffnfpahs123!!!
 
-  
+<br/>
 
 ## 실행방법
 1. 레포지토리 복제 및 의존성 설치
@@ -43,6 +43,8 @@ $ yarn dev
 http://localhost:5173/
 ```
 
+<br/>
+
 ## 기술스택
 기술|기술 선택 이유
 :--:|:--
@@ -58,40 +60,99 @@ http://localhost:5173/
 <img  src="https://img.shields.io/badge/Vercel-000000?style=flat-square&logo=Vercel&logoColor=white"  width="90px"/>|- 배포는 빠르고 간편하고 자동화된 CI/CD를 제공하는 Vercel을 사용하여 개발과 운영 효율성을 높였습니다.
 <img  src="https://img.shields.io/badge/supabase-3FCF8E?style=flat-square&logo=supabase&logoColor=white"  width="110px"/>|- 백엔드로는 Supabase를 사용했습니다. Supabase는 실시간 DB, Auth, Storage 등 다양한 백엔드 기능을 손쉽게 구현할 수 있는 BaaS(Backend as a Service) 플랫폼으로, 서버 없이도 언급된 기능을 제공 받을 수 있기 때문에 이번 프로젝트에 적합하다고 생각하여 선택했습니다.<br/>- NoSQL 기반인 Firebase와도 고민을 했지만, 이커머스 프로젝트의 복잡한 데이터 요구 사항을 효율적으로 처리할 수 있을 것으로 판단하여 오픈 소스 PostgreSQL 기반으로 강력한 쿼리 기능과 데이터베이스 관리 기능을 제공하고 데이터베이스 스키마의 직관적 관리가 가능한 Supabase를 선택했습니다.
 
- 
+<br/>
+
 ## 아키텍쳐
-![아키텍처이미지]()
+![F4H_architecture](https://github.com/user-attachments/assets/39df9a3e-1c5f-4c04-b5b4-7545082a199f)
 
 ### 폴더구조
 ```
-
-  
-
+📦src
+ ┣ 📂api
+ ┃ ┣ 📜brandApi.ts
+ ┃ ┣ 📜categoryApi.ts
+ ┃ ┣ 📜customerProductApi.ts
+ ┃ ┣ 📜mainApi.ts
+ ┃ ┣ 📜orderApi.ts
+ ┃ ┣ 📜paymentApi.ts
+ ┃ ┣ 📜productApi.ts
+ ┃ ┣ 📜searchApi.ts
+ ┃ ┗ 📜userApi.ts
+ ┣ 📂assets
+ ┃ ┗ 📂images
+ ┣ 📂components
+ ┃ ┣ 📂Cart
+ ┃ ┣ 📂Category
+ ┃ ┣ 📂Checkout
+ ┃ ┣ 📂Home
+ ┃ ┣ 📂Product
+ ┃ ┗ 📂ui
+ ┣ 📂context
+ ┣ 📂hooks
+ ┣ 📂lib
+ ┣ 📂pages
+ ┃ ┣ 📂Category
+ ┃ ┣ 📂Checkout
+ ┃ ┣ 📂Dashboard
+ ┃ ┣ 📂My
+ ┃ ┗ 📂Product
+ ┣ 📂schemas
+ ┣ 📂shared
+ ┃ ┗ 📂data
+ ┣ 📂types
+ ┣ 📜App.css
+ ┣ 📜App.tsx
+ ┣ 📜index.css
+ ┣ 📜main.tsx
+ ┗ 📜vite-env.d.ts
 ```
 
 ### ERD
 ![ERD]()
 
-## 화면 구성 및 주요기능
-#### 1. 로그인(`/login`), 회원가입(`/signup`)
+<br/>
+
+## 화면 구성
+|로그인 페이지<br/>`/login`|일반 회원가입 페이지<br/>`/signup`<br/>비즈니스 회원가입 페이지<br/>`/signup/biz`|
+|:--:|:--:|
+|<img width="600" alt="로그인" src="https://github.com/user-attachments/assets/6db0bdac-9096-4d85-a050-8f206dbd973c">|<img width="600" alt="일반회원가입" src="https://github.com/user-attachments/assets/ad2cf3d8-5823-4665-9384-3f09c8653489"><img width="600" alt="비즈니스회원가입" src="https://github.com/user-attachments/assets/c10ac085-6ac1-4884-8f9e-59b54060c9c2">|
+|메인 페이지<br/>`/`|검색 페이지<br/>`/search?keyword=`|
+|<img width="600" alt="메인" src="https://github.com/user-attachments/assets/5337f9be-5c64-4cca-8ee8-0ab31e05727a"><img width="600" alt="메인2" src="https://github.com/user-attachments/assets/202cace6-42ec-4a43-86a7-a19ba7ef869b">|<img width="600" alt="검색" src="https://github.com/user-attachments/assets/2ef8fee3-b18f-4159-997c-e44c0e8e5a2f">|
+|카테고리 페이지<br/>`/category/new, /category/tops, /category/sports-bras, /category/pants, `<br/>서브 카테고리 페이지<br/>`~/:subCategoryName`|상품 상세<br/>`product/:id`|
+|<img width="600" alt="카테고리" src="https://github.com/user-attachments/assets/ac3ad5ad-1e5f-47b6-8979-4be8b6e1169b"><img width="600" alt="서브카테고리" src="https://github.com/user-attachments/assets/d89deae2-8cc1-41df-8410-f7b0eb73573b">|<img width="600" alt="상품 상세" src="https://github.com/user-attachments/assets/8d391c8a-cb5a-4054-aa78-532d5ddc35bd">|
+|[고객] 장바구니(드롭다운)|[고객] 주문 및 결제 페이지<br/>`/checkout`|
+|<img width="600" alt="장바구니" src="https://github.com/user-attachments/assets/6d8bd5c2-00c1-49d9-b8d1-ccf5b9d8f48d">|<img width="600" alt="주문" src="https://github.com/user-attachments/assets/83b77446-68ab-4f90-bf54-bff1c6f3d0d6">|
+|[고객] 주문내역 페이지<br/>`/my/orders`|[고객] 주문내역상세 페이지<br/>`/my/orders/:id`|
+|<img width="600" alt="주문내역" src="https://github.com/user-attachments/assets/12110a0b-0f3c-447d-af6e-8e16b895c0f4">|<img width="600" alt="주문내역상세" src="https://github.com/user-attachments/assets/9939413c-c26d-4875-9714-8c8e00d656d4">|
+|[판매] 대시보드<br/>`/dashboard`, `/dashboard/overview`|[판매] 브랜드정보 탭<br/>`/dashboard/setting`|
+|<img width="600" alt="대시보드" src="https://github.com/user-attachments/assets/a3a145cf-819e-4238-8d8d-c75112a5d47f">|<img width="600" alt="브랜드정보" src="https://github.com/user-attachments/assets/64f6a068-cb3f-4697-b6b7-36f27b6ac606">|
+|[판매] 상품관리 탭<br/>`/dashboard/product`|[판매] 판매관리 탭<br/>`/dashboard/transaction`|
+|<img width="600" alt="상품관리" src="https://github.com/user-attachments/assets/4678d471-e2e7-4bef-b48b-7a4e041b7495">|<img width="600" alt="판매관리" src="https://github.com/user-attachments/assets/cdf4ca96-ac35-4bd6-8736-e7ed835be8ac">|
+
+<br />
+
+## 주요기능
+#### 1. 회원가입 및 로그인
 <details>
-<summary>로그인/회원가입</summary>
-![일반회원가입]()
-![비즈니스회원가입]()
-![로그인]()
+<summary>로그인 시연 영상</summary>
+  
+  - 로그인
+  <img width="600" alt="로그인" src="https://github.com/user-attachments/assets/8d7abc4b-7b73-475b-ae38-e46adb516391"/>
+
+  - 회원가입
+  <img width="600" alt="일반회원가입" src="https://github.com/user-attachments/assets/3f53b305-ec39-4c49-8320-fc6c0dce91fd"/>
 </details>
 
 - 일반회원/비즈니스 회원 가입 기능
 - 폼 유효성 검증
 - 로그인 후 전역상태로 회원정보 관리
 
-#### 2. 메인 페이지(`/`)
+#### 2. 캐러셀 배너, 전체 메뉴 선택 기능, 검색 기능
 <details>
-<summary>메인 페이지</summary>
-![메인페이지]()
-![더보기클릭시카테고리이동]()
-![상단전체메뉴바클릭시카테고리이동]()
-![상단검색바이용시검색페이지이동]()
+<summary>메인 페이지 시연 영상</summary>
+  
+  - 여러 기능
+  <img width="600" alt="메인" src="https://github.com/user-attachments/assets/f5725041-27c2-47f7-ae83-a53c380f756a"/>
 </details>
 
 - 상단 배너 캐러셀에 브랜드별 이미지 노출(3.5초 간격으로 자동 전환)
@@ -100,95 +161,115 @@ http://localhost:5173/
 - 상단 메뉴에서 카테고리 선택해 카테고리별 상품 페이지 이동
 - 상단 검색바에서 상품명/상품설명 키워드 검색 기능
 
-#### 3. 카테고리 페이지(`/category/:categoryName/:subCategoryName`)
+#### 3. 상품 조회
 <details>
-<summary>상품 조회</summary>
-![서브카테고리필터링]()
-![정렬옵션조회필터링]()
+<summary>카테고리 페이지 시연 영상</summary>
+  
+  - 카테고리 상품 조회
+  <img width="600" alt="카테고리" src="https://github.com/user-attachments/assets/34a3a276-faa0-4dda-9130-9c04b9521d15"/>
 </details>
+
 - 카테고리, 검색어, 정렬 옵션에 따른 조회 결과 필터링 기능
 - 무한 스크롤 활용한 페이지네이션
 
-#### 4. 상품 상세 조회 페이지(`/product/:id`)
+#### 4. 상품 상세
 <details>
-<summary>상품 상세 조회</summary>
-![이미지캐러셀기능]()
-![장바구니추가기능]()
+<summary>상품 상세 페이지 시연 영상</summary>
+  
+  - 상품 상세 이미지 캐러셀
+  <img width="600" alt="상품상세이미지캐러셀" src="https://github.com/user-attachments/assets/6d3ecc17-75de-43c2-a82d-6c384147fe65"/>
 </details>
 
 - 상품 이미지 캐러셀 기능으로 유저 인터랙션 강화
 - 상품 선택 시 장바구니 추가 기능
 
-#### 5. 장바구니 드롭다운
+#### 5. [고객] 장바구니
 <details>
-<summary>[구매자] 장바구니</summary>
-![장바구니상품수량수정]()
-![장바구니상품삭제]()
-![장바구니상품주문]()
+<summary>장바구니 시연 영상</summary>
+  
+  - 장바구니
+  <img width="600" alt="장바구니" src="https://github.com/user-attachments/assets/322e6a65-d3ae-4c81-ac1e-4357aac6427f"/>
 </details>
 
 - 장바구니 상품 수량 수정 및 삭제 기능
 - 장바구니 상품 주문 기능
 
-#### 6. 상품 주문 및 결제 페이지(`/checkout`)
+#### 6. [고객] 상품 주문 및 결제
 <details>
-<summary>[구매자] 상품 주문</summary>
-![배송정보입력]()
-![포트원SDK이용]()
+<summary>상품 주문 및 결제 시연 영상</summary>
+  
+  - 상품 주문
+  <img width="600" alt="배송정보입력" src="https://github.com/user-attachments/assets/36666c3e-b2bd-4b2e-9340-9c977599698b"/>
+  
+  - 상품 결제
+  <img width="600" alt="결제" src="https://github.com/user-attachments/assets/486b24d4-63df-4ab7-a7a5-f1ee310d3461"/>
 </details>
 
 - 배송 정보 입력
 - 포트원 SDK 활용한 결제 기능 (카카오페이 테스트로만 진행)
 
-#### 7. 주문 내역 (`/my/orders`), 주문 내역 상세 (`/my/orders/:id`)
+#### 7. [고객] 주문 내역 조회 및 주문 취소
 <details>
-<summary>[구매자] 주문 내역 조회 및 주문 취소</summary>
-![주문내역페이지이동]()
-![주문내역상세페이지이동및주문취소]()
+<summary>주문 내역 조회 및 취소 시연 영상</summary>
+  
+  - 주문 취소
+  <img width="600" alt="구매자결제취소" src="https://github.com/user-attachments/assets/0f343a59-ddbe-4619-bb4f-4ac01bd15a4a"/>
+  
+  - 주문 내역 조회
+  <img width="600" alt="구매자주문내역" src="https://github.com/user-attachments/assets/ca3bbd72-0d8f-4519-9bc7-6f22ce802dad"/>
 </details>
 
 - 주문 내역 전체 조회 기능
 - 주문 내역 상세 조회 기능
 - 주문 취소 기능 (주문 취소의 경우 `order_status: "order_cancelled"` 상태 변경으로 논리적 삭제)
 
-#### 8. 대시보드 설정(`/dashboard/setting`)
+#### 8. [판매] 대시보드 설정
 <details>
-<summary>[판매자] 대시보드 설정</summary>
-![첫로그인시브랜드등록]()
-![등록후브랜드정보입력]()
+<summary>브랜드 설정 페이지 시연 영상</summary>
+  - 비즈니스 회원 가입 후 브랜드 설정
+  <img width="600" alt="비즈니스회원가입" src="https://github.com/user-attachments/assets/11224e23-27f1-429c-93ed-25c5ced77358"/>
+  - 대시보드 설정 탭에서 브랜드 정보 조회
+  <img width="600" alt="브랜드정보" src="https://github.com/user-attachments/assets/e99d36cd-2749-40ae-9cc6-39e31397c642"/>
 </details>
 
 - 비즈니스 회원으로 가입한 판매자는 대시보드 설정 탭에서 브랜드 등록 후 대시보드 이용 가능
 - 브랜드 정보 조회 및 수정 기능
 
-#### 9. 대시보드(`/dashboard`), (`/dashboard/overview`)
+#### 9. [판매] 대시보드 오버뷰
 <details>
-<summary>[판매자] 대시보드 오버뷰</summary>
-![대시보드]()
+<summary>대시보드 페이지 시연 영상</summary>
+  
+  - 대시보드 오버뷰
+  <img width="600" alt="판매자대시보드" src="https://github.com/user-attachments/assets/53ed6a7c-6d53-405f-b512-07bdfbfa5ed8"/>
 </details>
 
 - 상품 판매 수치 조회
 
-#### 10. 대시보드 상품관리 (`/dashboard/product`)
+#### 10. [판매] 대시보드 상품관리
 <details>
-<summary>[판매자] 대시보드 상품관리</summary>
-![판매상품조회]()
-![판매상품등록]()
-![판매상품수정]()
-![판매상품삭제]()
+<summary>상품 관리 시연 영상</summary>
+  
+  - 상품 등록
+  <img width="600" alt="상품등록" src="https://github.com/user-attachments/assets/be09debc-2889-4fb9-8395-73cf00bfaeb4"/>
+  
+  - 상품 수정
+  <img width="600" alt="상품수정" src="https://github.com/user-attachments/assets/919c350c-6e21-4282-9a71-8532fc3295cf"/>
 </details>
 
 - 판매 상품 등록, 조회, 수정, 삭제 기능 (삭제의 경우 `is_active: true | false` 로 논리적 삭제)
 - 등록 시 상품 이미지 개수 최소 1개 ~ 최대 5개 제한
 
-#### 11. 대시보드 판매관리 (`/dashboard/transaction`)
+#### 11. [판매] 대시보드 판매관리
 <details>
-<summary>[판매자] 대시보드 판매관리</summary>
-![판매관리조회]()
-![상태변경]()
+<summary>판매자 배송 상태 변경 시연 영상</summary>
+  
+  - 판매 상품 배송 상태 변경
+  <img width="600" alt="판매자배송상태변경" src="https://github.com/user-attachments/assets/5f2b7b23-96c3-4418-8395-c6eb66e2fae2"/>
 </details>
 
 - 판매 상품에 대한 배송대기, 배송중, 배송완료, 구매확정, 주문취소 상태 변경 기능
+
+<br />
 
 ## 성능 최적화
 - 
