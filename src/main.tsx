@@ -20,13 +20,13 @@ const queryClient = new QueryClient({
 
 createRoot(document.getElementById("root")!).render(
   // <StrictMode>
-  <AuthProvider>
-    <CartProvider>
-      <QueryClientProvider client={queryClient}>
+  <QueryClientProvider client={queryClient}>
+    <AuthProvider>
+      <CartProvider>
         <App />
         <ReactQueryDevtools initialIsOpen={false} />
-      </QueryClientProvider>
-    </CartProvider>
-  </AuthProvider>
+      </CartProvider>
+    </AuthProvider>
+  </QueryClientProvider>
   // </StrictMode>
 );

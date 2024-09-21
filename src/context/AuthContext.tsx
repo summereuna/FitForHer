@@ -52,9 +52,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       if (event === "SIGNED_OUT") {
         setSession(null);
         setIsLoggedIn(false);
+        setUserRole(null); // 로그아웃 시 userRole도 null로 설정
       } else if (event === "SIGNED_IN") {
         setSession(session);
         setIsLoggedIn(true);
+        setUserRole(session?.user.user_metadata.role); // 로그인 시 userRole 설정
       }
     });
 
