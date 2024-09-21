@@ -45,16 +45,16 @@ export default function LoginForm() {
       const { session } = await loginWithEmail(loginData);
       if (session.user.user_metadata.role === "seller") {
         console.log(session.user.user_metadata.role);
-        setIsPending(false); // 로딩 끝
         navigate("/dashboard");
       } else {
-        setIsPending(false); // 로딩 끝
         navigate("/");
       }
     } catch (error) {
       if (error instanceof AuthError) {
         setErrorMessage("로그인을 할 수 없습니다.");
       }
+    } finally {
+      setIsPending(false); // 로딩 끝
     }
   };
 
@@ -64,12 +64,12 @@ export default function LoginForm() {
     setIsPending(true); //로딩 시작
     try {
       await loginWithSocial(provider);
-      setIsPending(false); // 로딩 끝
     } catch (error) {
       if (error instanceof AuthError) {
         setErrorMessage("로그인을 할 수 없습니다.");
-        setIsPending(false); // 로딩 끝
       }
+    } finally {
+      setIsPending(false); // 로딩 끝
     }
   };
 
