@@ -42,6 +42,7 @@ const OrderDetail = () => {
       <MetaTag
         title={`주문 내역 상세`}
         description="주문 상세 정보 페이지입니다. 주문 내용, 배송 상태 및 결제 정보를 확인하세요."
+        url="my/orders"
       />
       <CardTitle>주문 내역 상세</CardTitle>
       {isSuccess && data && (

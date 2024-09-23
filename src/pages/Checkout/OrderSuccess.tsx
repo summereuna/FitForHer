@@ -12,6 +12,7 @@ const OrderSuccess = () => {
       <MetaTag
         title="주문 결제 성공"
         description="주문 결제 성공 페이지입니다."
+        url="checkout"
       />
       <section className="flex flex-col items-center space-y-5">
         <CardTitle>주문을 완료했습니다!</CardTitle>

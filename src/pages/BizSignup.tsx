@@ -16,6 +16,7 @@ export default function BizSignup() {
       <MetaTag
         title="비즈니스 회원가입"
         description="아직 F4H 계정이 없으신가요? Fit For Her에서 브랜드 셀러로서의 혜택을 경험해보세요!"
+        url="signup/biz"
       />
       <BizPromo />
       <BizSignForm

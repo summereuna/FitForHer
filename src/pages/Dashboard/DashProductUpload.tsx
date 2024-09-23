@@ -11,6 +11,7 @@ function DashProductUpload() {
       <MetaTag
         title="상품 등록"
         description="상품 관리 등록 페이지입니다. 새 상품을 추가할 수 있습니다."
+        url="dashboard"
       />
       <section
         aria-label="섹션 링크"

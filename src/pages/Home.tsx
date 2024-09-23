@@ -2,6 +2,7 @@ import { useCategoryProducts } from "@/api/mainApi";
 import Banner from "@/components/Home/Banner";
 import BraCategorySection from "@/components/Home/BraCategorySection";
 import CategorySection from "@/components/Home/CategorySection";
+import MetaTag from "@/components/MetaTag";
 import { Separator } from "@/components/ui/separator";
 import { useAuth } from "@/hooks/useAuth";
 import { useEffect } from "react";
@@ -31,7 +32,7 @@ export default function Home() {
 
   return (
     <div className="flex flex-col space-y-10">
-      {/* <img src={banner} alt="배너" className="h-80 w-full object-cover" /> */}
+      <MetaTag title="홈" />
       <Banner />
       <Separator />
       {isSuccessTop && topProductsData && (
