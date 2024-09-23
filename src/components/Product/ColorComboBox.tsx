@@ -40,6 +40,7 @@ function ColorComboBox(form: UseFormReturn<z.infer<typeof productFormSchema>>) {
             <PopoverTrigger asChild>
               <FormControl>
                 <Button
+                  aria-label="상품 색상 선택"
                   variant="outline"
                   role="combobox"
                   className={cn(

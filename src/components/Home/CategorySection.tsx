@@ -76,6 +76,9 @@ const CategorySection = ({
             ))}
           </div>
           <Button
+            aria-label={`${getKoreanCategoryName(
+              topCategoryName
+            )} 카테고리로 이동`}
             variant={"outline"}
             className="w-32"
             onClick={() => navigate(`/category/${topCategoryName}`)}

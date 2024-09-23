@@ -14,6 +14,7 @@ const OrderSuccess = () => {
       <section className="flex flex-row justify-center">
         <div className="flex gap-5 min-w-40">
           <Button
+            aria-label="홈페이지로 이동"
             type="button"
             variant="outline"
             className="w-full"
@@ -22,6 +23,7 @@ const OrderSuccess = () => {
             확인
           </Button>
           <Button
+            aria-label="구매 내역 상세 페이지로 이동"
             type="button"
             className="w-full"
             onClick={() => navigate(`/my/orders/${id}`)}

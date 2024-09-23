@@ -59,6 +59,7 @@ const Banner = () => {
           type="button"
           onClick={handlePrevImage}
           className="rounded-full size-12 opacity-40"
+          aria-label="이전 배너 보기 버튼"
         >
           <div>
             <ChevronLeftIcon className="size-8" />
@@ -69,6 +70,7 @@ const Banner = () => {
           type="button"
           onClick={handleNextImage}
           className="rounded-full size-12 opacity-40"
+          aria-label="다음 배너 보기 버튼"
         >
           <div>
             <ChevronRightIcon className="size-8" />

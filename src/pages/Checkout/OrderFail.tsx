@@ -11,6 +11,7 @@ const OrderFail = () => {
       <section className="flex flex-row justify-center">
         <div className="flex gap-5 min-w-40">
           <Button
+            aria-label="홈페이지로 이동"
             type="button"
             variant="outline"
             className="w-full"

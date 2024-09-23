@@ -43,6 +43,7 @@ function SizeComboBox({ form, index }: SizeComboBoxProps) {
             <PopoverTrigger asChild>
               <FormControl>
                 <Button
+                  aria-label="상품 사이즈 선택"
                   variant="outline"
                   role="combobox"
                   className={cn(

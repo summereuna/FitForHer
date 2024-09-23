@@ -59,6 +59,7 @@ const SellerLayout = () => {
             <ul className="flex flex-col h-full">
               {mainNavList.map((li) => (
                 <NavLink
+                  aria-label={`${li.name} 탭으로 이동`}
                   key={li.id}
                   className={({ isActive }) =>
                     `pl-5 lg:pl-16 flex flex-row items-center w-full space-x-3 border-b-[1px] py-5 transition duration-200 ease-in-out ${

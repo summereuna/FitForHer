@@ -53,6 +53,7 @@ const BraCategorySection = () => {
             {braCategoryInfo[0].recommend}
           </CardDescription>
           <Button
+            aria-label={`${braCategoryInfo[0].title} 카테고리로 이동`}
             variant={"outline"}
             className="w-32"
             onClick={() => navigate(braCategoryInfo[0].path)}
@@ -82,6 +83,7 @@ const BraCategorySection = () => {
               {braCategoryInfo[1].recommend}
             </CardDescription>
             <Button
+              aria-label={`${braCategoryInfo[1].title} 카테고리로 이동`}
               variant={"outline"}
               className="w-32"
               onClick={() => navigate(braCategoryInfo[1].path)}
@@ -110,6 +112,7 @@ const BraCategorySection = () => {
               {braCategoryInfo[2].recommend}
             </CardDescription>
             <Button
+              aria-label={`${braCategoryInfo[2].title} 카테고리로 이동`}
               variant={"outline"}
               className="w-32"
               onClick={() => navigate(braCategoryInfo[2].path)}

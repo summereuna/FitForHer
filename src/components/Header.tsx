@@ -1,4 +1,7 @@
-import { CartDrawer } from "@/components/Cart/CartDrawer";
+import { lazy, Suspense } from "react";
+const CartDrawer = lazy(() => import("@/components/Cart/CartDrawer"));
+// import CartDrawer from "@/components/Cart/CartDrawer";
+
 import { CategoryTop } from "@/components/Category/CategoryTop";
 import { Icon } from "@/components/Icon";
 import MyDropdown from "@/components/MyDropdown";
@@ -26,7 +29,6 @@ function Header() {
     // { id: "brands", name: "브랜드", path: `/category/brands` },
   ];
 
-
   return (
     <div aria-label="전체 탐색">
       <div className="bg-white py-2 px-16">
@@ -36,21 +38,49 @@ function Header() {
             {/* <Separator orientation="vertical" className="h-3 bg-primary" /> */}
             {isLoggedIn && (
               <>
-                <button onClick={() => logout()}>로그아웃</button>
-                <Separator orientation="vertical" className="h-3 bg-primary" />
+                <li>
+                  <button aria-label="로그아웃 버튼" onClick={() => logout()}>
+                    로그아웃
+                  </button>
+                </li>
+                <li aria-hidden="true">
+                  <Separator
+                    orientation="vertical"
+                    className="h-3 bg-primary"
+                  />
+                </li>
                 {userRole === "seller" && (
-                  <span>{session?.user?.user_metadata.name}님</span>
+                  <li>
+                    <span aria-label="사용자 닉네임">
+                      {session?.user?.user_metadata.name}님
+                    </span>
+                  </li>
                 )}
                 {userRole !== "seller" && (
-                  <MyDropdown name={session?.user?.user_metadata.name} />
+                  <li>
+                    <MyDropdown name={session?.user?.user_metadata.name} />
+                  </li>
                 )}
               </>
             )}
             {!isLoggedIn && (
               <>
-                <NavLink to={`/signup`}>회원가입</NavLink>
-                <Separator orientation="vertical" className="h-3 bg-primary" />
-                <NavLink to={`/login`}>로그인</NavLink>
+                <li>
+                  <NavLink aria-label="회원가입 페이지로 이동" to={`/signup`}>
+                    회원가입
+                  </NavLink>
+                </li>
+                <li aria-hidden="true">
+                  <Separator
+                    orientation="vertical"
+                    className="h-3 bg-primary"
+                  />
+                </li>
+                <li>
+                  <NavLink aria-label="로그인 페이지로 이동" to={`/login`}>
+                    로그인
+                  </NavLink>
+                </li>
               </>
             )}
           </ul>
@@ -60,18 +90,26 @@ function Header() {
         aria-label="검색 탐색"
         className="bg-white y-2 px-16 flex flex-row justify-between items-center text-sm"
       >
-        <Link to={`/`} className="text-xl font-semibold w-20">
+        <Link
+          to={`/`}
+          aria-label="홈 버튼"
+          className="text-xl font-semibold w-20"
+        >
           F4H
         </Link>
         <search aria-label="검색" className="w-80">
           <SearchBar />
         </search>
         <div className="flex flex-row justify-end space-x-4 w-20">
-          <NavLink to={`/my/wish`}>
+          <NavLink to={`/my/wish`} aria-label="위시페이지로 이동">
             <Icon className="size-6">{wishIcon}</Icon>
           </NavLink>
           <div className="relative">
-            <CartDrawer isInNav={true} />
+            {/*  */}
+            <Suspense fallback={<div>Loading...</div>}>
+              <CartDrawer isInNav={true} />
+            </Suspense>
+            {/*  */}
             {cartItems.length > 0 && (
               <div className="absolute top-0 right-[-7px] text-[8px] text-white bg-black size-4 rounded-full flex justify-center items-center">
                 {totalCountCartItems}
@@ -90,17 +128,19 @@ function Header() {
           </div>
           <ul className="space-x-4">
             {mainNavList.map((li) => (
-              <NavLink
-                key={li.id}
-                className={({ isActive }) =>
-                  `transition duration-200 ease-in-out ${
-                    isActive ? "pb-[2px] border-b-[1.5px] border-black" : ""
-                  }`
-                }
-                to={li.path}
-              >
-                {li.name}
-              </NavLink>
+              <li key={li.id} className="inline-block">
+                <NavLink
+                  className={({ isActive }) =>
+                    `transition duration-200 ease-in-out ${
+                      isActive ? "pb-[2px] border-b-[1.5px] border-black" : ""
+                    }`
+                  }
+                  to={li.path}
+                  aria-label={`${li.name} 카테고리로 이동`}
+                >
+                  {li.name}
+                </NavLink>
+              </li>
             ))}
           </ul>
         </nav>

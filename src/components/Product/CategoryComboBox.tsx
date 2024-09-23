@@ -42,6 +42,7 @@ function CategoryComboBox(
             <PopoverTrigger asChild>
               <FormControl>
                 <Button
+                  aria-label="카테고리 종류 선택"
                   variant="outline"
                   role="combobox"
                   className={cn(

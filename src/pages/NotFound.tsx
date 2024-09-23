@@ -11,7 +11,11 @@ const NotFound = () => {
           description={`페이지를 찾을 수 없습니다.\n요청하신 페이지는 존재하지 않는 페이지입니다.`}
         />
       </div>
-      <Button variant={"outline"} onClick={() => navigate("/")}>
+      <Button
+        aria-label="홈페이지로 이동"
+        variant={"outline"}
+        onClick={() => navigate("/")}
+      >
         홈으로
       </Button>
     </section>

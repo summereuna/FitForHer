@@ -22,10 +22,10 @@ interface CartDrawerProps {
   onChangeIsAddedItem?: () => void;
 }
 
-export function CartDrawer({ isInNav, onChangeIsAddedItem }: CartDrawerProps) {
+const CartDrawer = ({ isInNav, onChangeIsAddedItem }: CartDrawerProps) => {
   const navigate = useNavigate();
   const { session } = useAuth();
-  
+
   const {
     cartItems,
     updateCartItem,
@@ -78,6 +78,7 @@ export function CartDrawer({ isInNav, onChangeIsAddedItem }: CartDrawerProps) {
       <SheetTrigger asChild className="w-full">
         {!isInNav ? (
           <Button
+            aria-label="장바구니 보기 버튼"
             type="button"
             size={"lg"}
             variant="secondary"
@@ -86,7 +87,7 @@ export function CartDrawer({ isInNav, onChangeIsAddedItem }: CartDrawerProps) {
             장바구니 보기
           </Button>
         ) : (
-          <button>
+          <button aria-label="장바구니 버튼">
             <Icon className="size-6">{cartIcon}</Icon>
           </button>
         )}
@@ -140,7 +141,11 @@ export function CartDrawer({ isInNav, onChangeIsAddedItem }: CartDrawerProps) {
                 </SheetDescription>
               </div>
               <Separator orientation="horizontal" />
-              <Button className="w-full" onClick={handleOrder}>
+              <Button
+                aria-label="결제하기 버튼"
+                className="w-full"
+                onClick={handleOrder}
+              >
                 결제 하기
               </Button>
             </div>
@@ -156,4 +161,6 @@ export function CartDrawer({ isInNav, onChangeIsAddedItem }: CartDrawerProps) {
       {/*  */}
     </Sheet>
   );
-}
+};
+
+export default CartDrawer;

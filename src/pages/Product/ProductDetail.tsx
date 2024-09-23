@@ -1,5 +1,7 @@
+import { lazy, Suspense, useCallback, useEffect, useState } from "react";
 import { useProductDetail } from "@/api/customerProductApi";
-import { CartDrawer } from "@/components/Cart/CartDrawer";
+// import { CartDrawer } from "@/components/Cart/CartDrawer";
+const CartDrawer = lazy(() => import("@/components/Cart/CartDrawer"));
 import { Icon } from "@/components/Icon";
 import RelatedProducts from "@/components/RelatedProducts";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -30,7 +32,6 @@ import { wishIcon } from "@/shared/icons";
 import { Enums } from "@/types/database.types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
-import { useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { NavLink, Outlet, useNavigate, useParams } from "react-router-dom";
 import { z } from "zod";
@@ -179,6 +180,7 @@ function ProductDetail() {
                 </Avatar>
                 <div className="absolute bottom-3 right-3 space-x-2">
                   <Button
+                    aria-label="이전 상품 이미지 보기"
                     variant="outline"
                     type="button"
                     onClick={handlePrevImage}
@@ -189,6 +191,7 @@ function ProductDetail() {
                     </div>
                   </Button>
                   <Button
+                    aria-label="다음 상품 이미지 보기"
                     variant="outline"
                     type="button"
                     onClick={handleNextImage}
@@ -287,20 +290,28 @@ function ProductDetail() {
                       )}
                     />
                     {!isAddedItem && (
-                      <Button type="submit" size={"lg"} className="w-full">
+                      <Button
+                        aria-label="장바구니 추가 버튼"
+                        type="submit"
+                        size={"lg"}
+                        className="w-full"
+                      >
                         장바구니 추가
                       </Button>
                     )}
                     {isAddedItem && (
-                      <CartDrawer
-                        isInNav={false}
-                        onChangeIsAddedItem={handleChangeIsAddedItem}
-                      />
+                      <Suspense fallback={<div>Loading...</div>}>
+                        <CartDrawer
+                          isInNav={false}
+                          onChangeIsAddedItem={handleChangeIsAddedItem}
+                        />
+                      </Suspense>
                     )}
                   </form>
                 </Form>
                 {/*  */}
                 <Button
+                  aria-label="위시리스트 추가 버튼"
                   variant={"outline"}
                   size={"lg"}
                   className="w-full space-x-2"
@@ -319,6 +330,7 @@ function ProductDetail() {
           <ul className="w-full flex justify-between">
             <div className="w-full">
               <NavLink
+                aria-label="리뷰 보기"
                 to="review"
                 className={({ isActive }) =>
                   `w-full flex justify-center py-2 transition duration-200 ease-in-out ${
@@ -331,6 +343,7 @@ function ProductDetail() {
             </div>
             <div className="w-full">
               <NavLink
+                aria-label="QnA 보기"
                 to="qna"
                 className={({ isActive }) =>
                   `w-full flex justify-center py-2 transition duration-200 ease-in-out ${

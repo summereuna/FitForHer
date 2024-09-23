@@ -22,7 +22,7 @@ export function CategoryTop() {
     <div className="grid grid-cols-2 gap-2">
       <Sheet open={isOpen} onOpenChange={setIsOpen}>
         <SheetTrigger asChild>
-          <button>
+          <button aria-label="전체 카테고리 보기 버튼">
             <Icon className="size-6">{categoryIcon}</Icon>
           </button>
         </SheetTrigger>
@@ -35,6 +35,7 @@ export function CategoryTop() {
               >
                 <SheetTitle className="transition duration-200 ease-linear hover:underline">
                   <Link
+                    aria-label={`${section.top.label} 카테고리로 이동`}
                     to={`/category/${section.top.value}`}
                     onClick={handleClose}
                   >
@@ -45,6 +46,7 @@ export function CategoryTop() {
                   <ul className="flex flex-col space-y-1">
                     {section.sub.map((sub) => (
                       <Link
+                        aria-label={`${sub.label} 카테고리로 이동`}
                         to={`/category/${section.top.value}/${sub.value}`}
                         key={sub.value}
                         onClick={handleClose}

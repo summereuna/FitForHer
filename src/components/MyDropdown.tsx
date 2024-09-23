@@ -16,7 +16,9 @@ const MyDropdown = ({ name }: MyDropdownProps) => {
   const navigate = useNavigate();
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger>{name} 님</DropdownMenuTrigger>
+      <DropdownMenuTrigger aria-label="사용자 닉네임">
+        {name} 님
+      </DropdownMenuTrigger>
       <DropdownMenuContent>
         <DropdownMenuLabel>내 정보</DropdownMenuLabel>
         <DropdownMenuSeparator />

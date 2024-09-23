@@ -363,6 +363,7 @@ export function ProductForm({ productData, onUpdateData }: ProductFormProps) {
               </FormDescription>
               <CardFooter className="flex space-x-3 justify-end">
                 <Button
+                  aria-label="상품 등록 취소 버튼"
                   variant="outline"
                   type="button"
                   disabled={isPendingProduct}
@@ -370,7 +371,13 @@ export function ProductForm({ productData, onUpdateData }: ProductFormProps) {
                 >
                   취소하기
                 </Button>
-                <Button type="submit" disabled={isPendingProduct}>
+                <Button
+                  type="submit"
+                  disabled={isPendingProduct}
+                  aria-label={
+                    !productData ? "상품 등록 버튼" : "상품 수정 버튼"
+                  }
+                >
                   {!productData ? "등록하기" : "수정하기"}
                 </Button>
               </CardFooter>

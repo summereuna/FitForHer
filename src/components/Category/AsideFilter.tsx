@@ -36,7 +36,9 @@ const AsideFilter = ({
   return (
     <aside className="flex flex-col space-y-5 h-full w-56">
       <div className="text-xs">
-        <Link to={`/category/${topCateName}`}>
+        <Link 
+        aria-label={`${getKoreanCategoryName(topCateName)} 카테고리로 이동`}
+        to={`/category/${topCateName}`}>
           {currentCategory?.top.label}
         </Link>
         <span>

@@ -20,6 +20,7 @@ function DashProduct() {
       <section className="flex justify-between items-center">
         <CardTitle>상품관리</CardTitle>
         <Button
+          aria-label="상품 등록 페이지로 이동"
           variant="outline"
           onClick={() => {
             navigate("/dashboard/product/upload");

@@ -41,6 +41,7 @@ function Dashboard() {
                   브랜드가 등록되고 다음 단계로 넘어갈 수 있습니다.
                 </li>
                 <Button
+                  aria-label="브랜드 등록하는 페이지로 이동"
                   className="w-40"
                   onClick={() => navigate("/dashboard/setting")}
                 >
@@ -60,6 +61,7 @@ function Dashboard() {
                 <br />
                 브랜드 설정이 완료되면,
                 <Link
+                  aria-label="상품관리 페이지로 이동"
                   to={"/dashboard/product"}
                   className="text-gray-400 transition duration-150 ease-linear hover:text-blue-500 "
                 >

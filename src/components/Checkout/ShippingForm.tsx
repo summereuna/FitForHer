@@ -238,6 +238,7 @@ const ShippingForm = ({ onSubmitShippingData }: ShippingFormProps) => {
           <section className="flex flex-row justify-end pt-5">
             <div className="flex gap-5 min-w-40">
               <Button
+                aria-label="주문 취소 버튼"
                 type="button"
                 variant="outline"
                 className="w-full"
@@ -245,7 +246,11 @@ const ShippingForm = ({ onSubmitShippingData }: ShippingFormProps) => {
               >
                 취소
               </Button>
-              <Button type="submit" className="w-full">
+              <Button
+                aria-label="주문 계속하기 버튼"
+                type="submit"
+                className="w-full"
+              >
                 저장 및 계속
               </Button>
               {/* 

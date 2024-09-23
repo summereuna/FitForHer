@@ -239,6 +239,7 @@ const OrderDetail = () => {
                   )}
 
                   <Button
+                    aria-label="뒤로가기 버튼"
                     type="button"
                     className="w-full"
                     onClick={() => navigate(-1)}

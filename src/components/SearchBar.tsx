@@ -57,6 +57,7 @@ export function SearchBar() {
           )}
         />
         <button
+          aria-label="검색 버튼"
           type="submit"
           className="absolute right-2 top-2 text-gray-400 transition duration-200 ease-in-out hover:text-black focus-visible:text-black "
         >

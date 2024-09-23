@@ -109,6 +109,7 @@ const CheckoutMethodForm = ({ onPay, shippingData }: CheckoutMethodForm) => {
           <section className="flex flex-row justify-end pt-5">
             <div className="flex gap-5 min-w-40">
               <Button
+                aria-label="결제 취소 버튼"
                 variant={"outline"}
                 className="w-40"
                 type="button"
@@ -116,7 +117,7 @@ const CheckoutMethodForm = ({ onPay, shippingData }: CheckoutMethodForm) => {
               >
                 취소
               </Button>
-              <Button className="w-40" type="submit">
+              <Button aria-label="결제하기 버튼" className="w-40" type="submit">
                 결제하기
               </Button>
             </div>

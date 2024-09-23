@@ -44,7 +44,6 @@ export default function LoginForm() {
     try {
       const { session } = await loginWithEmail(loginData);
       if (session.user.user_metadata.role === "seller") {
-        console.log(session.user.user_metadata.role);
         navigate("/dashboard");
       } else {
         navigate("/");
@@ -121,7 +120,12 @@ export default function LoginForm() {
                 </FormItem>
               )}
             />
-            <Button type="submit" disabled={isPending} className="w-full">
+            <Button
+              aria-label="로그인 버튼"
+              type="submit"
+              disabled={isPending}
+              className="w-full"
+            >
               로그인
             </Button>
           </form>
@@ -141,6 +145,7 @@ export default function LoginForm() {
           className="flex justify-center space-x-5"
         >
           <button
+            aria-label="구글 로그인 버튼"
             id="google"
             onClick={handleLoginGoogle}
             className="flex justify-center items-center w-9 h-9 p-1 rounded-full border-[1px] bg-white hover:border-gray-300 hover:bg-gray-100 transition duration-200 ease-in-out"
@@ -149,6 +154,7 @@ export default function LoginForm() {
             {googleIcon}
           </button>
           <button
+            aria-label="카카오 로그인 버튼"
             id="kakao"
             // onClick={}
             className="flex justify-center items-center w-9 h-9 p-1 rounded-full border-[1px] bg-white hover:border-gray-300 hover:bg-gray-100 transition duration-200 ease-in-out"

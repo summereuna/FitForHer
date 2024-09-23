@@ -15,7 +15,7 @@ export function PopoverInfo({ title, description }: PopoverInfoProps) {
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <button>
+        <button aria-label="설명 보기">
           <Icon className="size-4">{infoIcon}</Icon>
         </button>
       </PopoverTrigger>

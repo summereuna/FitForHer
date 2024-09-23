@@ -75,6 +75,7 @@ const CartItem = ({
         <CardTitle className="text-sm">{productPrice || "가격"} 원</CardTitle>
       </div>
       <button
+        aria-label="장바구니에서 삭제하기 버튼"
         onClick={() => onDeleteCartItem(item.id, item.size)}
         className="size-5 rounded-full transition duration-200 ease-linear hover:bg-muted-foreground hover:text-white"
       >

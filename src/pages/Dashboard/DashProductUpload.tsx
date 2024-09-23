@@ -11,11 +11,16 @@ function DashProductUpload() {
         aria-label="섹션 링크"
         className="flex items-center space-x-2 text-sm text-muted-foreground"
       >
-        <Link to="/dashboard/product" className="hover:underline">
+        <Link
+          aria-label="상품 관리 페이지로 이동"
+          to="/dashboard/product"
+          className="hover:underline"
+        >
           상품 관리
         </Link>
         <Icon className="size-4">{chevronRightIcon}</Icon>
         <NavLink
+          aria-label="상품 등록 버튼"
           to="/dashboard/product/upload"
           className={({ isActive }) =>
             `hover:underline transition duration-200 ease-in-out ${

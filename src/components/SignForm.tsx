@@ -148,7 +148,11 @@ export default function SignForm({
               )}
             />
             <div className="flex gap-5">
-              <Button type="submit" className="w-full">
+              <Button
+                aria-label="가입하기 버튼"
+                type="submit"
+                className="w-full"
+              >
                 가입하기
               </Button>
               {/* 
@@ -165,7 +169,11 @@ export default function SignForm({
       </CardContent>
       <CardFooter className="flex justify-center space-x-2 text-xs">
         <span>법인 고객이신가요?</span>
-        <Link to="biz" className="underline">
+        <Link
+          aria-label="비즈니스 회원가입 페이지로 이동"
+          to="biz"
+          className="underline"
+        >
           비즈니스 회원 가입하기
         </Link>
       </CardFooter>
