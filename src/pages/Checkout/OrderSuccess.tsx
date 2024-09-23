@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { CardTitle } from "@/components/ui/card";
+import MetaTag from "@/components/MetaTag";
 import { useNavigate, useParams } from "react-router-dom";
 
 const OrderSuccess = () => {
@@ -8,6 +9,10 @@ const OrderSuccess = () => {
 
   return (
     <div className="flex flex-col h-full justify-center space-y-14">
+      <MetaTag
+        title="주문 결제 성공"
+        description="주문 결제 성공 페이지입니다."
+      />
       <section className="flex flex-col items-center space-y-5">
         <CardTitle>주문을 완료했습니다!</CardTitle>
       </section>

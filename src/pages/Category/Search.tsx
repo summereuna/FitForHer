@@ -1,6 +1,7 @@
 import { useSearchProducts } from "@/api/searchApi";
 import CategoryPageSection from "@/components/Category/CategoryPageSection";
 import ItemNotFound from "@/components/ItemNotFound";
+import MetaTag from "@/components/MetaTag";
 import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
 
@@ -31,6 +32,10 @@ const Search = () => {
 
   return (
     <div className="flex justify-center w-full h-full">
+      <MetaTag
+        title={`검색`}
+        description="원하는 상품을 찾을 수 있는 검색 결과 페이지입니다. 키워드를 입력하여 다양한 제품을 쉽게 찾아보세요"
+      />
       <main>
         {searchData && searchData?.pages[0].length > 0 && (
           <CategoryPageSection

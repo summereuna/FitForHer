@@ -4,6 +4,7 @@ import OrderItem from "@/components/OrderItem";
 import { CardDescription, CardTitle } from "@/components/ui/card";
 import { useAuth } from "@/hooks/useAuth";
 import { getOnlyRepresentativePhoto } from "@/lib/utils";
+import MetaTag from "@/components/MetaTag";
 import { Separator } from "@radix-ui/react-separator";
 
 const Orders = () => {
@@ -19,6 +20,10 @@ const Orders = () => {
     filteredMyOrdersData?.reduce((total, item) => total + item.total_amount, 0);
   return (
     <section className="h-full w-full">
+      <MetaTag
+        title={`주문 내역`}
+        description="지난 주문 내역을 확인하고, 주문 상태를 추적할 수 있습니다."
+      />
       <section className="h-full grid grid-cols-1 gap-y-10 lg:gap-y-0 lg:grid-cols-3 lg:space-x-10">
         <section className="flex flex-col items-center col-span-2 order-2 lg:order-1 space-y-5">
           {myOrdersData?.length === 0 && (

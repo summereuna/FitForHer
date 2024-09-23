@@ -1,6 +1,7 @@
 import { useSameCateProducts, useSameSubCateProducts } from "@/api/categoryApi";
 import AsideFilter from "@/components/Category/AsideFilter";
 import CategoryPageSection from "@/components/Category/CategoryPageSection";
+import MetaTag from "@/components/MetaTag";
 import SubCategory from "@/pages/Category/SubCategory";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -64,6 +65,10 @@ const Tops = () => {
 
   return (
     <div className="flex flex-row space-x-10 w-full">
+      <MetaTag
+        title="상의"
+        description="상의 카테고리 페이지입니다. 다양한 브랜드의 상의 컬렉션에서 통기성과 편안함을 제공하는 상의를 만나보세요."
+      />
       {categoryData && (
         <AsideFilter
           topCateName={categoryName}
@@ -89,6 +94,7 @@ const Tops = () => {
             fetchNextPage={fetchNextPageSub}
             hasNextPage={hasNextPageSub}
             isFetchingNextPage={isFetchingNextPageSub}
+            subCategoryName={subCategoryName}
           />
         )}
       </main>

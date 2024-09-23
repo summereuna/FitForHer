@@ -4,6 +4,7 @@ import ProductDataTable from "@/components/Product/ProductDataTable";
 import { Button } from "@/components/ui/button";
 import { Card, CardTitle } from "@/components/ui/card";
 import { useAuth } from "@/hooks/useAuth";
+import MetaTag from "@/components/MetaTag";
 import { useNavigate } from "react-router-dom";
 
 function DashProduct() {
@@ -17,6 +18,10 @@ function DashProduct() {
 
   return (
     <div className="flex flex-col h-full w-full gap-5">
+      <MetaTag
+        title="상품관리"
+        description="상품 관리 페이지입니다. 새 상품을 추가하거나 기존 상품을 수정할 수 있습니다."
+      />
       <section className="flex justify-between items-center">
         <CardTitle>상품관리</CardTitle>
         <Button

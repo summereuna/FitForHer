@@ -1,9 +1,11 @@
 import { Card, CardDescription, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import MetaTag from "@/components/MetaTag";
 
 function About() {
   return (
     <section className="flex justify-center items-center h-full">
+      <MetaTag title="소개" />
       <Card className="flex flex-col space-y-5 p-10 max-w-[50rem]">
         <CardTitle>Fit For Her (F4H)</CardTitle>
         <CardDescription className="text-lg">

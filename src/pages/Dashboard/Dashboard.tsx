@@ -57,7 +57,7 @@ function Dashboard() {
                 있도록 도와줍니다.
               </li>
               <li>
-                <strong>상품 업로드</strong>
+                <strong>상품 등록</strong>
                 <br />
                 브랜드 설정이 완료되면,
                 <Link

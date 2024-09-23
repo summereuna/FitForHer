@@ -17,6 +17,7 @@ import {
   getOrderItemStatusKorean,
   getOrderStatusKorean,
 } from "@/lib/utils";
+import MetaTag from "@/components/MetaTag";
 import { Enums } from "@/types/database.types";
 import { useNavigate, useParams } from "react-router-dom";
 
@@ -38,6 +39,10 @@ const OrderDetail = () => {
 
   return (
     <div className="flex flex-col space-y-10">
+      <MetaTag
+        title={`주문 내역 상세`}
+        description="주문 상세 정보 페이지입니다. 주문 내용, 배송 상태 및 결제 정보를 확인하세요."
+      />
       <CardTitle>주문 내역 상세</CardTitle>
       {isSuccess && data && (
         <section className="grid grid-cols-1 gap-y-5 lg:gap-y-0 lg:grid-cols-3 lg:space-x-10">

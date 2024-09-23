@@ -27,7 +27,6 @@ import ProductDetail from "@/pages/Product/ProductDetail";
 import QnA from "@/pages/Product/QnA";
 import Review from "@/pages/Product/Review";
 import Signup from "@/pages/Signup";
-import Wish from "@/pages/Wish";
 import Layout from "@/shared/Layout";
 import SellerLayout from "@/shared/SellerLayout";
 import SellerRoute from "@/shared/SellerRoute";
@@ -37,6 +36,7 @@ import Orders from "@/pages/My/Orders";
 import OrderDetail from "@/pages/My/OrderDetail";
 import Search from "@/pages/Category/Search";
 import NotFound from "@/pages/NotFound";
+import Wish from "@/pages/My/Wish";
 
 // PrivateRoute : 로그인이 필요한 페이지에 접근할 수 있도록 하는 컴포넌트
 // 로그인이 되어있지 않은 사용자는 login 페이지로 리다이렉트

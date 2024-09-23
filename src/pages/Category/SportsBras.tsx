@@ -1,6 +1,7 @@
 import { useSameCateProducts, useSameSubCateProducts } from "@/api/categoryApi";
 import AsideFilter from "@/components/Category/AsideFilter";
 import CategoryPageSection from "@/components/Category/CategoryPageSection";
+import MetaTag from "@/components/MetaTag";
 import SubCategory from "@/pages/Category/SubCategory";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -64,6 +65,10 @@ function SportsBras() {
 
   return (
     <div className="flex flex-row space-x-10 w-full">
+      <MetaTag
+        title="스포츠 브라"
+        description="스포츠 브라 카테고리 페이지입니다. 여러 브랜드의 스포츠 브라 컬렉션에서 운동 기능에 최적화된 스포츠 브라를 찾으세요."
+      />
       {categoryData && (
         <AsideFilter
           topCateName={categoryName}
@@ -89,6 +94,7 @@ function SportsBras() {
             fetchNextPage={fetchNextPageSub}
             hasNextPage={hasNextPageSub}
             isFetchingNextPage={isFetchingNextPageSub}
+            subCategoryName={subCategoryName}
           />
         )}
       </main>

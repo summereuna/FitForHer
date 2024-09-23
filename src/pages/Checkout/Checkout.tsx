@@ -6,6 +6,7 @@ import { CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { useCart } from "@/hooks/useCart";
 import { cn } from "@/lib/utils";
+import MetaTag from "@/components/MetaTag";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -75,6 +76,10 @@ const Checkout = () => {
 
   return (
     <section className="grid grid-cols-1 gap-y-5 lg:gap-y-0 lg:grid-cols-3 lg:space-x-10">
+      <MetaTag
+        title="주문 결제"
+        description="주문 결제 페이지입니다. 장바구니에 담은 상품을 확인하고, 안전하게 결제를 진행하세요."
+      />
       <section className="flex flex-col items-center col-span-2 order-2 lg:order-1 space-y-5">
         <div className="flex flex-col w-full space-y-5">
           <div

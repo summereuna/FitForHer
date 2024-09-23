@@ -35,6 +35,7 @@ import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { NavLink, Outlet, useNavigate, useParams } from "react-router-dom";
 import { z } from "zod";
+import MetaTag from "@/components/MetaTag";
 
 function ProductDetail() {
   const navigate = useNavigate();
@@ -132,6 +133,10 @@ function ProductDetail() {
     <div className="flex flex-col space-y-10">
       {isSuccess && data && (
         <section className="flex w-full">
+          <MetaTag
+            title={data.name}
+            description={`${data.brands?.name} | ${data.name} | ${data.description}`}
+          />
           <div className="w-full flex flex-col md:flex-row space-x-0 space-y-5 md:space-x-10 md:space-y-0">
             <section
               aria-label="상품 사진"

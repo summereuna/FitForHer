@@ -8,6 +8,7 @@ import { PopoverInfo } from "@/components/PopoverInfo";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useAuth } from "@/hooks/useAuth";
 import { getOnlyRepresentativePhoto } from "@/lib/utils";
+import MetaTag from "@/components/MetaTag";
 
 function DashOverview() {
   const { authId } = useAuth();
@@ -32,6 +33,10 @@ function DashOverview() {
 
   return (
     <div className="flex-col md:flex">
+      <MetaTag
+        title="대시보드"
+        description="대시보드에 오신 것을 환영합니다. 판매 통계 및 최근 활동을 한눈에 확인하세요."
+      />
       <div className="space-y-4 flex-1">
         <div className="flex items-center justify-between space-y-2">
           <CardTitle className="tracking-tight">대시보드</CardTitle>

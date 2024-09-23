@@ -1,6 +1,8 @@
 import CategoryFilterSelect from "@/components/Category/CategoryFilterSelect";
 import ItemNotFound from "@/components/ItemNotFound";
 import ProductItem from "@/components/ProductItem";
+import { getKoreanCategoryName } from "@/lib/utils";
+import MetaTag from "@/components/MetaTag";
 import { SameSubCategoryProduct } from "@/types/category.types";
 import {
   FetchNextPageOptions,
@@ -20,6 +22,7 @@ interface SubCategoryProps {
   ) => Promise<UseInfiniteQueryResult>;
   hasNextPage: boolean;
   isFetchingNextPage: boolean;
+  subCategoryName: string;
 }
 
 const SubCategory = ({
@@ -28,7 +31,9 @@ const SubCategory = ({
   fetchNextPage,
   hasNextPage,
   isFetchingNextPage,
+  subCategoryName,
 }: SubCategoryProps) => {
+  const title = getKoreanCategoryName(subCategoryName);
   const navigate = useNavigate();
 
   const observerRef = useRef<HTMLDivElement | null>(null); // 감지할 div의 ref
@@ -64,6 +69,12 @@ const SubCategory = ({
 
   return (
     <section className="flex flex-row w-full space-y-5 h-m-80 flex-wrap lg:space-x-5 lg:flex-nowrap lg:space-y-0">
+      {title && (
+        <MetaTag
+          title={title}
+          description={`${title} 카테고리 페이지입니다.`}
+        />
+      )}
       {data && data.pages[0].length > 0 && (
         <div className="flex flex-col space-y-5">
           <div className="flex justify-end">

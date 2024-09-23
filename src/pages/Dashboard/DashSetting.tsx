@@ -3,12 +3,17 @@ import BrandForm from "@/components/BrandForm";
 import { CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { useAuth } from "@/hooks/useAuth";
+import MetaTag from "@/components/MetaTag";
 
 function DashSetting() {
   const { session } = useAuth();
   const { brandData } = useBrand(session?.user.id as string);
   return (
     <div>
+      <MetaTag
+        title="브랜드 정보"
+        description="브랜드 정보 설정 페이지입니다."
+      />
       <section aria-label="브랜드 정보" className="space-y-5">
         {!brandData && (
           <>
