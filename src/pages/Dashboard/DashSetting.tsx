@@ -13,6 +13,7 @@ function DashSetting() {
       <MetaTag
         title="브랜드 정보"
         description="브랜드 정보 설정 페이지입니다."
+        url="dashboard"
       />
       <section aria-label="브랜드 정보" className="space-y-5">
         {!brandData && (

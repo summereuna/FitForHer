@@ -9,8 +9,20 @@
 </div>
 <br/>
 
+## 목차
+  - [프로젝트 소개](#프로젝트-소개)
+  - [실행방법](#실행방법)
+  - [기술스택](#기술스택)
+  - [아키텍쳐](#아키텍쳐)
+  - [화면 구성](#화면-구성)
+  - [주요 기능](#주요-기능)
+  - [성능 최적화](#성능-최적화)
+  - [트러블 슈팅](#트러블-슈팅)
+
+<br/>
+
 ## 프로젝트 소개
-여성을 위한 스포츠웨어 이커머스 플랫폼입니다.
+[개인 프로젝트] 여성을 위한 스포츠웨어 이커머스 플랫폼입니다.
 
 #### 프로젝트 진행기간
 2024.08.20 ~ 2024.09.21 (약 5주)
@@ -58,7 +70,7 @@ http://localhost:5173/
 <img  src="https://img.shields.io/badge/shadcnui-000000?style=flat-square&logo=shadcnui&logoColor=white"  width="300px"/>|- Shadcn/UI는 접근성과 사용자 경험을 중시하고, 미리 설계된 컴포넌트들을 제공하여 빠르고 일관된 UI 개발을 지원합니다. 또한, Tailwind CSS와의 원활한 통합으로 커스터마이징이 쉽고, 다양한 UI 요구 사항을 효율적으로 충족할 수 있어 이를 선택했습니다.<br/>- 이번 프로젝트에서는 Shadcn/UI의 버튼, 알림창, 드롭다운, 표, 토스트 등의 UI를 사용하였습니다.
 <img  src="https://img.shields.io/badge/ReactRouter-CA4245?style=flat-square&logo=reactrouter&logoColor=white"  width="140px"/>|- React 환경에서 라우팅과 페이지 설계를 간편하게 처리할 수 있는 React Router를 사용하였습니다.<br/>SPA(Single Page Application)에서 페이지 간의 네비게이션을 쉽게 관리할 수 있고 Layout, Outlet 등의 기능을 사용할 수 있습니다.
 <img  src="https://img.shields.io/badge/Vercel-000000?style=flat-square&logo=Vercel&logoColor=white"  width="90px"/>|- 배포는 빠르고 간편하고 자동화된 CI/CD를 제공하는 Vercel을 사용하여 개발과 운영 효율성을 높였습니다.
-<img  src="https://img.shields.io/badge/supabase-3FCF8E?style=flat-square&logo=supabase&logoColor=white"  width="110px"/>|- 백엔드로는 Supabase를 사용했습니다. Supabase는 실시간 DB, Auth, Storage 등 다양한 백엔드 기능을 손쉽게 구현할 수 있는 BaaS(Backend as a Service) 플랫폼으로, 서버 없이도 언급된 기능을 제공 받을 수 있기 때문에 이번 프로젝트에 적합하다고 생각하여 선택했습니다.<br/>- NoSQL 기반인 Firebase와도 고민을 했지만, 이커머스 프로젝트의 복잡한 데이터 요구 사항을 효율적으로 처리할 수 있을 것으로 판단하여 오픈 소스 PostgreSQL 기반으로 강력한 쿼리 기능과 데이터베이스 관리 기능을 제공하고 데이터베이스 스키마의 직관적 관리가 가능한 Supabase를 선택했습니다.
+<img  src="https://img.shields.io/badge/supabase-3FCF8E?style=flat-square&logo=supabase&logoColor=white"  width="110px"/>|- 백엔드로는 Supabase를 사용했습니다. Supabase는 실시간 DB, Auth, Storage 등 다양한 백엔드 기능을 손쉽게 구현할 수 있는 BaaS(Backend as a Service) 플랫폼으로, 서버 없이도 언급된 기능을 제공 받을 수 있기 때문에 이번 프로젝트에 적합하다고 생각하여 선택했습니다.<br/>- NoSQL 기반인 Firebase와도 고민을 했지만, supabase가 이커머스 프로젝트의 복잡한 데이터 요구 사항을 좀 더 효율적으로 처리할 수 있을 것으로 판단하여 오픈 소스 PostgreSQL 기반으로 강력한 쿼리 기능과 데이터베이스 관리 기능을 제공하고 데이터베이스 스키마의 직관적 관리가 가능한 Supabase를 선택했습니다.
 
 <br/>
 
@@ -131,7 +143,7 @@ http://localhost:5173/
 
 <br />
 
-## 주요기능
+## 주요 기능
 #### 1. 회원가입 및 로그인
 <details>
 <summary>로그인 시연 영상</summary>
@@ -257,7 +269,7 @@ http://localhost:5173/
 </details>
 
 - 판매 상품 등록, 조회, 수정, 삭제 기능 (삭제의 경우 `is_active: true | false` 로 논리적 삭제)
-- 등록 시 상품 이미지 개수 최소 1개 ~ 최대 5개 제한
+- 등록 시 상품 이미지 개수 최소 1개 ~ 최대 4개 제한
 
 #### 11. [판매] 대시보드 판매관리
 <details>

@@ -66,7 +66,11 @@ const CheckoutRedirect = () => {
   if (code && message) {
     return (
       <section className="flex justify-center items-center w-full h-full">
-        <MetaTag title="결제 오류" description="결제 오류 페이지입니다." />
+        <MetaTag
+          title="결제 오류"
+          description="결제 오류 페이지입니다."
+          url="checkout"
+        />
         <ItemNotFound description={message} />
       </section>
     );
@@ -77,6 +81,7 @@ const CheckoutRedirect = () => {
       <MetaTag
         title="주문 결제"
         description="주문 결제 페이지입니다. 장바구니에 담은 상품을 확인하고, 안전하게 결제를 진행하세요."
+        url="checkout"
       />
       <CardTitle>결제 중입니다...</CardTitle>
     </section>

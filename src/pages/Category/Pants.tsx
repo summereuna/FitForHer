@@ -68,6 +68,7 @@ const Pants = () => {
       <MetaTag
         title="하의"
         description="하의 카테고리 페이지입니다. 여러 브랜드의 하의 컬렉션에서 당신의 운동을 완성해 줄 완벽한 핏을 찾으세요."
+        url="category/pants"
       />
       {categoryData && (
         <AsideFilter

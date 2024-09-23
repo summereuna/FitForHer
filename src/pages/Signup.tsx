@@ -15,6 +15,7 @@ export default function Signup() {
       <MetaTag
         title="회원가입"
         description="아직 F4H 계정이 없으신가요? Fit For Her의 멤버가 되어 다양한 혜택을 누리세요!"
+        url="signup"
       />
       <AuthPromo />
       <SignForm

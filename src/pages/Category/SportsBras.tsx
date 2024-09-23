@@ -68,6 +68,7 @@ function SportsBras() {
       <MetaTag
         title="스포츠 브라"
         description="스포츠 브라 카테고리 페이지입니다. 여러 브랜드의 스포츠 브라 컬렉션에서 운동 기능에 최적화된 스포츠 브라를 찾으세요."
+        url="category/sports-bras"
       />
       {categoryData && (
         <AsideFilter

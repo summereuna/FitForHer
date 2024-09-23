@@ -22,6 +22,7 @@ function DashProductEdit() {
       <MetaTag
         title="상품 수정"
         description="상품 관리 수정 페이지입니다. 기존 상품을 수정할 수 있습니다."
+        url="dashboard"
       />
       <section
         aria-label="섹션 링크"

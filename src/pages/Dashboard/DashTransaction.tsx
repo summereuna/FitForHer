@@ -17,6 +17,7 @@ function DashTransaction() {
       <MetaTag
         title="판매관리"
         description="판매 관리 페이지입니다. 판매 내역을 확인하고, 배송 및 결제 상황을 관리하세요."
+        url="dashboard"
       />
       <section className="flex justify-between items-center">
         <CardTitle>판매관리</CardTitle>

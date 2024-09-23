@@ -36,6 +36,7 @@ function DashOverview() {
       <MetaTag
         title="대시보드"
         description="대시보드에 오신 것을 환영합니다. 판매 통계 및 최근 활동을 한눈에 확인하세요."
+        url="dashboard"
       />
       <div className="space-y-4 flex-1">
         <div className="flex items-center justify-between space-y-2">

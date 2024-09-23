@@ -21,6 +21,7 @@ function DashProduct() {
       <MetaTag
         title="상품관리"
         description="상품 관리 페이지입니다. 새 상품을 추가하거나 기존 상품을 수정할 수 있습니다."
+        url="dashboard"
       />
       <section className="flex justify-between items-center">
         <CardTitle>상품관리</CardTitle>

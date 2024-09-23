@@ -79,6 +79,7 @@ const Checkout = () => {
       <MetaTag
         title="주문 결제"
         description="주문 결제 페이지입니다. 장바구니에 담은 상품을 확인하고, 안전하게 결제를 진행하세요."
+        url="checkout"
       />
       <section className="flex flex-col items-center col-span-2 order-2 lg:order-1 space-y-5">
         <div className="flex flex-col w-full space-y-5">

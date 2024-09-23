@@ -68,6 +68,7 @@ const Tops = () => {
       <MetaTag
         title="상의"
         description="상의 카테고리 페이지입니다. 다양한 브랜드의 상의 컬렉션에서 통기성과 편안함을 제공하는 상의를 만나보세요."
+        url="category/tops"
       />
       {categoryData && (
         <AsideFilter

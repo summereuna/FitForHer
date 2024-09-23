@@ -8,6 +8,7 @@ function DashReviewAndQnA() {
       <MetaTag
         title="리뷰 및 문의"
         description="리뷰와 문의를 관리하는 페이지입니다."
+        url="dashboard"
       />
       <Card>
         <ItemNotFound description={`등록된 리뷰가 없습니다.`} />

@@ -136,6 +136,7 @@ function ProductDetail() {
           <MetaTag
             title={data.name}
             description={`${data.brands?.name} | ${data.name} | ${data.description}`}
+            url="product"
           />
           <div className="w-full flex flex-col md:flex-row space-x-0 space-y-5 md:space-x-10 md:space-y-0">
             <section
