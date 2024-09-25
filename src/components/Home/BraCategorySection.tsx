@@ -1,8 +1,8 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardDescription, CardTitle } from "@/components/ui/card";
 import { useNavigate } from "react-router-dom";
-import lightImage from "@/assets/images/light.jpg";
-import mediumImage from "@/assets/images/medium.jpeg";
+import lightImage from "@/assets/images/light.webp";
+import mediumImage from "@/assets/images/medium.webp";
 import hightImage from "@/assets/images/hight.avif";
 
 const BraCategorySection = () => {

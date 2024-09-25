@@ -31,7 +31,7 @@ function Header() {
 
   return (
     <div aria-label="전체 탐색">
-      <div className="bg-white py-2 px-16">
+      <div className="bg-white py-2 px-5 md:px-16">
         <nav aria-label="사용자 탐색">
           <ul className=" flex flex-row justify-end items-center space-x-4 text-xs">
             {/* <NavLink to={`/help`}>고객센터</NavLink> */}
@@ -88,7 +88,7 @@ function Header() {
       </div>
       <div
         aria-label="검색 탐색"
-        className="bg-white y-2 px-16 flex flex-row justify-between items-center text-sm"
+        className="bg-white y-2 px-5 md:px-16 flex flex-row justify-between items-center text-sm"
       >
         <Link
           to={`/`}
@@ -118,7 +118,7 @@ function Header() {
           </div>
         </div>
       </div>
-      <header className="mt-3 py-2 px-16 text-sm border-t-[1px] border-b-[1px]">
+      <header className="mt-3 py-2 px-5 md:px-16 text-sm border-t-[1px] border-b-[1px]">
         <nav
           aria-label="메인 탐색"
           className="relative flex flex-row justify-center"

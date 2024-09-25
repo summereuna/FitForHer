@@ -9,7 +9,7 @@ const Layout = () => {
     <div className="flex flex-col min-h-screen">
       <Header />
       <main className="flex-grow flex">
-        <div className="px-16 py-5 container mx-auto flex-grow">
+        <div className="px-5 md:px-16 py-5 container mx-auto flex-grow">
           <Outlet />
         </div>
       </main>
