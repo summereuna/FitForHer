@@ -3,31 +3,29 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { CardDescription, CardTitle } from "@/components/ui/card";
 import { getKoreanCategoryName } from "@/lib/utils";
-import { CategoryProductsWithRelations, MainProduct } from "@/types/main.types";
+import { categories } from "@/shared/data/categories";
+import { CategoryProductsWithRelations } from "@/types/main.types";
 import { useNavigate } from "react-router-dom";
 
 interface CategorySectionProps {
   data: CategoryProductsWithRelations;
-  isPending: boolean;
-  isMainPage: boolean;
+  topCategoryName: string;
 }
 
-const CategorySection = ({
-  data,
-  isPending,
-  isMainPage = false,
-}: CategorySectionProps) => {
+const CategorySection = ({ data, topCategoryName }: CategorySectionProps) => {
   const navigate = useNavigate();
 
-  const { name: topCategoryName, sub_categories } = data;
-  const mergedProducts: MainProduct[] = data.sub_categories.flatMap(
-    (subCategory) => subCategory.products
-  );
+  // const { name: topCategoryName, sub_categories } = data;
+  // const mergedProducts: MainProduct[] = data.sub_categories.flatMap(
+  //   (subCategory) => subCategory.products
+  // );
 
-  let sortedProducts = mergedProducts.sort(
-    (a, b) =>
-      new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
-  ); // 최신 순
+  // let sortedProducts = mergedProducts.sort(
+  //   (a, b) =>
+  //     new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+  // ); // 최신 순
+
+  let sortedProducts = data;
 
   if (sortedProducts.length >= 4) {
     sortedProducts = sortedProducts.slice(0, 4); //4개만 보이게
@@ -46,51 +44,52 @@ const CategorySection = ({
     },
   ];
 
-  if (isPending) return null;
-
   return (
-    <section className="flex flex-row w-full space-y-5 flex-wrap lg:space-x-5 lg:flex-nowrap lg:space-y-0">
-      {isMainPage && (
-        <div
-          aria-label="카테고리 설명"
-          className="flex flex-col space-y-7 items-center w-full pb-5 lg:items lg:items-start"
-        >
-          <CardTitle>{getKoreanCategoryName(topCategoryName)}</CardTitle>
-          <CardDescription className="text-base leading-6 whitespace-pre-line text-center lg:text-left">
-            {topCategoryName === categoryDescription[0].name
-              ? categoryDescription[0].description
-              : categoryDescription[1].description}
-          </CardDescription>
-          <div className="flex flex-row space-x-2">
-            {sub_categories.map((sub_category, index) => (
+    <section className="min-h-[24rem] flex flex-row w-full space-y-5 flex-wrap lg:space-x-5 lg:flex-nowrap lg:space-y-0">
+      <div
+        aria-label="카테고리 설명"
+        className="flex flex-col space-y-7 items-center w-full pb-5 lg:items lg:items-start"
+      >
+        <CardTitle>{getKoreanCategoryName(topCategoryName)}</CardTitle>
+        <CardDescription className="text-base leading-6 whitespace-pre-line text-center lg:text-left">
+          {topCategoryName === categoryDescription[0].name
+            ? categoryDescription[0].description
+            : categoryDescription[1].description}
+        </CardDescription>
+        <div className="flex flex-row space-x-2">
+          {categories
+            .filter(
+              (category) =>
+                category.topCategory === getKoreanCategoryName(topCategoryName)
+            )
+            .map((sub_category, index) => (
               <Badge
                 key={index}
                 variant="outline"
                 className="bg-white h-8 opacity-70 text-sm flex justify-center transition duration-200 ease-linear hover:bg-black hover:text-white cursor-pointer"
                 onClick={() => {
-                  navigate(`category/${topCategoryName}/${sub_category.name}`);
+                  navigate(`category/${topCategoryName}/${sub_category.value}`);
                 }}
               >
-                {getKoreanCategoryName(sub_category.name)}
+                {getKoreanCategoryName(sub_category.value)}
               </Badge>
             ))}
-          </div>
-          <Button
-            aria-label={`${getKoreanCategoryName(
-              topCategoryName
-            )} 카테고리로 이동`}
-            variant={"outline"}
-            className="w-32"
-            onClick={() => navigate(`/category/${topCategoryName}`)}
-          >
-            더보기
-          </Button>
         </div>
-      )}
+        <Button
+          aria-label={`${getKoreanCategoryName(
+            topCategoryName
+          )} 카테고리로 이동`}
+          variant={"outline"}
+          className="w-32"
+          onClick={() => navigate(`/category/${topCategoryName}`)}
+        >
+          더보기
+        </Button>
+      </div>
 
-      {sortedProducts.map((item, index) => (
+      {sortedProducts.map((item) => (
         <div
-          key={index}
+          key={item.id}
           aria-label="카테고리별 상품"
           className="flex flex-col w-full p-0 md:w-1/2 md:p-3 lg:p-0"
           onClick={() => {

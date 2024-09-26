@@ -7,33 +7,20 @@ const getCategoryProducts = async (
   categoryName: string
 ): Promise<CategoryProductsWithRelations> => {
   const { data, error } = await supabase
-    .from("categories")
+    .from("products")
     .select(
       `*,
-      sub_categories(
-        name,
-        products (
-            id,
-            is_active,
-            name, 
-            description,
-            price,
-            created_at,
-            color,
-            brands( name ),
-            product_sizes( size, stock_quantity ),
-            product_images( image_url ),
-            sub_categories ( name )
-        )
-      )`
+    product_sizes( size, stock_quantity ),
+    product_images( image_url ),
+    sub_categories!inner ( *, categories!inner ( name ) ),
+    brands( name )
+    `
     )
-    .eq("name", categoryName)
-    .filter("sub_categories.products.is_active", "eq", true)
+    .eq("sub_categories.categories.name", categoryName)
+    .filter("is_active", "eq", true)
     .order("created_at", {
-      referencedTable: "sub_categories.products",
       ascending: false,
-    })
-    .single(); //카테고리 배열안에 든거 다 가져오기
+    });
 
   if (error) throw console.log("쿼리 잘못됌", error);
 
