@@ -21,6 +21,6 @@ export type CategoryProductsWithRelations = QueryData<
   typeof categoryProductsQuery
 >;
 
-type MainCategory = CategoryProductsWithRelations["sub_categories"][number];
+// type MainCategory = CategoryProductsWithRelations["sub_categories"][number];
 
-export type MainProduct = MainCategory["products"][number];
+// export type MainProduct = MainCategory["products"][number];
