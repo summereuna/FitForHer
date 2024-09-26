@@ -2,6 +2,7 @@ import { useCategoryProducts } from "@/api/mainApi";
 import Banner from "@/components/Home/Banner";
 import BraCategorySection from "@/components/Home/BraCategorySection";
 import CategorySection from "@/components/Home/CategorySection";
+import CategorySectionSkeleton from "@/components/Home/CategorySectionSkeleton";
 import MetaTag from "@/components/MetaTag";
 import { Separator } from "@/components/ui/separator";
 import { useAuth } from "@/hooks/useAuth";
@@ -35,23 +36,17 @@ export default function Home() {
       <MetaTag title="홈" />
       <Banner />
       <Separator />
+      {isPendingTop && <CategorySectionSkeleton />}
       {isSuccessTop && topProductsData && (
-        <CategorySection
-          data={topProductsData}
-          isPending={isPendingTop}
-          isMainPage={true}
-        />
+        <CategorySection data={topProductsData!} topCategoryName="tops" />
       )}
 
       <Separator />
       <BraCategorySection />
       <Separator />
+      {isPendingPants && <CategorySectionSkeleton />}
       {isSuccessPants && pantsProductsData && (
-        <CategorySection
-          data={pantsProductsData}
-          isPending={isPendingPants}
-          isMainPage={true}
-        />
+        <CategorySection data={pantsProductsData} topCategoryName="pants" />
       )}
     </div>
   );
