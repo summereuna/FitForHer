@@ -49,6 +49,8 @@ const Banner = () => {
             key={index}
             src={image}
             alt={`carousel-${index}`}
+            width="1200"
+            height="600"
             className="h-80 w-full flex-shrink-0 object-cover"
           />
         ))}
