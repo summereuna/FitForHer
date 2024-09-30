@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import banner1 from "@/assets/images/1.webp";
-import banner2 from "@/assets/images/2.avif";
+import banner2 from "@/assets/images/2.webp";
 import banner3 from "@/assets/images/3.webp";
 import banner4 from "@/assets/images/4.webp";
 

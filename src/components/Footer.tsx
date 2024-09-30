@@ -41,15 +41,6 @@ function Footer() {
                 깃허브
               </a>
               <a
-                aria-label="(외부) 노션으로 이동"
-                href="https://dandelion-girdle-1ba.notion.site/1eef138624dd4bb29254dca841c4f8c9"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hover:underline"
-              >
-                노션
-              </a>
-              <a
                 aria-label="(외부) 블로그로 이동"
                 href="https://velog.io/@summereuna"
                 target="_blank"

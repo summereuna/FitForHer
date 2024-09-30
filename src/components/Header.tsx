@@ -1,11 +1,8 @@
-import { lazy, Suspense } from "react";
-const CartDrawer = lazy(() => import("@/components/Cart/CartDrawer"));
-// import CartDrawer from "@/components/Cart/CartDrawer";
-
-import { CategoryTop } from "@/components/Category/CategoryTop";
+import CartDrawer from "@/components/Cart/CartDrawer";
+import CategoryTop from "@/components/Category/CategoryTop";
 import { Icon } from "@/components/Icon";
 import MyDropdown from "@/components/MyDropdown";
-import { SearchBar } from "@/components/SearchBar";
+import SearchBar from "@/components/SearchBar";
 import { Separator } from "@/components/ui/separator";
 import { useAuth } from "@/hooks/useAuth";
 import { useCart } from "@/hooks/useCart";
@@ -106,9 +103,8 @@ function Header() {
           </NavLink>
           <div className="relative">
             {/*  */}
-            <Suspense fallback={<div>Loading...</div>}>
-              <CartDrawer isInNav={true} />
-            </Suspense>
+
+            <CartDrawer isInNav={true} />
             {/*  */}
             {cartItems.length > 0 && (
               <div className="absolute top-0 right-[-7px] text-[8px] text-white bg-black size-4 rounded-full flex justify-center items-center">

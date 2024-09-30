@@ -14,7 +14,7 @@ const SellerRoute: React.FC<SellerRouteProps> = ({
   const { isLoggedIn, userRole, isSessionLoading } = useAuth();
 
   if (isSessionLoading) {
-    return <div>로딩 인디케이터 표시...</div>;
+    return <div>로딩중...</div>;
   }
 
   if (!isLoggedIn || userRole !== "seller") {

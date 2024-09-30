@@ -306,7 +306,19 @@ function ProductDetail() {
                       </Button>
                     )}
                     {isAddedItem && (
-                      <Suspense fallback={<div>Loading...</div>}>
+                      <Suspense
+                        fallback={
+                          <Button
+                            aria-label="장바구니 보기 버튼"
+                            type="button"
+                            size={"lg"}
+                            variant="secondary"
+                            className="w-full border-[1px]"
+                          >
+                            장바구니 보기
+                          </Button>
+                        }
+                      >
                         <CartDrawer
                           isInNav={false}
                           onChangeIsAddedItem={handleChangeIsAddedItem}

@@ -11,7 +11,7 @@ import { categoryIcon } from "@/shared/icons";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
-export function CategoryTop() {
+export default function CategoryTop() {
   const [isOpen, setIsOpen] = useState(false);
 
   const handleClose = () => {
