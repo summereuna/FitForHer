@@ -28,13 +28,9 @@ const getProductDetail = async (
       referencedTable: "product_sizes",
       ascending: true,
     })
-    // .order("created_at", {
-    //   referencedTable: "product_questions",
-    //   ascending: false,
-    // })
-    .single(); //카테고리 배열안에 든거 다 가져오기
+    .single();
 
-  if (error) throw console.log("상품 상세 에러", error);
+  if (error) throw error;
 
   return data;
 };
@@ -77,7 +73,7 @@ const getRelatedProductDetail = async (
       ascending: true,
     });
 
-  if (error) throw console.log("연관 상품 조회 에러", error);
+  if (error) throw error;
 
   return data;
 };

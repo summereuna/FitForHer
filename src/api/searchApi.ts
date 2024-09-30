@@ -40,8 +40,7 @@ const getSearchProducts = async (
     })
     .range((pageParam - 1) * pageSize, pageParam * pageSize - 1); // 페이지네이션 범위
 
-  if (error) throw new Error(error.message);
-
+  if (error) throw error;
   return data;
 };
 

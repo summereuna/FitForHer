@@ -40,7 +40,7 @@ export const pay = async (
     currency: "CURRENCY_KRW",
     payMethod: "EASY_PAY", //간편결제
     windowType: {
-      //카카오는 이렇게만 세팅 가능
+      //카카오 세팅
       pc: "IFRAME",
       mobile: "REDIRECTION",
     },
@@ -124,7 +124,6 @@ export const usePayment = (paymentId: string, cartItems: Item[]) => {
     queryKey: ["payment", paymentId],
     queryFn: () => verifyPayment(paymentId, cartItems),
     enabled: !!paymentId, // id가 있을 때만 쿼리를 실행
-    // staleTime: Infinity, // fresh 유지
   });
 
   return { payment, isPending, isError, isSuccess };

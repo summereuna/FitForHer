@@ -30,6 +30,7 @@ interface AlertProps {
   noButton: string;
   yesButton: string;
   onClick: () => void;
+  isPending?: boolean;
 }
 
 function Alert({
@@ -41,6 +42,7 @@ function Alert({
   noButton,
   yesButton,
   onClick,
+  isPending,
 }: AlertProps) {
   return (
     <AlertDialog>
@@ -56,7 +58,9 @@ function Alert({
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>{noButton}</AlertDialogCancel>
-          <AlertDialogAction onClick={onClick}>{yesButton}</AlertDialogAction>
+          <AlertDialogAction disabled={isPending} onClick={onClick}>
+            {yesButton}
+          </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

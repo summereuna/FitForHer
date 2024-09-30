@@ -1,6 +1,8 @@
 // import useFormError from "@/hooks/useFormError";
 import supabase from "@/shared/supabaseClient";
 import {
+  BrandProductByIdQueryRelations,
+  BrandProductsWithRelations,
   InsertSizesRequired,
   UpdateProductRequest,
   UploadProductRequest,
@@ -8,18 +10,14 @@ import {
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { QueryData } from "@supabase/supabase-js";
+import { getAuthUser } from "@/api/userApi";
+import { toast } from "@/hooks/use-toast";
 
 const uploadProductImages = async (files: File[]) => {
-  const {
-    data: { user },
-    error: userError,
-  } = await supabase.auth.getUser();
-  if (userError) throw userError;
-  if (!user) throw new Error("인증되지 않은 사용자 입니다.");
-
-  //스토리지에 올리기
+  const user = await getAuthUser();
   const userId = user?.id;
 
+  //스토리지에 올리기
   //파일 업로드 병렬 처리 함수
   const uploadPromises = files.map(async (file, index) => {
     const fileName = `product_img_${index}`;
@@ -32,9 +30,8 @@ const uploadProductImages = async (files: File[]) => {
         upsert: true,
       });
 
-    if (uploadError) {
-      throw uploadError;
-    }
+    if (uploadError)
+      throw new Error(`파일을 업로드하는 중 오류가 발생했습니다.`);
 
     //스토리지에서 public url 가져오기
     const { data } = await supabase.storage
@@ -50,14 +47,12 @@ const uploadProductImages = async (files: File[]) => {
     const imageUrls = await Promise.all(uploadPromises);
     return imageUrls; //업로드된 모든 파일의 public url 배열로 반환
   } catch (error) {
-    throw new Error(`${error}: 파일을 업로드하는 중 오류가 발생했습니다.`);
+    if (error) throw new Error(`파일을 업로드하는 중 오류가 발생했습니다.`);
   }
 };
 
 export const useUploadProductImages = () => {
   const queryClient = useQueryClient();
-
-  // const { errorMessage, setErrorMessage } = useFormError();
 
   const {
     mutate: mutateUploadProductImages,
@@ -73,19 +68,11 @@ export const useUploadProductImages = () => {
       }
     },
     onError: (error) => {
-      console.log(error);
-      // switch (error.code) {
-      //   case "user_already_exists":
-      //     setErrorMessage("이미 가입한 사용자입니다.");
-      //     break;
-      //   case "weak_password":
-      //     setErrorMessage("비밀번호가 너무 약합니다.");
-      //     break;
-      //   default:
-      //     setErrorMessage("회원가입에 실패했습니다. 다시 시도해 주세요.");
-      //     break;
-      // }
-      // return errorMessage;
+      toast({
+        title: "파일 업로드 중 문제 발생",
+        description: `${error.message}`,
+        variant: "destructive",
+      });
     },
   });
 
@@ -105,17 +92,8 @@ export const useUploadProductImages = () => {
 //3. product_id 생성 되면 -> 스토리지 옮기고 프로덕트 이미지 테이블 생성
 
 const uploadProduct = async (productRequestData: UploadProductRequest) => {
-  // 현재 로그인된 사용자 정보 가져오기
-  const {
-    data: { user },
-    error: userError,
-  } = await supabase.auth.getUser();
-  if (userError) throw userError;
-
-  if (!user) throw new Error("인증되지 않은 사용자 입니다.");
+  const user = await getAuthUser();
   const authId = user.id;
-
-  /////////////////////////////////////////////////////////
 
   const {
     brand_id,
@@ -128,7 +106,6 @@ const uploadProduct = async (productRequestData: UploadProductRequest) => {
     product_images,
   } = productRequestData;
 
-  /////////////////////////////////////////////////////////////
   //0. 카테고리 아이디 가져오기
   const { data: categoryData, error: categoryError } = await supabase
     .from("sub_categories")
@@ -136,7 +113,10 @@ const uploadProduct = async (productRequestData: UploadProductRequest) => {
     .eq("name", `${categoryName}`)
     .single();
 
-  if (categoryError) throw categoryError;
+  if (categoryError)
+    throw new Error(
+      `상품을 등록하는 중 카테고리 조회 오류가 발생했습니다. 관리자에게 문의해 주세요.`
+    );
   const category_id = categoryData.id;
 
   //1. 프로덕트 생성
@@ -147,7 +127,10 @@ const uploadProduct = async (productRequestData: UploadProductRequest) => {
     .single();
   //기본적으로 수버페이스는 모든 행 배열로 반환하기 때문에 단일 객체로 받기 위해 single()
 
-  if (error) throw error;
+  if (error)
+    throw new Error(
+      `상품을 등록하는 중 오류가 발생했습니다. 관리자에게 문의해 주세요.`
+    );
 
   /////////////////////////////////////////////////////////////
   //2. product_id 생성 되면 -> 사이즈 생성 병렬 처리
@@ -164,7 +147,10 @@ const uploadProduct = async (productRequestData: UploadProductRequest) => {
       product_id,
     });
 
-    if (error) throw error;
+    if (error)
+      throw new Error(
+        `상품을 등록하는 중 사이즈 및 재고 업로드 오류가 발생했습니다. 관리자에게 문의해 주세요.`
+      );
     return;
   };
 
@@ -187,7 +173,10 @@ const uploadProduct = async (productRequestData: UploadProductRequest) => {
         `${authId}/product_imgs/${product_id}/product_img_${index}`
       );
 
-    if (imageMoveError) throw imageMoveError;
+    if (imageMoveError)
+      throw new Error(
+        `상품을 등록하는 중 상품 사진 업로드 오류가 발생했습니다. 관리자에게 문의해 주세요.`
+      );
   };
 
   const moveFileToProductImgFolderPromises = product_images.map(
@@ -199,7 +188,6 @@ const uploadProduct = async (productRequestData: UploadProductRequest) => {
   await Promise.all(moveFileToProductImgFolderPromises);
 
   ///////////////////////////////////////////////////////////////////////
-
   //이미지 테이블 생성
   const uploadProductImage = async (product_id: string, index: number) => {
     //🌈 퍼블릭 url 얻기
@@ -215,7 +203,10 @@ const uploadProduct = async (productRequestData: UploadProductRequest) => {
     const { error } = await supabase
       .from("product_images")
       .insert({ product_id, image_url });
-    if (error) throw error;
+    if (error)
+      throw new Error(
+        `상품을 등록하는 중 상품 사진 업로드 오류가 발생했습니다. 관리자에게 문의해 주세요.`
+      );
   };
 
   //이미지 테이블 생성하기 => 병렬 처리
@@ -237,8 +228,6 @@ export const useUploadProduct = () => {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
 
-  // const { errorMessage, setErrorMessage } = useFormError();
-
   const {
     mutate: mutateUploadProduct,
     isPending: isPendingProduct,
@@ -252,19 +241,11 @@ export const useUploadProduct = () => {
       navigate("/dashboard/product");
     },
     onError: (error) => {
-      console.log(error);
-      // switch (error.code) {
-      //   case "user_already_exists":
-      //     setErrorMessage("이미 가입한 사용자입니다.");
-      //     break;
-      //   case "weak_password":
-      //     setErrorMessage("비밀번호가 너무 약합니다.");
-      //     break;
-      //   default:
-      //     setErrorMessage("회원가입에 실패했습니다. 다시 시도해 주세요.");
-      //     break;
-      // }
-      // return errorMessage;
+      toast({
+        title: "상품 등록 중 문제 발생",
+        description: `${error.message}`,
+        variant: "destructive",
+      });
     },
   });
 
@@ -278,35 +259,12 @@ export const useUploadProduct = () => {
   };
 };
 
-/////////////////////////////////////////////////////////////////
+//---------------------------------------------------------------------------------
 //셀러 상품 조회
-const productsQuery = supabase
-  .from("products")
-  .select(
-    `*,
-    product_sizes( size, stock_quantity ),
-    product_images( image_url ),
-    sub_categories (
-      *,
-      categories (
-        name
-      )
-    )`
-  )
-  .order("created_at", { ascending: false });
-
-// 'productsQuery'에 대한 타입 생성
-export type BrandProductsWithRelations = QueryData<typeof productsQuery>;
-
 const getBrandProducts = async (
   seller_id: string
 ): Promise<BrandProductsWithRelations> => {
-  const {
-    data: { user },
-    error: userError,
-  } = await supabase.auth.getUser();
-  if (userError) throw userError;
-  if (!user) throw new Error("인증되지 않은 사용자 입니다.");
+  await getAuthUser();
 
   //seller_id 가 작성한 것만 가져오기
   const { data, error } = await supabase
@@ -346,30 +304,11 @@ export const useBrandProducts = (seller_id: string) => {
 };
 
 //////////////////////////////////////////////////////////
-//업데이트할 항목 조회
-
-//셀러 상품 조회
-const brandProductByIdQuery = supabase
-  .from("products")
-  .select(
-    `*, product_sizes( size, stock_quantity ), product_images( image_url ), sub_categories( name )`
-  )
-  .single();
-
-// 'productsQuery'에 대한 타입 생성
-export type BrandProductByIdQueryRelations = QueryData<
-  typeof brandProductByIdQuery
->;
-
+//업데이트할 셀러 상품 조회
 const getBrandProductById = async (
   productId: string
 ): Promise<BrandProductByIdQueryRelations> => {
-  const {
-    data: { user },
-    error: userError,
-  } = await supabase.auth.getUser();
-  if (userError) throw userError;
-  if (!user) throw new Error("인증되지 않은 사용자 입니다.");
+  await getAuthUser();
 
   const { data, error } = await supabase
     .from("products")
@@ -384,10 +323,7 @@ const getBrandProductById = async (
   return data;
 };
 
-export const useBrandProductById = (
-  productId: string
-  // isEditClicked: boolean
-) => {
+export const useBrandProductById = (productId: string) => {
   const {
     data: brandProductData,
     isPending,
@@ -397,8 +333,6 @@ export const useBrandProductById = (
     queryKey: ["products", productId],
     queryFn: () => getBrandProductById(productId),
     enabled: !!productId,
-    //  && isEditClicked,
-    // id가 있을 때만 쿼리를 실행
   });
 
   return { brandProductData, isPending, isError, isSuccess };
@@ -409,14 +343,7 @@ export const useBrandProductById = (
 const updateBrandProducts = async (
   updatedProductRequestData: UpdateProductRequest
 ) => {
-  // 현재 로그인된 사용자 정보 가져오기
-  const {
-    data: { user },
-    error: userError,
-  } = await supabase.auth.getUser();
-  if (userError) throw userError;
-
-  if (!user) throw new Error("인증되지 않은 사용자 입니다.");
+  const user = await getAuthUser();
   const authId = user.id;
 
   const {
@@ -439,7 +366,11 @@ const updateBrandProducts = async (
     .eq("name", `${category_name}`)
     .single();
 
-  if (categoryError) throw console.log("카테고리 에러", categoryError);
+  if (categoryError)
+    throw new Error(
+      `상품을 수정하는 중 카테고리 조회 오류가 발생했습니다. 관리자에게 문의해 주세요.`
+    );
+
   const category_id = categoryData.id;
 
   //1. 프로덕트 업데이트
@@ -447,7 +378,10 @@ const updateBrandProducts = async (
     .from("products")
     .update({ color, description, name, price, category_id })
     .eq("id", product_id);
-  if (productError) throw console.log("프로덕트 업데이트 에러", productError);
+  if (productError)
+    throw new Error(
+      `상품을 수정하는 중 오류가 발생했습니다. 관리자에게 문의해 주세요.`
+    );
 
   //2. 사이즈 업데이트
   //2-1. 기존 사이즈 삭제
@@ -456,7 +390,10 @@ const updateBrandProducts = async (
     .delete()
     .eq("product_id", product_id);
   if (removeSizesError)
-    throw console.log("기존 사이즈 테이블에서 삭제 에러", removeSizesError);
+    throw new Error(
+      `사이즈 및 재고 삭제 중 오류가 발생했습니다. 관리자에게 문의해 주세요.`
+    );
+
   //2-2. 새로 사이즈 생성
   const insertProductSizes = async (
     size: InsertSizesRequired,
@@ -467,7 +404,11 @@ const updateBrandProducts = async (
       stock_quantity: size.stock_quantity,
       product_id,
     });
-    if (sizeError) throw console.log("사이즈 업데이트 에러", sizeError);
+    if (sizeError)
+      throw new Error(
+        `사이즈 및 재고 생성 중 오류가 발생했습니다. 관리자에게 문의해 주세요.`
+      );
+
     return;
   };
 
@@ -482,15 +423,9 @@ const updateBrandProducts = async (
   const { data, error } = await supabase.storage
     .from("images")
     .list(`${authId}/temporary`);
-  // if (existNewFilesError)
-  //   throw console.log(
-  //     "스토리지 temporary에 새 파일 있는지 확인 중 에러",
-  //     existNewFilesError
-  //   );
   if (error) throw error;
   //새로운 이미지 파일 없으면 얼리 리턴
   if (!data) return;
-  //근데 data[0]이 엠티 어쩌구 라서 ;;;
 
   //새로운 이미지 파일 있으면 진행
   const isExistNewFiles = !!(data.length > 1);
@@ -498,7 +433,6 @@ const updateBrandProducts = async (
   //여기가 진짜 이미지 없는 경우 얼리 리턴으로 마무리
   if (!isExistNewFiles) return;
 
-  ///////////////////////////////////////////////////////////////
   ///////////////////////////////////////////////////////////////
   //새로운 이미지 있다면
 
@@ -508,9 +442,8 @@ const updateBrandProducts = async (
     .delete()
     .eq("product_id", product_id);
   if (removePrevImagesError)
-    throw console.log(
-      "기존 이미지 테이블에서 삭제 에러",
-      removePrevImagesError
+    throw new Error(
+      `기존 상품 사진 삭제 중 오류가 발생했습니다. 관리자에게 문의해 주세요.`
     );
 
   //5. product_id 폴더에 든 기존 파일 스토리지에서 삭제
@@ -521,9 +454,8 @@ const updateBrandProducts = async (
       .list(`${authId}/product_imgs/${product_id}`);
 
   if (prevImageFilesError)
-    throw console.log(
-      "기존 이미지 파일 개수 확인하기 에러",
-      prevImageFilesError
+    throw new Error(
+      `기존 상품 사진 파일 개수 확인 중 오류가 발생했습니다. 관리자에게 문의해 주세요.`
     );
 
   //5-2. 기존 파일 삭제
@@ -531,7 +463,10 @@ const updateBrandProducts = async (
     const { error: imageRemoveError } = await supabase.storage
       .from("images")
       .remove([`${authId}/product_imgs/${product_id}/product_img_${index}`]);
-    if (imageRemoveError) throw imageRemoveError;
+    if (imageRemoveError)
+      throw new Error(
+        `기존 상품 사진 파일 삭제 중 오류가 발생했습니다. 관리자에게 문의해 주세요.`
+      );
   };
 
   const removePrevFilesPromises = prevImageFiles!.map(async (_, index) => {
@@ -550,7 +485,9 @@ const updateBrandProducts = async (
       );
 
     if (imageMoveError)
-      throw console.log("이미지 파일 스토리지 옮기는 중 에러", imageMoveError);
+      throw new Error(
+        `새로운 상품 사진 파일 처리 중 오류가 발생했습니다. 관리자에게 문의해 주세요.`
+      );
   };
 
   const moveFileToProductImgFolderPromises = product_images.map(
@@ -575,7 +512,9 @@ const updateBrandProducts = async (
       .from("product_images")
       .insert({ product_id, image_url });
     if (insertImageError)
-      throw console.log("이미지 테이블 insert 에러", insertImageError);
+      throw new Error(
+        `새로운 상품 사진 업로드 중 오류가 발생했습니다. 관리자에게 문의해 주세요.`
+      );
   };
 
   //이미지 테이블 생성하기 => 병렬 처리
@@ -590,8 +529,6 @@ export const useUpdateProduct = () => {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
 
-  // const { errorMessage, setErrorMessage } = useFormError();
-
   const {
     mutate: mutateUpdateProduct,
     isPending: isPendingUpdateProduct,
@@ -604,19 +541,11 @@ export const useUpdateProduct = () => {
       navigate("/dashboard/product");
     },
     onError: (error) => {
-      console.log(error);
-      // switch (error.code) {
-      //   case "user_already_exists":
-      //     setErrorMessage("이미 가입한 사용자입니다.");
-      //     break;
-      //   case "weak_password":
-      //     setErrorMessage("비밀번호가 너무 약합니다.");
-      //     break;
-      //   default:
-      //     setErrorMessage("회원가입에 실패했습니다. 다시 시도해 주세요.");
-      //     break;
-      // }
-      // return errorMessage;
+      toast({
+        title: "상품 수정 중 문제 발생",
+        description: `${error.message}`,
+        variant: "destructive",
+      });
     },
   });
 
@@ -625,25 +554,24 @@ export const useUpdateProduct = () => {
     isError,
     isPendingUpdateProduct,
     isSuccessUpdateProduct,
-    // errorMessage,
   };
 };
 
 //////////////////////////////////////////////////////////////////////
 // 프로덕트 논리적 삭제
-
 const changeActiveProduct = async (product_id: string) => {
   const { error: productError } = await supabase
     .from("products")
     .update({ is_active: false })
     .eq("id", product_id);
   if (productError)
-    throw console.log("프로덕트 논리적 삭제 에러", productError);
+    throw new Error(
+      `상품 삭제 중 오류가 발생했습니다. 관리자에게 문의해 주세요.`
+    );
 };
 
 export const useChangeActiveProduct = () => {
   const queryClient = useQueryClient();
-  // const { errorMessage, setErrorMessage } = useFormError();
 
   const {
     mutate: mutateChangeActiveProduct,
@@ -656,7 +584,11 @@ export const useChangeActiveProduct = () => {
       queryClient.invalidateQueries({ queryKey: ["products"] });
     },
     onError: (error) => {
-      console.log(error);
+      toast({
+        title: "상품 삭제 중 문제 발생",
+        description: `${error.message}`,
+        variant: "destructive",
+      });
     },
   });
 
@@ -665,6 +597,5 @@ export const useChangeActiveProduct = () => {
     isError,
     isPendingChangeActiveProduct,
     isSuccessChangeActiveProduct,
-    // errorMessage,
   };
 };

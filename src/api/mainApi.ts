@@ -22,7 +22,7 @@ const getCategoryProducts = async (
       ascending: false,
     });
 
-  if (error) throw console.log("쿼리 잘못됌", error);
+  if (error) throw error;
 
   return data;
 };

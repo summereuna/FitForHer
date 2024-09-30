@@ -20,8 +20,9 @@ const MyDropdown = ({ name }: MyDropdownProps) => {
         {name} 님
       </DropdownMenuTrigger>
       <DropdownMenuContent>
-        <DropdownMenuLabel>내 정보</DropdownMenuLabel>
-        <DropdownMenuSeparator />
+        <DropdownMenuItem onClick={() => navigate("/my")}>
+          내 정보
+        </DropdownMenuItem>
         <DropdownMenuItem onClick={() => navigate("/my/orders")}>
           주문내역
         </DropdownMenuItem>

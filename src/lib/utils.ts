@@ -164,3 +164,19 @@ export function getTimesAgo(createdAt: string) {
 export function getCreatedTime(createdAt: string) {
   return dayjs(createdAt).format("LLL");
 }
+
+export const getUserRoleKorea = (userRole: Enums<"user_role">) => {
+  switch (userRole) {
+    case "customer":
+      return "일반 회원";
+
+    case "seller":
+      return "비즈니스 회원";
+
+    case "admin":
+      return "관리자";
+
+    default:
+      return "일반 회원";
+  }
+};

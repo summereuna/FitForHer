@@ -1,3 +1,5 @@
+import { getIsDeleteUser } from "@/api/userApi";
+import { toast } from "@/hooks/use-toast";
 import supabase from "@/shared/supabaseClient";
 import { LoginUserRequest } from "@/types/auth.types";
 import { Enums } from "@/types/database.types";
@@ -86,14 +88,31 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   const loginWithEmail = async (loginData: LoginUserRequest) => {
     const { email, password } = loginData;
 
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
+    try {
+      const { is_active } = await getIsDeleteUser(email);
 
-    if (error) throw error;
+      //탈퇴한 회원
+      if (!is_active) throw new Error(`입력하신 정보가 올바르지 않습니다.`);
 
-    return data;
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+
+      //비밀번호 틀림
+      if (error) throw new Error(`입력하신 정보가 올바르지 않습니다.`);
+
+      return data;
+    } catch (error) {
+      const err = error as Error;
+      toast({
+        title: "로그인 실패",
+        description: `${err.message}`,
+        variant: "destructive",
+      });
+
+      return Promise.reject(err);
+    }
   };
 
   //로그아웃
@@ -104,21 +123,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const authId = session?.user.id;
 
-  // // 에러 메시지 커스터마이징 함수
-  // const getCustomErrorMessage = (error: AuthApiError): string => {
-  //   // Supabase 에러 코드에 따라 커스텀 메시지 설정
-  //   switch (error.code) {
-  //     case "400":
-  //       return "잘못된 로그인 정보입니다.";
-  //     case "401":
-  //       return "로그인 인증에 실패했습니다.";
-  //     case "429":
-  //       return "로그인 시도가 너무 많습니다. 잠시 후 다시 시도해 주세요.";
-  //     // 기타 에러 코드에 대한 메시지 설정
-  //     default:
-  //       return "로그인 중 문제가 발생했습니다. 나중에 다시 시도해 주세요.";
-  //   }
-  // };
   return (
     <AuthContext.Provider
       value={{

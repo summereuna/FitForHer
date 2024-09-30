@@ -317,18 +317,29 @@ BaaS|<img  src="https://img.shields.io/badge/supabase-3FCF8E?style=flat-square&l
    - sitemap, robots.txt 생성
    - React-Helmet-async 사용해 meta tag 설정
 
-- 웹 뷰
-<img width="468" alt="웹뷰" src="https://github.com/user-attachments/assets/c4c0f843-ca94-45bc-b527-be56f16e4036">
+- PC
+  <img width="468" alt="웹뷰" src="https://github.com/user-attachments/assets/c4c0f843-ca94-45bc-b527-be56f16e4036">
 
-- 모바일 뷰
-<img width="468" alt="모바일뷰" src="https://github.com/user-attachments/assets/e87f58b4-8e86-4d18-bd7c-13bd643b86e2">
+- 모바일
+  <img width="468" alt="모바일뷰" src="https://github.com/user-attachments/assets/e87f58b4-8e86-4d18-bd7c-13bd643b86e2">
 
 3. 성능 최적화:
    - 데이터 페칭시 스켈레톤 UI 사용하여 CLS 개선 (**2.222 -> 0**)
      - <img width="500" alt="웹뷰" src="https://github.com/user-attachments/assets/3db903dc-cabb-4cc7-91d2-18dadc2896b4">
      - <img width="200" alt="모바일뷰" src="https://github.com/user-attachments/assets/aaf471fb-39b4-4ac5-adfd-dda792dd43de">
      - 모바일 뷰: **55 -> 62**
+   - 이미지 압축, 동적 임포트 및 코드 스플리팅으로 초기 로드 시간 감소 (**253ms -> 178ms, 29.6% 개선**)
+     - 자원 효율성 향상, 더 빠른 초기 페이지 로딩으로 사용자 경험 개선
+     - <img width="262" alt="초기로딩속도개선_1" src="https://github.com/user-attachments/assets/b194116d-a2a2-45c6-9278-3d1031ed6916">
+     - <img width="279" alt="초기로딩속도개선_2" src="https://github.com/user-attachments/assets/30485b6a-232f-4777-82e8-cd06ec4aef08">
+   - 결과:
+      - PC
+      - <img width="600" alt="PC결과" src="https://github.com/user-attachments/assets/be036c31-b449-4700-8111-92902a682eeb">
+      - 모바일
+      - <img width="600" alt="모바일개선결과" src="https://github.com/user-attachments/assets/56100812-c462-46f7-8234-a663436fbbae">
 
-
-## 트러블 슈팅
--
+4. 결과:
+  - PC
+  - <img width="459" alt="PC결과" src="https://github.com/user-attachments/assets/8140594b-c440-4435-92a6-bcc3acf8a2ea">
+  - 모바일
+  - <img width="458" alt="모바일결과" src="https://github.com/user-attachments/assets/b7cb052c-f0fe-4b56-ae8e-4b143f0a3bd8">
