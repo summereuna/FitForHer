@@ -1,4 +1,6 @@
+import supabase from "@/shared/supabaseClient";
 import { Database, Tables } from "@/types/database.types";
+import { QueryData } from "@supabase/supabase-js";
 
 //프로덕트
 export type Products = Tables<"products">;
@@ -12,11 +14,6 @@ export type InsertProductImagesRequest =
 export type UpdateProductImages =
   Database["public"]["Tables"]["product_images"]["Update"];
 
-// export type InsertProductImagesRequest = Omit<
-//   ProductImages,
-//   "id" | "created_at" | "updated_at" | "is_active"
-// >;
-
 //프로덕트 사이즈
 export type ProductSizes = Tables<"product_sizes">;
 export type InsertProductSize =
@@ -28,27 +25,6 @@ export type InsertSizesRequired = Omit<
   ProductSizes,
   "id" | "is_active" | "product_id" | "seller_id"
 >;
-// export interface InsertSizesRequest {
-//   sizes: InsertSizesRequired[];
-// }
-
-//////////////////////////////////////
-// 카테고리
-// parent가 null일 수 있는 최상위 카테고리 타입
-// type TopCategory = {
-//   name: string;
-//   parent: {
-//     name: null; // 최상위 카테고리의 parent는 null
-//   };
-// };
-
-// // parent가 있는 두 번째 레벨 카테고리 타입
-// type SubCategory = {
-//   name: string;
-//   parent: {
-//     name: string;
-//   };
-// };
 
 //////////////////////////////////////
 export interface UploadProductRequest
@@ -72,3 +48,34 @@ export interface UpdateProductRequest
 
 //프로덕트 QnA
 export type ProductQnA = Tables<"product_questions">;
+
+//셀러 상품 조회
+const productsQuery = supabase
+  .from("products")
+  .select(
+    `*,
+    product_sizes( size, stock_quantity ),
+    product_images( image_url ),
+    sub_categories (
+      *,
+      categories (
+        name
+      )
+    )`
+  )
+  .order("created_at", { ascending: false });
+
+export type BrandProductsWithRelations = QueryData<typeof productsQuery>;
+
+//업데이트할 셀러 상품 조회
+const brandProductByIdQuery = supabase
+  .from("products")
+  .select(
+    `*, product_sizes( size, stock_quantity ), product_images( image_url ), sub_categories( name )`
+  )
+  .single();
+
+// 'productsQuery'에 대한 타입 생성
+export type BrandProductByIdQueryRelations = QueryData<
+  typeof brandProductByIdQuery
+>;

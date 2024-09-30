@@ -32,21 +32,24 @@ function DashOverview() {
   const threeTransactions = dashboardItemsData?.slice(0, 3);
 
   return (
-    <div className="flex-col md:flex">
+    <div className="flex-col md:flex h-full">
       <MetaTag
         title="대시보드"
         description="대시보드에 오신 것을 환영합니다. 판매 통계 및 최근 활동을 한눈에 확인하세요."
         url="dashboard"
       />
-      <div className="space-y-4 flex-1">
+      <div className="space-y-4 flex-1 h-full">
         <div className="flex items-center justify-between space-y-2">
           <CardTitle className="tracking-tight">대시보드</CardTitle>
           {/* <div className="flex items-center space-x-2">
             <Button>다운로드</Button>
           </div> */}
         </div>
-        <section className="space-y-4">
-          <section aria-label="대시보드" className="space-y-4">
+        <section className="space-y-4 h-full">
+          <section
+            aria-label="대시보드"
+            className="flex flex-col space-y-4 h-full"
+          >
             <div
               aria-label="대시보드 상단"
               className="grid gap-4 md:grid-cols-2 lg:grid-cols-4"
@@ -87,11 +90,11 @@ function DashOverview() {
                   />
                 </CardHeader>
                 <CardContent className="pl-2">
-                  {dashboardItemsData && (
+                  {dashboardItemsData && dashboardItemsData?.length > 0 && (
                     <CategoryChart data={dashboardItemsData} />
                   )}
                   {dashboardItemsData?.length === 0 && (
-                    <section className="flex justify-center items-center w-full h-full">
+                    <section className="flex justify-center items-center w-full">
                       <ItemNotFound description={"판매된 상품이 없습니다."} />
                     </section>
                   )}

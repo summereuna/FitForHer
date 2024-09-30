@@ -1,4 +1,5 @@
-// import useFormError from "@/hooks/useFormError";
+import { getAuthUser } from "@/api/userApi";
+import { toast } from "@/hooks/use-toast";
 import supabase from "@/shared/supabaseClient";
 import {
   BrandRegistrationRequest,
@@ -11,14 +12,7 @@ const createBrands = async (newBrandData: BrandRegistrationRequest) => {
   const { name } = newBrandData;
 
   // 현재 로그인된 사용자 정보 가져오기
-  const {
-    data: { user },
-    error: userError,
-  } = await supabase.auth.getUser();
-
-  if (userError) throw userError;
-
-  if (!user) throw new Error("인증되지 않은 사용자 입니다.");
+  const user = await getAuthUser();
 
   const { data, error } = await supabase
     .from("brands")
@@ -26,15 +20,20 @@ const createBrands = async (newBrandData: BrandRegistrationRequest) => {
     .select()
     .single();
 
-  if (error) throw error;
+  if (error) {
+    if (error.code === "23505") {
+      throw new Error("이미 사용중인 브랜드 이름입니다.");
+    } else {
+      throw new Error("브랜드 설정을 업데이트할 수 없습니다.");
+    }
+  }
+
   return data;
 };
 
 export const useCreateBrand = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-
-  // const { errorMessage, setErrorMessage } = useFormError();
 
   const {
     mutate: mutateCreateBrand,
@@ -47,23 +46,19 @@ export const useCreateBrand = () => {
       queryClient.invalidateQueries({ queryKey: ["brands"] });
 
       if (data.id) {
+        toast({
+          title: "브랜드 등록 성공",
+          description: `브랜드를 등록했습니다.`,
+        });
         navigate("/dashboard/setting");
       }
     },
     onError: (error) => {
-      console.log(error);
-      // switch (error.code) {
-      //   case "user_already_exists":
-      //     setErrorMessage("이미 가입한 사용자입니다.");
-      //     break;
-      //   case "weak_password":
-      //     setErrorMessage("비밀번호가 너무 약합니다.");
-      //     break;
-      //   default:
-      //     setErrorMessage("회원가입에 실패했습니다. 다시 시도해 주세요.");
-      //     break;
-      // }
-      // return errorMessage;
+      toast({
+        title: "브랜드 등록 실패",
+        description: `${error.message}`,
+        variant: "destructive",
+      });
     },
   });
 
@@ -72,11 +67,9 @@ export const useCreateBrand = () => {
     isError,
     isPending,
     isSuccess,
-    // errorMessage,
   };
 };
 
-//select brands to public
 const getBrandBySellerId = async (seller_id: string) => {
   const { data, error } = await supabase
     .from("brands")
@@ -109,14 +102,7 @@ export const useBrand = (seller_id: string) => {
 };
 
 const updateBrands = async (updatedBrandData: BrandUpdateRequest) => {
-  // 인증
-  const {
-    data: { user },
-    error: userError,
-  } = await supabase.auth.getUser();
-
-  if (userError) throw userError;
-  if (!user) throw new Error("인증되지 않은 사용자 입니다.");
+  await getAuthUser();
 
   const { data, error } = await supabase
     .from("brands")
@@ -125,16 +111,19 @@ const updateBrands = async (updatedBrandData: BrandUpdateRequest) => {
     .select("*")
     .single();
 
-  if (error) throw error;
+  if (error) {
+    if (error.code === "23505") {
+      throw new Error("이미 사용중인 브랜드 이름입니다.");
+    } else {
+      throw new Error("브랜드 설정을 업데이트할 수 없습니다.");
+    }
+  }
 
   return data;
 };
 
 export const useUpdateBrand = () => {
-  const navigate = useNavigate();
   const queryClient = useQueryClient();
-
-  // const { errorMessage, setErrorMessage } = useFormError();
 
   const {
     mutate: mutateUpdateBrand,
@@ -145,22 +134,17 @@ export const useUpdateBrand = () => {
     mutationFn: updateBrands,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["brands"] });
-      navigate("/dashboard/setting");
+      toast({
+        title: "브랜드 정보 수정 성공",
+        description: `브랜드 정보를 수정했습니다.`,
+      });
     },
     onError: (error) => {
-      console.log(error);
-      // switch (error.code) {
-      //   case "user_already_exists":
-      //     setErrorMessage("이미 가입한 사용자입니다.");
-      //     break;
-      //   case "weak_password":
-      //     setErrorMessage("비밀번호가 너무 약합니다.");
-      //     break;
-      //   default:
-      //     setErrorMessage("회원가입에 실패했습니다. 다시 시도해 주세요.");
-      //     break;
-      // }
-      // return errorMessage;
+      toast({
+        title: "브랜드 정보 수정 실패",
+        description: `${error.message}`,
+        variant: "destructive",
+      });
     },
   });
 
@@ -169,22 +153,13 @@ export const useUpdateBrand = () => {
     isError,
     isPending,
     isSuccess,
-    // errorMessage,
   };
 };
 
 const upsertBrandLogo = async (file: File) => {
-  const {
-    data: { user },
-    error: userError,
-  } = await supabase.auth.getUser();
-
-  if (userError) throw userError;
-
-  if (!user) throw new Error("인증되지 않은 사용자 입니다.");
+  const user = await getAuthUser();
 
   //스토리지에 올리기
-  // const brandId = brandData.id;
   const userId = user?.id;
   const fileName = "logo";
   const filePath = `${userId}/${fileName}`;
@@ -212,8 +187,6 @@ const upsertBrandLogo = async (file: File) => {
 export const useUploadBrandLogo = () => {
   const queryClient = useQueryClient();
 
-  // const { errorMessage, setErrorMessage } = useFormError();
-
   const {
     mutate: mutateUploadBrandLogo,
     isPending: isPendingBrandLogo,
@@ -227,21 +200,6 @@ export const useUploadBrandLogo = () => {
         queryClient.invalidateQueries({ queryKey: ["brands"] });
       }
     },
-    onError: (error) => {
-      console.log(error);
-      // switch (error.code) {
-      //   case "user_already_exists":
-      //     setErrorMessage("이미 가입한 사용자입니다.");
-      //     break;
-      //   case "weak_password":
-      //     setErrorMessage("비밀번호가 너무 약합니다.");
-      //     break;
-      //   default:
-      //     setErrorMessage("회원가입에 실패했습니다. 다시 시도해 주세요.");
-      //     break;
-      // }
-      // return errorMessage;
-    },
   });
 
   return {
@@ -250,6 +208,5 @@ export const useUploadBrandLogo = () => {
     isPendingBrandLogo,
     isSuccessBrandLogo,
     responseBrandLogoUrl,
-    // errorMessage,
   };
 };

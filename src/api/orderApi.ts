@@ -15,7 +15,38 @@ import {
 } from "@/types/order.types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { PreReducedItem } from "@/components/Checkout/CheckoutMethodForm";
+import { toast } from "@/hooks/use-toast";
+import { getAuthUser } from "@/api/userApi";
 
+//재고 조회
+const getQuantity = async (productSizesId: string) => {
+  const { data, error } = await supabase
+    .from("product_sizes")
+    .select("stock_quantity")
+    .eq("id", productSizesId)
+    .single(); // 단일 항목 조회
+
+  if (error) throw new Error("재고 수량을 조회할 수 없습니다.");
+
+  return data;
+};
+
+//재고 수량 업데이트
+const updateQuantity = async (productSizesId: string, reducedStock: number) => {
+  const { data, error } = await supabase
+    .from("product_sizes")
+    .update({
+      stock_quantity: reducedStock,
+    })
+    .eq("id", productSizesId)
+    .select();
+
+  if (error) throw new Error("재고 수량을 업데이트 할 수 없습니다.");
+
+  return data;
+};
+
+//------------------------------------------------------------------------------
 //재고 우선 감소
 export const reducePreQuantities = async (updateData: PreReducedItem[]) => {
   const reducePreQuantity = async (
@@ -23,37 +54,16 @@ export const reducePreQuantities = async (updateData: PreReducedItem[]) => {
     orderQuantity: number
   ) => {
     // 0. 인증된 사용자
-    const {
-      data: { user },
-      error: userError,
-    } = await supabase.auth.getUser();
-    if (userError) throw userError;
-    if (!user) throw new Error("인증되지 않은 사용자 입니다.");
+    await getAuthUser();
 
-    // 1.현재 재고 수량을 먼저 조회
-    const { data: productSizeData, error: selectError } = await supabase
-      .from("product_sizes")
-      .select("stock_quantity")
-      .eq("id", productSizesId)
-      .single(); // 단일 항목 조회
+    // 1.현재 재고 수량 먼저 조회
+    const productSizeData = await getQuantity(productSizesId);
 
-    if (selectError) throw selectError;
-
-    // 2. 재고를 차감한 값을 업데이트
+    // 2. 재고를 차감한 값 업데이트
     const currentStock = productSizeData?.stock_quantity;
     const reducedStock = currentStock - orderQuantity;
-
     if (reducedStock < 0) throw new Error("재고 수량이 부족합니다.");
-
-    const { data, error } = await supabase
-      .from("product_sizes")
-      .update({
-        stock_quantity: reducedStock,
-      })
-      .eq("id", productSizesId)
-      .select();
-
-    if (error) throw error;
+    const data = await updateQuantity(productSizesId, reducedStock);
 
     return data;
   };
@@ -68,7 +78,6 @@ export const reducePreQuantities = async (updateData: PreReducedItem[]) => {
 
 export const useReducePreQuantity = () => {
   const queryClient = useQueryClient();
-  // const { errorMessage, setErrorMessage } = useFormError();
 
   const {
     mutate: mutateReducePreQuantity,
@@ -81,19 +90,11 @@ export const useReducePreQuantity = () => {
       queryClient.invalidateQueries({ queryKey: ["pre-quantity"] });
     },
     onError: (error) => {
-      console.log(error);
-      // switch (error.code) {
-      //   case "user_already_exists":
-      //     setErrorMessage("이미 가입한 사용자입니다.");
-      //     break;
-      //   case "weak_password":
-      //     setErrorMessage("비밀번호가 너무 약합니다.");
-      //     break;
-      //   default:
-      //     setErrorMessage("회원가입에 실패했습니다. 다시 시도해 주세요.");
-      //     break;
-      // }
-      // return errorMessage;
+      toast({
+        title: "재고 수량 에러 발생",
+        description: `${error.message}`,
+        variant: "destructive",
+      });
     },
   });
 
@@ -102,28 +103,10 @@ export const useReducePreQuantity = () => {
     isError,
     isPending,
     isSuccess,
-    // errorMessage,
   };
 };
 
 //-----------------------------------------------------------------------------
-
-const reIncreaseQuantity = async (
-  productSizesId: string,
-  reducedStock: number
-) => {
-  const { data, error } = await supabase
-    .from("product_sizes")
-    .update({
-      stock_quantity: reducedStock,
-    })
-    .eq("id", productSizesId)
-    .select();
-
-  if (error) throw error;
-
-  return data;
-};
 
 //재고 감소 취소
 export const reIncreasePreQuantities = async (updateData: PreReducedItem[]) => {
@@ -132,36 +115,15 @@ export const reIncreasePreQuantities = async (updateData: PreReducedItem[]) => {
     orderQuantity: number
   ) => {
     // 0. 인증된 사용자
-    const {
-      data: { user },
-      error: userError,
-    } = await supabase.auth.getUser();
-    if (userError) throw userError;
-    if (!user) throw new Error("인증되지 않은 사용자 입니다.");
+    await getAuthUser();
 
     // 1.현재 재고 수량을 먼저 조회
-    const { data: productSizeData, error: selectError } = await supabase
-      .from("product_sizes")
-      .select("stock_quantity")
-      .eq("id", productSizesId)
-      .single(); // 단일 항목 조회
-
-    if (selectError) throw selectError;
+    const productSizeData = await getQuantity(productSizesId);
 
     // 2. 재고를 차감한 값을 업데이트
     const currentStock = productSizeData?.stock_quantity;
     const reducedStock = currentStock + orderQuantity;
-
-    const data = await reIncreaseQuantity(productSizesId, reducedStock);
-    // const { data, error } = await supabase
-    //   .from("product_sizes")
-    //   .update({
-    //     stock_quantity: reducedStock,
-    //   })
-    //   .eq("id", productSizesId)
-    //   .select();
-
-    // if (error) throw error;
+    const data = await updateQuantity(productSizesId, reducedStock);
 
     return data;
   };
@@ -176,7 +138,6 @@ export const reIncreasePreQuantities = async (updateData: PreReducedItem[]) => {
 
 export const useReIncreasePreQuantity = () => {
   const queryClient = useQueryClient();
-  // const { errorMessage, setErrorMessage } = useFormError();
 
   const {
     mutate: mutateReIncreasePreQuantity,
@@ -189,19 +150,11 @@ export const useReIncreasePreQuantity = () => {
       queryClient.invalidateQueries({ queryKey: ["pre-quantity"] });
     },
     onError: (error) => {
-      console.log(error);
-      // switch (error.code) {
-      //   case "user_already_exists":
-      //     setErrorMessage("이미 가입한 사용자입니다.");
-      //     break;
-      //   case "weak_password":
-      //     setErrorMessage("비밀번호가 너무 약합니다.");
-      //     break;
-      //   default:
-      //     setErrorMessage("회원가입에 실패했습니다. 다시 시도해 주세요.");
-      //     break;
-      // }
-      // return errorMessage;
+      toast({
+        title: "재고 수량 에러 발생",
+        description: `${error.message}`,
+        variant: "destructive",
+      });
     },
   });
 
@@ -210,11 +163,11 @@ export const useReIncreasePreQuantity = () => {
     isError,
     isPending,
     isSuccess,
-    // errorMessage,
   };
 };
 
 //------------------------------------------------------------------
+//주문
 const createOrder = async ({
   newOrder,
   cartItems,
@@ -222,13 +175,18 @@ const createOrder = async ({
   newOrder: OrderRequest;
   cartItems: Item[];
 }) => {
+  await getAuthUser();
+
   const { data: orderData, error: orderError } = await supabase
     .from("orders")
     .insert(newOrder)
     .select()
     .single();
 
-  if (orderError) throw orderError;
+  if (orderError)
+    throw new Error(
+      "주문 처리 중 오류가 발생했습니다, 다시 시도해 주세요. 같은 문제가 계속 될 경우 관리자에게 문의해 주세요."
+    );
   const orderId = orderData.id;
 
   const createOrderItem = async (item: Item) => {
@@ -244,7 +202,10 @@ const createOrder = async ({
       .select()
       .single();
 
-    if (orderItemError) throw orderItemError;
+    if (orderItemError)
+      throw new Error(
+        "주문 내 상품 처리 중 오류가 발생했습니다, 다시 시도해 주세요. 같은 문제가 계속 될 경우 관리자에게 문의해 주세요."
+      );
     return orderItemData;
   };
 
@@ -260,7 +221,6 @@ const createOrder = async ({
 
 export const useCreateOrder = () => {
   const queryClient = useQueryClient();
-  // const { errorMessage, setErrorMessage } = useFormError();
 
   const {
     mutate: mutateCreateOrder,
@@ -274,19 +234,11 @@ export const useCreateOrder = () => {
       queryClient.invalidateQueries({ queryKey: ["order"] });
     },
     onError: (error) => {
-      console.log(error);
-      // switch (error.code) {
-      //   case "user_already_exists":
-      //     setErrorMessage("이미 가입한 사용자입니다.");
-      //     break;
-      //   case "weak_password":
-      //     setErrorMessage("비밀번호가 너무 약합니다.");
-      //     break;
-      //   default:
-      //     setErrorMessage("회원가입에 실패했습니다. 다시 시도해 주세요.");
-      //     break;
-      // }
-      // return errorMessage;
+      toast({
+        title: "주문 처리 중 문제 발생",
+        description: `${error.message}`,
+        variant: "destructive",
+      });
     },
   });
 
@@ -296,7 +248,6 @@ export const useCreateOrder = () => {
     isPendingOrder,
     isErrorOrder,
     isSuccessOrder,
-    // errorMessage,
   };
 };
 
@@ -305,12 +256,7 @@ export const useCreateOrder = () => {
 const getOrdersByUserId = async (
   myId: string
 ): Promise<OrdersByUserIdResponse> => {
-  const {
-    data: { user },
-    error: userError,
-  } = await supabase.auth.getUser();
-  if (userError) throw userError;
-  if (!user) throw new Error("인증되지 않은 사용자 입니다.");
+  await getAuthUser();
 
   const { data, error } = await supabase
     .from("orders")
@@ -350,12 +296,7 @@ export const useOrdersByUserId = (myId: string) => {
 const getOrderbyOrderId = async (
   orderId: string
 ): Promise<GetOrderByOrderIdDataResponse> => {
-  const {
-    data: { user },
-    error: userError,
-  } = await supabase.auth.getUser();
-  if (userError) throw userError;
-  if (!user) throw new Error("인증되지 않은 사용자 입니다.");
+  await getAuthUser();
 
   const { data: orderData, error } = await supabase
     .from("orders")
@@ -396,13 +337,7 @@ export const useOrdersByOrderId = (orderId: string) => {
 // 구매자: status 수정 (주문 취소!!)
 const cancelOrder = async (newStatusData: CancelOrderRequest) => {
   const { orderId, newStatus } = newStatusData;
-
-  const {
-    data: { user },
-    error: userError,
-  } = await supabase.auth.getUser();
-  if (userError) throw userError;
-  if (!user) throw new Error("인증되지 않은 사용자 입니다.");
+  await getAuthUser();
 
   //newStatus 상태에 따라 바뀌게
   const { data: orderData, error: orderError } = await supabase
@@ -414,7 +349,10 @@ const cancelOrder = async (newStatusData: CancelOrderRequest) => {
     .select()
     .single();
 
-  if (orderError) throw orderError;
+  if (orderError)
+    throw new Error(
+      "주문 취소 처리 중 오류가 발생했습니다, 다시 시도해 주세요. 같은 문제가 계속 될 경우 관리자에게 문의해 주세요."
+    );
 
   //newStatus가 주문취소인 경우, order_items 테이블도 주문 취소되게 하기
   const { data: orderItemsData, error } = await supabase
@@ -425,7 +363,10 @@ const cancelOrder = async (newStatusData: CancelOrderRequest) => {
     .eq("order_id", orderId)
     .select();
 
-  if (error) throw error;
+  if (error)
+    throw new Error(
+      "주문 취소 처리 중 오류가 발생했습니다, 다시 시도해 주세요. 같은 문제가 계속 될 경우 관리자에게 문의해 주세요."
+    );
 
   //주문 취소된 items에 대해 재고 복구
   const reIncreaseCanceledItems = async ({
@@ -433,18 +374,12 @@ const cancelOrder = async (newStatusData: CancelOrderRequest) => {
     orderQuantity,
   }: ReIncreaseCanceledItemsRequest) => {
     // 1.현재 재고 수량을 먼저 조회
-    const { data: productSizeData, error: getQuantityError } = await supabase
-      .from("product_sizes")
-      .select("stock_quantity")
-      .eq("id", productSizesId)
-      .single(); // 단일 항목 조회
-
-    if (getQuantityError) throw getQuantityError;
+    const productSizeData = await getQuantity(productSizesId);
 
     // 2. 재고를 복구한 값으로 업데이트
     const currentStock = productSizeData?.stock_quantity;
     const reducedStock = currentStock + orderQuantity;
-    await reIncreaseQuantity(productSizesId, reducedStock);
+    await updateQuantity(productSizesId, reducedStock);
   };
 
   //재고 복구해야할 아이템 목록
@@ -463,7 +398,6 @@ const cancelOrder = async (newStatusData: CancelOrderRequest) => {
 
 export const useCancelOrder = () => {
   const queryClient = useQueryClient();
-  // const { errorMessage, setErrorMessage } = useFormError();
 
   const {
     mutate: mutateCancelOrder,
@@ -476,19 +410,11 @@ export const useCancelOrder = () => {
       queryClient.invalidateQueries({ queryKey: ["orders"] });
     },
     onError: (error) => {
-      console.log(error);
-      // switch (error.code) {
-      //   case "user_already_exists":
-      //     setErrorMessage("이미 가입한 사용자입니다.");
-      //     break;
-      //   case "weak_password":
-      //     setErrorMessage("비밀번호가 너무 약합니다.");
-      //     break;
-      //   default:
-      //     setErrorMessage("회원가입에 실패했습니다. 다시 시도해 주세요.");
-      //     break;
-      // }
-      // return errorMessage;
+      toast({
+        title: "주문 취소 처리 중 문제 발생",
+        description: `${error.message}`,
+        variant: "destructive",
+      });
     },
   });
 
@@ -497,7 +423,6 @@ export const useCancelOrder = () => {
     isPending,
     isError,
     isSuccess,
-    // errorMessage,
   };
 };
 
@@ -507,12 +432,7 @@ export const useCancelOrder = () => {
 const getOrdersByBrandId = async (
   brandId: string
 ): Promise<OrdersByBrandIdResponse> => {
-  const {
-    data: { user },
-    error: userError,
-  } = await supabase.auth.getUser();
-  if (userError) throw userError;
-  if (!user) throw new Error("인증되지 않은 사용자 입니다.");
+  await getAuthUser();
 
   const { data, error } = await supabase
     .from("order_items")
@@ -550,12 +470,7 @@ export const useOrdersByBrandId = (brandId: string) => {
 const getDashboardItemsByBrandId = async (
   brandId: string
 ): Promise<DashboardItemsByBrandIdResponse> => {
-  const {
-    data: { user },
-    error: userError,
-  } = await supabase.auth.getUser();
-  if (userError) throw userError;
-  if (!user) throw new Error("인증되지 않은 사용자 입니다.");
+  await getAuthUser();
 
   const { data, error } = await supabase
     .from("order_items")
@@ -606,15 +521,16 @@ const updateOrderItemStatus = async (
     .eq("id", orderItemId)
     .select();
 
-  if (error) throw error;
-  //✅newStatus가 주문취소인 경우, order 테이블도 주문 취소되게 하기..?
+  if (error)
+    throw new Error(
+      "판매 상품의 상태 변경 중 오류가 발생했습니다, 다시 시도해 주세요. 같은 문제가 계속 될 경우 관리자에게 문의해 주세요."
+    );
 
   return data;
 };
 
 export const useUpdateOrderItemStatus = () => {
   const queryClient = useQueryClient();
-  // const { errorMessage, setErrorMessage } = useFormError();
 
   const {
     mutate: mutateUpdateOrderItemStatus,
@@ -627,19 +543,11 @@ export const useUpdateOrderItemStatus = () => {
       queryClient.invalidateQueries({ queryKey: ["orderItems"] });
     },
     onError: (error) => {
-      console.log(error);
-      // switch (error.code) {
-      //   case "user_already_exists":
-      //     setErrorMessage("이미 가입한 사용자입니다.");
-      //     break;
-      //   case "weak_password":
-      //     setErrorMessage("비밀번호가 너무 약합니다.");
-      //     break;
-      //   default:
-      //     setErrorMessage("회원가입에 실패했습니다. 다시 시도해 주세요.");
-      //     break;
-      // }
-      // return errorMessage;
+      toast({
+        title: "판매 상품의 상태 변경 중 문제 발생",
+        description: `${error.message}`,
+        variant: "destructive",
+      });
     },
   });
 
@@ -648,6 +556,5 @@ export const useUpdateOrderItemStatus = () => {
     isPending,
     isError,
     isSuccess,
-    // errorMessage,
   };
 };

@@ -1,4 +1,3 @@
-// import { toast } from "@/components/hooks/use-toast"
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import {
   Select,
@@ -50,25 +49,15 @@ const OrderItemStatusSelectForm = ({
   });
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
-    //console.log(data);
     if (!data) return;
     if (!orderItemId) return;
     const updatedData = { orderItemId, newStatus: data.status };
     onChangeStatus(updatedData);
-    // toast({
-    //   title: "You submitted the following values:",
-    //   description: (
-    //     <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-    //       <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-    //     </pre>
-    //   ),
-    // })
   }
 
   useEffect(() => {
     if (dbStatus) {
       form.setValue("status", dbStatus);
-      console.log("기본 세팅");
     }
   }, [dbStatus, form]);
 

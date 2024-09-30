@@ -35,6 +35,7 @@ const Review = lazy(() => import("@/pages/Product/Review"));
 const OrderFail = lazy(() => import("@/pages/Checkout/OrderFail"));
 const OrderSuccess = lazy(() => import("@/pages/Checkout/OrderSuccess"));
 
+const My = lazy(() => import("@/pages/My/My"));
 const Wish = lazy(() => import("@/pages/My/Wish"));
 const Orders = lazy(() => import("@/pages/My/Orders"));
 const OrderDetail = lazy(() => import("@/pages/My/OrderDetail"));
@@ -132,6 +133,14 @@ export default function Router() {
             element={
               <Suspense>
                 <PublicRoute element={Login} />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/my"
+            element={
+              <Suspense>
+                <PrivateRoute element={My} />
               </Suspense>
             }
           />
