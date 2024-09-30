@@ -21,11 +21,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useEffect, useState } from "react";
 import { productFormSchema } from "@/schemas/productFormSchema";
-import {
-  BrandProductByIdQueryRelations,
-  useUploadProduct,
-  useUploadProductImages,
-} from "@/api/productApi";
+import { useUploadProduct, useUploadProductImages } from "@/api/productApi";
 import { cn, sortProductImages } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 
@@ -43,7 +39,10 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { useNavigate } from "react-router-dom";
-import { UpdateProductRequest } from "@/types/product.types";
+import {
+  BrandProductByIdQueryRelations,
+  UpdateProductRequest,
+} from "@/types/product.types";
 
 interface ProductFormProps {
   productData?: BrandProductByIdQueryRelations;

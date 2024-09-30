@@ -1,7 +1,6 @@
 import {
   Table,
   TableBody,
-  //   TableCaption,
   TableCell,
   TableHead,
   TableHeader,
@@ -14,10 +13,10 @@ import {
   sortSizes,
 } from "@/lib/utils";
 import Dropdown from "@/components/Dropdown";
-import { BrandProductsWithRelations } from "@/api/productApi";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useState } from "react";
+import { BrandProductsWithRelations } from "@/types/product.types";
 
 interface ProductDataTableProps {
   brandProductsData: BrandProductsWithRelations;
@@ -31,7 +30,6 @@ const ProductDataTable = ({ brandProductsData }: ProductDataTableProps) => {
   return (
     <section>
       <Table>
-        {/* <TableCaption>상품 관리 페이지입니다.</TableCaption> */}
         <TableHeader>
           <TableRow>
             <TableHead className="w-[100px]">카테고리</TableHead>

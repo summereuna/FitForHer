@@ -9,7 +9,6 @@ import {
 } from "@/types/product.types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
-import { QueryData } from "@supabase/supabase-js";
 import { getAuthUser } from "@/api/userApi";
 import { toast } from "@/hooks/use-toast";
 

@@ -71,8 +71,6 @@ const CategoryChart = ({ data }: CategoryChartProps) => {
     transactions: categoryCount[data.category] ?? 0,
   }));
 
-  // console.log(updatedChartData);
-
   const totalTransaction = useMemo(() => {
     return updatedChartData.reduce((acc, curr) => acc + curr.transactions, 0);
   }, []);
