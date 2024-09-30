@@ -317,5 +317,18 @@ BaaS|<img  src="https://img.shields.io/badge/supabase-3FCF8E?style=flat-square&l
    - sitemap, robots.txt 생성
    - React-Helmet-async 사용해 meta tag 설정
 
+- 웹 뷰
+<img width="468" alt="웹뷰" src="https://github.com/user-attachments/assets/c4c0f843-ca94-45bc-b527-be56f16e4036">
+
+- 모바일 뷰
+<img width="468" alt="모바일뷰" src="https://github.com/user-attachments/assets/e87f58b4-8e86-4d18-bd7c-13bd643b86e2">
+
+3. 성능 최적화:
+   - 데이터 페칭시 스켈레톤 UI 사용하여 CLS 개선 (**2.222 -> 0**)
+     - <img width="500" alt="웹뷰" src="https://github.com/user-attachments/assets/3db903dc-cabb-4cc7-91d2-18dadc2896b4">
+     - <img width="200" alt="모바일뷰" src="https://github.com/user-attachments/assets/aaf471fb-39b4-4ac5-adfd-dda792dd43de">
+     - 모바일 뷰: **55 -> 62**
+
+
 ## 트러블 슈팅
 -

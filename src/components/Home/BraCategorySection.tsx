@@ -39,8 +39,8 @@ const BraCategorySection = () => {
         className="relative w-full overflow-hidden h-[15rem] md:h-full"
       >
         <img
-          width="1200"
-          height="600"
+          width="800"
+          height="500"
           src={braCategoryInfo[0].asset}
           alt={braCategoryInfo[0].title}
           className="w-full h-full object-cover object-top"
@@ -71,8 +71,8 @@ const BraCategorySection = () => {
           className="relative w-full overflow-hidden h-full"
         >
           <img
-            width="1200"
-            height="600"
+            width="800"
+            height="300"
             src={braCategoryInfo[1].asset}
             alt={braCategoryInfo[1].title}
             className="w-full h-full object-cover"
@@ -102,8 +102,8 @@ const BraCategorySection = () => {
           className="relative w-full overflow-hidden h-full"
         >
           <img
-            width="1200"
-            height="600"
+            width="800"
+            height="300"
             src={braCategoryInfo[2].asset}
             alt={braCategoryInfo[2].title}
             className="w-full h-full object-cover object-top"

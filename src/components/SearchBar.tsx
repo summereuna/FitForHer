@@ -14,7 +14,7 @@ const SearchFormSchema = z.object({
   }),
 });
 
-export function SearchBar() {
+export default function SearchBar() {
   const navigate = useNavigate();
   const form = useForm<z.infer<typeof SearchFormSchema>>({
     resolver: zodResolver(SearchFormSchema),

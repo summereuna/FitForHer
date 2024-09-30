@@ -30,7 +30,7 @@ const Orders = () => {
           {myOrdersData?.length === 0 && (
             <ItemNotFound description={`주문 내역이 없습니다.`} />
           )}
-          {isSuccess && myOrdersData && (
+          {isSuccess && myOrdersData && myOrdersData?.length > 0 && (
             <section
               aria-label="주문내역"
               className="w-full overflow-y-auto flex flex-col divide-y-[1px]"

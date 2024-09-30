@@ -21,6 +21,8 @@ const ProductItem = ({ item }: ProductItemProps) => {
     <div aria-label="카테고리별 상품" className="cursor-pointer">
       <Avatar className="w-full h-60 rounded-none border-[1px] bg-white">
         <AvatarImage
+          width="200"
+          height="500"
           src={getOnlyRepresentativePhoto(item.product_images)}
           alt="상품 대표 사진"
           className="object-cover"
