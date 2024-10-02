@@ -313,9 +313,15 @@ BaaS|<img  src="https://img.shields.io/badge/supabase-3FCF8E?style=flat-square&l
 1. 웹 접근성 개선: **86 -> 100 (16.28% 개선)**
    - 모든 button, a, Link, NavLink 요소에 aria-label로 인식 가능한 이름 표시
 
+<br/>
+
 2. 검색엔진 최적화: **83 -> 100 (20.48% 개선)**
-   - sitemap, robots.txt 생성
+   - sitemap, robots.txt 생성 및 구글 서치엔진 등록
+     - <img width="700" alt="구글검색시최상단노출" src="https://github.com/user-attachments/assets/5a3dae03-3cc4-4032-bce5-449152b765a2">
    - React-Helmet-async 사용해 meta tag 설정
+     - <img width="237" alt="SNS공유" src="https://github.com/user-attachments/assets/dd056dda-b927-4e5e-bc7f-4c352c662e38">
+
+<br/>
 
 3. 성능 최적화: **PC: 95 -> 99 (4.21% 개선), 모바일: 59 -> 83 (40.68%% 개선)**
    - 데이터 페칭시 스켈레톤 UI 사용하여 CLS 개선 (**2.222 -> 0**)
@@ -331,6 +337,8 @@ BaaS|<img  src="https://img.shields.io/badge/supabase-3FCF8E?style=flat-square&l
       - <img width="600" alt="PC결과" src="https://github.com/user-attachments/assets/be036c31-b449-4700-8111-92902a682eeb">
       - 모바일
       - <img width="600" alt="모바일개선결과" src="https://github.com/user-attachments/assets/37c69573-11c9-4c4e-9b16-8ffa51b61f0d">
+
+<br/>
 
 4. 결과:
   - PC
