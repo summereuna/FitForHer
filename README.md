@@ -122,19 +122,6 @@ BaaS|<img  src="https://img.shields.io/badge/supabase-3FCF8E?style=flat-square&l
 
 <br/>
 
-### MVVM 패턴에 가까운 구조
-1. Model
-  - TanStackQuery로 api 연결하여 데이터 상태 관리
-  - 비즈니스 로직은 일부 View에 포함되어 있으나, 이를 분리하고 개선할 예정
-2. View
-  - 페이지 컴포넌트, 하위 컴포넌트 등으로 구성하여 UI 표시
-  - 사용자 입력 처리 및 데이터 렌더링
-3. View Model
-  - TanStack Query의 query와 mutation을 커스텀 훅으로 감싸 API 함수와 연결
-  - 커스텀 훅으로 API 호출과 상태 관리 로직을 캡슐화하여, View에서 쉽게 접근 가능
-
-<br/>
-
 ### ERD
 ![F4F_ERD](https://github.com/user-attachments/assets/7fa17abe-790b-4bdf-9f17-90a99d97aef8)
 
